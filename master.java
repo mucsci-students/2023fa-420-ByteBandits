@@ -1,2 +1,8 @@
-//This file will contain main functions
-//Workflow TEST - Josh
+// Authors: Logan Wasmer, Jose De La Cruz, 
+
+
+public class master{
+   public static void main(String args[]){
+
+} 
+}
