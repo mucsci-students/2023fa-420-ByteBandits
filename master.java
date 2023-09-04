@@ -1,17 +1,32 @@
-// Authors: Logan Wasmer, Jose De La Cruz,
+// Authors: Logan Wasmer, Jose De La Cruz, Ilynd Rapant, 
+
+/**********************************************************/
+/**********************************************************/
 
 //Imports
 import java.io.*;
 import java.util.*;
 
+/**********************************************************/
+/**********************************************************/
+
 public class master extends helpers{
-   public static void main(String args[]) throws FileNotFoundException{
-        String baseWord = getBaseWord(dictionaryFile());
-        char reqLetter = getReqLetter(baseWord);
+public static void main(String args[]) throws FileNotFoundException{
+    String baseWord = getBaseWord(dictionaryFile());
+    char reqLetter = getReqLetter(baseWord);
 }
 
 /**********************************************************/
 /**********************************************************/
+
+/*
+ * dictionaryFile
+ * param: N/A
+ * returns: String[] 
+ * This function scans the given dictionary file
+ * of seven letter words and creates a string array
+ * of all the words on the file.
+ */
 
 public static String[] dictionaryFile() throws FileNotFoundException{
     Scanner scanner = new Scanner(new File("7-letter-words.txt"));
@@ -27,6 +42,16 @@ public static String[] dictionaryFile() throws FileNotFoundException{
 /**********************************************************/
 /**********************************************************/
 
+/*
+ * getBaseWord
+ * param: String[] dictionary
+ * returns: String 
+ * This function receives the string array from
+ * dictionaryFile and randomly chooses a word
+ * from the array using indexing. This word
+ * is then returned and acts as our base word.
+ */
+
 public static String getBaseWord(String[] dictionary){
     Random rand = new Random();
     int upperBound = 25250;
@@ -38,6 +63,17 @@ public static String getBaseWord(String[] dictionary){
 /**********************************************************/
 /**********************************************************/
 
+/*
+ * getReqLetters
+ * param: String baseWord
+ * returns: char
+ * This function receives the string from 
+ * getBaseWord and randomly chooses a character
+ * from the base word given using indexing. 
+ * This character is returned and acts as 
+ * our required character.
+ */
+
 public static char getReqLetter(String baseWord){
     Random rand = new Random();
     int upperBound = 7;
@@ -48,14 +84,6 @@ public static char getReqLetter(String baseWord){
 
 /**********************************************************/
 /**********************************************************/
-
-
-
-
-
-
-
-
 
 /*
  * pointsPWord
@@ -129,49 +157,5 @@ private static String playerRank(int playerPoints){
 
     return playerRank;
 }
-
-/*********************************************************/
-/*********************************************************/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }
