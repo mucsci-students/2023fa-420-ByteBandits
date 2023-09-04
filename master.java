@@ -1,10 +1,15 @@
-// Authors: Logan Wasmer, Jose De La Cruz, 
+// Authors: Logan Wasmer, Jose De La Cruz, Ilynd Rapant
 
 
 public class master{
    public static void main(String args[]){
       help();
 } 
+/*Has short explanation on the general rules of the game
+ * Will probably have to change some command lines as the game is getting developed
+ * Will have to add things like how rank system works
+ * Has table with command lines and explanations for command lines
+ */
 public static void help()
 {
 
