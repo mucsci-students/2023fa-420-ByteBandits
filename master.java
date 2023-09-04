@@ -4,6 +4,7 @@
 public class master{
    public static void main(String args[]){
       help();
+      exit();
 } 
 /*Has short explanation on the general rules of the game
  * Will probably have to change some command lines as the game is getting developed
@@ -50,6 +51,11 @@ public static void help()
         for (int i = 0; i < commandLines.length; i++) {
          System.out.printf("%-15s |   %s%n", commandLines[i], explanations[i]);
         }
+}
+/*When this is called the program will terminate immediately */
+public static void exit()
+{
+   System.exit(0);
 }
 }
 
