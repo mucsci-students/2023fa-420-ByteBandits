@@ -1,21 +1,13 @@
-// Authors: Logan Wasmer, Jose De La Cruz, 
-
-/**********************************************************/
-/**********************************************************/
+// Authors: Logan Wasmer, Jose De La Cruz,
 
 //Imports
 import java.io.*;
 import java.util.*;
 
-/**********************************************************/
-/**********************************************************/
-
 public class master extends helpers{
-
-public static void main(String args[]) throws FileNotFoundException{ 
-    String baseWord = getBaseWord(dictionaryFile());
-    char reqLetter = getReqLetter(baseWord);
-    
+   public static void main(String args[]) throws FileNotFoundException{
+        String baseWord = getBaseWord(dictionaryFile());
+        char reqLetter = getReqLetter(baseWord);
 }
 
 /**********************************************************/
@@ -56,6 +48,14 @@ public static char getReqLetter(String baseWord){
 
 /**********************************************************/
 /**********************************************************/
+
+
+
+
+
+
+
+
 
 /*
  * pointsPWord
