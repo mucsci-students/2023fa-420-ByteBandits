@@ -3,13 +3,19 @@
 
 public class master{
    public static void main(String args[]){
-      help();
-      exit();
-} 
-/*Has short explanation on the general rules of the game
- * Will probably have to change some command lines as the game is getting developed
- * Will have to add things like how rank system works
- * Has table with command lines and explanations for command lines
+
+   }
+     
+/*********************************************************/
+/*********************************************************/
+
+/*
+ * help
+ * param: nothing
+ * returns: String
+ * This function tells the player the rules of the game and shows
+ * a table of all the command lines the player can use and what 
+ * each command line does. 
  */
 public static void help()
 {
@@ -52,10 +58,20 @@ public static void help()
          System.out.printf("%-15s |   %s%n", commandLines[i], explanations[i]);
         }
 }
-/*When this is called the program will terminate immediately */
+/*********************************************************/
+/*********************************************************/
+
+/*
+ * exit
+ * param: nothing
+ * returns: exit status code
+ * This function forcibly exits out of the game
+ * when the player invokes it. 
+ */
 public static void exit()
 {
    System.exit(0);
 }
 }
+
 
