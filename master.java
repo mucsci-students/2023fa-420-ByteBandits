@@ -1,4 +1,4 @@
-// Authors: Logan Wasmer, Jose De La Cruz, Ilynd Rapant, 
+// Authors: Logan Wasmer, Jose De La Cruz, Ilynd Rapant, Joshua Dawson
 
 /**********************************************************/
 /**********************************************************/
@@ -12,6 +12,7 @@ import java.util.*;
 
 public class master extends helpers{
 public static void main(String args[]) throws FileNotFoundException{
+    PlayerData saveFile = new PlayerData();
     String baseWord = getBaseWord(dictionaryFile());
     char reqLetter = getReqLetter(baseWord);
 }
@@ -91,7 +92,7 @@ public static char getReqLetter(String baseWord){
  * returns: int 
  * This function recieves a String as a parameter,
  * the length of the string is then retrived. After 
- * the amount of pointes is determined be the length
+ * the amount of points is determined be the length
  * it will return that point value.
  */
 
