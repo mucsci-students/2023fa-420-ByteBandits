@@ -13,7 +13,7 @@ import java.util.Random;
 
 public class master extends helpers{
 public static void main(String args[]) throws FileNotFoundException{
-    PlayerData saveFile = new PlayerData();
+    playerData saveFile = new playerData();
     String baseWord = getBaseWord(dictionaryFile());
     char reqLetter = getReqLetter(baseWord);
 }
@@ -127,7 +127,7 @@ private static int pointsPWord(String userGuess){
 /*********************************************************/
 
 /*
- * playerRank
+ * Rank
  * param: int playerPoints
  * returns: String
  * This function receives an int as a parameter, the int value
