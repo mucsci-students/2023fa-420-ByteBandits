@@ -6,6 +6,7 @@
 //Imports
 import java.io.*;
 import java.util.*;
+import java.util.Random;
 
 /**********************************************************/
 /**********************************************************/
@@ -295,8 +296,43 @@ public static void display(String baseword, char required)
      return builder.toString();
  }
     
+/*********************************************************/
+/*********************************************************/
 
+/*
+ * shuffle
+ * param: String curr
+ * param: char required
+ * returns: nothing
+ * This function shuffles the letters of a current puzzle 
+ */
+public static void shuffle (String curr, char required)
+{
+    //Convert the input string to a character array
+    char[] charArray = curr.toCharArray();
 
+    //Create a random number generator
+    Random rand = new Random();
+
+    //Loop through the character array for shuffling
+    for (int i = charArray.length - 1; i > 0; i--)
+    {
+        //Generate a random index between 0 and i
+        int j = rand.nextInt(i + 1);
+
+        //Swap the characters at positions i and j
+        char temp = charArray[i];
+        charArray[i] = charArray[j];
+        charArray[j] = temp;
+    }
+    //Convert the shuffled character array back to a string 
+    String shuffled = new String(charArray);
+    
+    //This will display the shuffled word in the format we like
+    //display (shuffled, required);
+    //commenting it out until I have display merged with master
+}
+  
 
 }
 
