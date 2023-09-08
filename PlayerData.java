@@ -8,7 +8,7 @@ import java.util.prefs.Preferences;
  *NOTE: Char for required letter must be converted to string before calling this class for savefile to work. 
  */
 
-public class PlayerData {
+public class playerData {
 
    /*
     * savePlayerData
@@ -19,7 +19,7 @@ public class PlayerData {
     */
 
     public static void savePlayerData(String chosenWord, String reqLetterString, int score, String rank){
-        Preferences prefs = Preferences.userNodeForPackage(PlayerData.class);
+        Preferences prefs = Preferences.userNodeForPackage(playerData.class);
         prefs.put("ChosenWord", chosenWord);
         prefs.put("ReqLetter", reqLetterString);
         prefs.putInt("Score", score);
@@ -38,7 +38,7 @@ public class PlayerData {
     */
 
     public static void loadPlayerData(){
-        Preferences prefs = Preferences.userNodeForPackage(PlayerData.class);
+        Preferences prefs = Preferences.userNodeForPackage(playerData.class);
         String chosenWord = prefs.get("ChosenWord", "EMPTY");
         String reqLetterString = prefs.get("ReqLetter", "EMPTY");
         int score = prefs.getInt("Score", 0);
