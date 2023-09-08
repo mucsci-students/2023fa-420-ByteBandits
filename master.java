@@ -235,10 +235,11 @@ public static void exit()
 /*
  * shuffle
  * param: String curr
- * returns: String
+ * param: char required
+ * returns: nothing
  * This function shuffles the letters of a current puzzle 
  */
-public static String shuffle (String curr)
+public static void shuffle (String curr, char required)
 {
     //Convert the input string to a character array
     char[] charArray = curr.toCharArray();
@@ -260,8 +261,9 @@ public static String shuffle (String curr)
     //Convert the shuffled character array back to a string 
     String shuffled = new String(charArray);
     
-    //Return the shuffle string
-    return shuffled;
+    //This will display the shuffled word in the format we like
+    //display (shuffled, required);
+    //commenting it out until I have display merged with master
 }
   
 }
