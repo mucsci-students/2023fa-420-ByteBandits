@@ -233,6 +233,73 @@ public static void exit()
 /*********************************************************/
 
 /*
+ * display
+ * param: String baseword
+ * param: char required
+ * returns: nothiing
+ * This function creates a cool display for the puzzle
+ */
+
+public static void display(String baseword, char required)
+{
+    //Remove the required character from the baseword
+    String result = removeChar(baseword, required);
+    
+    
+    //Convert the result (shuffled characters without the required word)
+    char[] charArray = result.toCharArray(); 
+
+    //Display the characters in a specific format
+    System.out.println("   -----");
+    System.out.print(" / ");
+    for (int i = 0; i < 3; i++) {
+        System.out.print(charArray[i] + " ");
+    }
+    System.out.print( "\\");
+    System.out.println();
+    System.out.println("||   " + required + "   ||");
+    System.out.print(" \\ ");
+    for (int i = 3; i < 6; i++) {
+        System.out.print(charArray[i] + " ");
+    }
+    System.out.println("/");
+    System.out.println("   -----");
+}
+
+/*********************************************************/
+/*********************************************************/
+ /*
+ * removeChar
+ * param: String current
+ * param: char remove
+ * returns: String
+ * This is a helper function for display.  It gets rid of the 
+ * required letter from the baseword.
+ */
+
+ private static String removeChar(String current, char remove)
+ {
+     //Create a StringBuilder to construct the new string without the required letter
+     StringBuilder builder = new StringBuilder();
+
+     //Iterate through each character in the input string
+     for (char c : current.toCharArray())
+     {
+         //Check if the current character is not equal to the character to be removed
+         if (c != remove)
+         {
+             //Append the character to the StringBuilder if it's not the character to  be removed
+             builder.append(c);
+         }
+     }
+     //Convert the StringBuilder to a string and return the updated string
+     return builder.toString();
+ }
+    
+/*********************************************************/
+/*********************************************************/
+
+/*
  * shuffle
  * param: String curr
  * param: char required
@@ -266,6 +333,7 @@ public static void shuffle (String curr, char required)
     //commenting it out until I have display merged with master
 }
   
+
 }
 
 
