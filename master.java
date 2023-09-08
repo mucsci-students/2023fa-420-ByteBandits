@@ -227,7 +227,21 @@ public static void exit()
 {
    System.exit(0);
 }
-  
+/*********************************************************/
+/*********************************************************/
+
+/*
+ * getCurrent
+ * param: String baseword
+ * param: char required
+ * returns: a nice display of current puzzle
+ * This function gets the current word of the puzzle and 
+ * displays it in a nice way 
+ */
+public static void getCurrent(String baseword, char required)
+{
+    display (baseword, required);
+}
 }
 
 
