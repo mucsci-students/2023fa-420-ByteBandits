@@ -306,6 +306,7 @@ public static void display(String baseword, char required)
  * returns: nothing
  * This function shuffles the letters of a current puzzle 
  */
+  
 public static void shuffle (String curr, char required)
 {
     //Convert the input string to a character array
@@ -333,7 +334,23 @@ public static void shuffle (String curr, char required)
     //commenting it out until I have display merged with master
 }
   
-
+/*********************************************************/
+/*********************************************************/
+  
+/* 
+* getCurrent
+* param: String baseword
+* param: char required
+* returns: a nice display of current puzzle
+* This function gets the current word of the puzzle and 
+* displays it in a nice way 
+*/
+  
+public static void getCurrent(String baseword, char required)
+{
+    display (baseword, required);
+}
+  
 }
 
 
