@@ -274,11 +274,14 @@ public static void shuffle (String curr, char required)
 /*********************************************************/
 
 /*
- * shuffle
- * param: String curr
- * param: char required
- * returns: nothing
- * This function shuffles the letters of a current puzzle 
+ * acceptedWords
+ * param: String baseWord, char reqLetter
+ * returns: List<String>
+ * This function scans through each string in the dictionary
+ * and makes sure each char in that string is also included 
+ * in baseWord as well as making sure it inlcudes the reqLetter.
+ * It then adds any string that passes the test into the List<String>
+ * and returns it. 
  */
 
 public static List<String> acceptedWords(String baseWord, char reqLetter) throws FileNotFoundException{
