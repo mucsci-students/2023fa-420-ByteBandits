@@ -6,7 +6,6 @@
 //Imports
 import java.io.*;
 import java.util.*;
-import java.util.Random;
 
 /**********************************************************/
 /**********************************************************/
@@ -14,7 +13,8 @@ import java.util.Random;
 public class master extends helpers{
 public static void main(String args[]) throws FileNotFoundException{
     String baseWord = getBaseWord(dictionaryFile());
-    char reqLetter = getReqLetter(baseWord);
+    char reqLetter = getReqLetter(baseWord);   
+    List<String> acceptedWordList = acceptedWords(baseWord, reqLetter);
 }
 
 /**********************************************************/
@@ -23,19 +23,22 @@ public static void main(String args[]) throws FileNotFoundException{
 /*
  * dictionaryFile
  * param: N/A
- * returns: String[] 
+ * returns: List<String> 
  * This function scans the given dictionary file
- * of seven letter words and creates a string array
- * of all the words on the file.
+ * of seven letter words and creates an arraylist of strings
+ * of all the words on the file that have all unique letters.
  */
 
-public static String[] dictionaryFile() throws FileNotFoundException{
+public static List<String> dictionaryFile() throws FileNotFoundException{
     Scanner scanner = new Scanner(new File("7-letter-words.txt"));
-    String[] sevenLetterWords = new String[25251];
+    List<String> sevenLetterWords = new ArrayList<>();
     int i = 0;
-    while(scanner.hasNext()){
-        sevenLetterWords[i] = scanner.nextLine();
-        i++;
+    while(scanner.hasNextLine()){
+        var a = scanner.nextLine();
+        if(isUnique(a)){
+            sevenLetterWords.add(a);
+            i++;
+        }
     } 
     return sevenLetterWords;
 }
@@ -45,7 +48,7 @@ public static String[] dictionaryFile() throws FileNotFoundException{
 
 /*
  * getBaseWord
- * param: String[] dictionary
+ * param: List<String> dictionary
  * returns: String 
  * This function receives the string array from
  * dictionaryFile and randomly chooses a word
@@ -53,12 +56,12 @@ public static String[] dictionaryFile() throws FileNotFoundException{
  * is then returned and acts as our base word.
  */
 
-public static String getBaseWord(String[] dictionary){
+public static String getBaseWord(List<String> dictionary) throws FileNotFoundException{
     Random rand = new Random();
-    int upperBound = 25250;
+    int upperBound = dictionaryFile().size();
     int randomInt = rand.nextInt(upperBound);
     
-    return dictionary[randomInt];
+    return dictionary.get(randomInt);
 }
 
 /**********************************************************/
@@ -239,6 +242,7 @@ public static void exit()
  * returns: nothing
  * This function shuffles the letters of a current puzzle 
  */
+
 public static void shuffle (String curr, char required)
 {
     //Convert the input string to a character array
@@ -265,7 +269,34 @@ public static void shuffle (String curr, char required)
     //display (shuffled, required);
     //commenting it out until I have display merged with master
 }
-  
+
+/*********************************************************/
+/*********************************************************/
+
+/*
+ * shuffle
+ * param: String curr
+ * param: char required
+ * returns: nothing
+ * This function shuffles the letters of a current puzzle 
+ */
+
+public static List<String> acceptedWords(String baseWord, char reqLetter) throws FileNotFoundException{
+    Scanner scanner = new Scanner(new File("Dictionary.txt"));
+    List<String> acceptedWordList = new ArrayList<>();
+    String reqLetter2 = Character.toString(reqLetter);
+    
+    String sNL = scanner.nextLine();
+    while(scanner.hasNextLine()){
+        if(sameChars(baseWord, sNL) && sNL.contains(reqLetter2)){
+            acceptedWordList.add(sNL);
+        }
+        sNL = scanner.nextLine();  
+    }
+
+    return acceptedWordList;
+}
+
 }
 
 
