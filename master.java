@@ -281,7 +281,7 @@ public static void shuffle (String curr, char required)
  * and makes sure each char in that string is also included 
  * in baseWord as well as making sure it inlcudes the reqLetter.
  * It then adds any string that passes the test into the List<String>
- * and returns it. 
+ * and then returns it. 
  */
 
 public static List<String> acceptedWords(String baseWord, char reqLetter) throws FileNotFoundException{
