@@ -61,7 +61,7 @@ public static boolean isUnique(String s)
  * This function takes the base word and a string from the dictionary.
  * It then converts base word to a set of chars and checks if all chars
  * in dicString are in baseWord. If it finds so much as 1 that isnt in baseWord
- * it returns false. If the tests pass then it returns true.
+ * it returns false. If the tests all pass then it returns true.
  */
 
 public static boolean sameChars(String baseWord, String dicString) {

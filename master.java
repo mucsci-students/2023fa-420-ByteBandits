@@ -281,11 +281,11 @@ public static void shuffle (String curr, char required)
  * and makes sure each char in that string is also included 
  * in baseWord as well as making sure it inlcudes the reqLetter.
  * It then adds any string that passes the test into the List<String>
- * and then returns it. 
+ * and then finally returns it. 
  */
 
 public static List<String> acceptedWords(String baseWord, char reqLetter) throws FileNotFoundException{
-    Scanner scanner = new Scanner(new File("Dictionary.txt"));
+    Scanner scanner = new Scanner(new File("4-15_Dictionary.txt"));
     List<String> acceptedWordList = new ArrayList<>();
     String reqLetter2 = Character.toString(reqLetter);
     
