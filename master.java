@@ -230,21 +230,6 @@ public static void exit()
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /*********************************************************/
 /*********************************************************/
 
@@ -345,8 +330,8 @@ public static void shuffle (String curr, char required)
     String shuffled = new String(charArray);
     
     //This will display the shuffled word in the format we like
-    //display (shuffled, required);
-    //commenting it out until I have display merged with master
+    display (shuffled, required);
+    
 }
   
 
