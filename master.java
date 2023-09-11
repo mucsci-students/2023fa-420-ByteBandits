@@ -14,8 +14,55 @@ public class master extends helpers{
 public static void main(String args[]) throws FileNotFoundException{
     playerData saveFile = new playerData();
     String baseWord = getBaseWord(dictionaryFile());
-    char reqLetter = getReqLetter(baseWord);   
-    List<String> acceptedWordList = acceptedWords(baseWord, reqLetter);
+    char reqLetter = getReqLetter(baseWord);
+    intro();
+    
+    Scanner inputScanner = new Scanner(System.in);
+    String input;
+    //------------------------------------------------------//
+    //LOGIC FOR COMMAND INPUT
+    do
+    {
+        input = inputScanner.nextLine();
+
+        switch (input.toLowerCase())
+        {
+            case "new puzzle":
+                //insert new puzzle command call here
+                break;
+            case "base puzzle":
+                //insert base puzzle command call here
+                break;
+            case "show puzzle":
+                //display(basword, required letter)
+                break;
+            case "found words":
+                //insert found words command call here
+                break;
+            case "guess":
+                //insert guess command call here
+                break;
+            case "shuffle":
+                //shuffle (String curr, char required)
+                break;
+            case "save puzzle":
+                //savePlayerData(String chosenWord, String reqLetterString, int score, String rank)
+                System.out.println("Game Status Saved!");
+                break;
+            case "load puzzle":
+                playerData.loadPlayerData();
+                System.out.println("Game Status Loaded!");
+                break;
+            case "show status":
+                //playerRank(reqLetter);
+                break;
+        }
+    }
+    while (!input.equalsIgnoreCase("exit"));
+    inputScanner.close();
+    System.out.println("Thanks for playing! :)");
+    
+    //------------------------------------------------------//
 }
 
 /**********************************************************/
@@ -24,22 +71,19 @@ public static void main(String args[]) throws FileNotFoundException{
 /*
  * dictionaryFile
  * param: N/A
- * returns: List<String> 
+ * returns: String[] 
  * This function scans the given dictionary file
- * of seven letter words and creates an arraylist of strings
- * of all the words on the file that have all unique letters.
+ * of seven letter words and creates a string array
+ * of all the words on the file.
  */
 
-public static List<String> dictionaryFile() throws FileNotFoundException{
+public static String[] dictionaryFile() throws FileNotFoundException{
     Scanner scanner = new Scanner(new File("7-letter-words.txt"));
-    List<String> sevenLetterWords = new ArrayList<>();
+    String[] sevenLetterWords = new String[25251];
     int i = 0;
-    while(scanner.hasNextLine()){
-        var a = scanner.nextLine();
-        if(isUnique(a)){
-            sevenLetterWords.add(a);
-            i++;
-        }
+    while(scanner.hasNext()){
+        sevenLetterWords[i] = scanner.nextLine();
+        i++;
     } 
     return sevenLetterWords;
 }
@@ -49,7 +93,7 @@ public static List<String> dictionaryFile() throws FileNotFoundException{
 
 /*
  * getBaseWord
- * param: List<String> dictionary
+ * param: String[] dictionary
  * returns: String 
  * This function receives the string array from
  * dictionaryFile and randomly chooses a word
@@ -57,12 +101,12 @@ public static List<String> dictionaryFile() throws FileNotFoundException{
  * is then returned and acts as our base word.
  */
 
-public static String getBaseWord(List<String> dictionary) throws FileNotFoundException{
+public static String getBaseWord(String[] dictionary){
     Random rand = new Random();
-    int upperBound = dictionaryFile().size();
+    int upperBound = 25250;
     int randomInt = rand.nextInt(upperBound);
     
-    return dictionary.get(randomInt);
+    return dictionary[randomInt];
 }
 
 /**********************************************************/
@@ -130,7 +174,7 @@ private static int pointsPWord(String userGuess){
 /*********************************************************/
 
 /*
- * Rank
+ * playerRank
  * param: int playerPoints
  * returns: String
  * This function receives an int as a parameter, the int value
@@ -204,7 +248,7 @@ public static void help()
       "The player can see their rank and progress on a current puzzle",
       "Leave the application"
    };
-   System.out.println("The Spelling Bee game allows players to create words using 7 unique letters with a required letter. ");
+   System.out.println("The WordyWasps game allows players to create words using 7 unique letters with a required letter. ");
    System.out.println("- Words must contain at least 4 letters");
    System.out.println("- Words must include the required letter");
    System.out.println("- Letters can be used more than once");
@@ -337,37 +381,7 @@ public static void shuffle (String curr, char required)
     //display (shuffled, required);
     //commenting it out until I have display merged with master
 }
-
-/*********************************************************/
-/*********************************************************/
-
-/*
- * acceptedWords
- * param: String baseWord, char reqLetter
- * returns: List<String>
- * This function scans through each string in the dictionary
- * and makes sure each char in that string is also included 
- * in baseWord as well as making sure it inlcudes the reqLetter.
- * It then adds any string that passes the test into the List<String>
- * and then finally returns it. 
- */
-
-public static List<String> acceptedWords(String baseWord, char reqLetter) throws FileNotFoundException{
-    Scanner scanner = new Scanner(new File("4-15_Dictionary.txt"));
-    List<String> acceptedWordList = new ArrayList<>();
-    String reqLetter2 = Character.toString(reqLetter);
-    
-    String sNL = scanner.nextLine();
-    while(scanner.hasNextLine()){
-        if(sameChars(baseWord, sNL) && sNL.contains(reqLetter2)){
-            acceptedWordList.add(sNL);
-        }
-        sNL = scanner.nextLine();  
-    }
-
-    return acceptedWordList;
-}
-
+  
 /*********************************************************/
 /*********************************************************/
   
@@ -384,9 +398,45 @@ public static void getCurrent(String baseword, char required)
 {
     display (baseword, required);
 }
-  
 
+/*********************************************************/
+/*********************************************************/
+
+/* 
+* intro
+* param: N/A
+* param: N/A
+* returns: an introduction to the game and basic commands
+*/
+
+public static void intro()
+{
+    // ANSI escape code for red color
+    String yellowColor = "\u001B[33m";
+    // ANSI escape code for resetting the color
+    String resetColor = "\u001B[0m";
+
+    System.out.println("Welcome to " + yellowColor + "WordyWasps - A Word Puzzle Game!" + resetColor);
+    System.out.println("In WordyWasps, you'll be given a set of 7 letters and 1 required letter. Your goal is to create words from them.");
+    System.out.println("Here are the " + yellowColor + "basic commands" + resetColor + " you can use to play the game:");
+
+    System.out.println("1. " + yellowColor + "New Puzzle" + resetColor + ": Start a new puzzle.");
+    System.out.println("2. " + yellowColor + "Base Puzzle" + resetColor + ": Restart the current puzzle with the same set of letters.");
+    System.out.println("3. " + yellowColor + "Show Puzzle" + resetColor + ": Display the current set of 7 letters.");
+    System.out.println("4. " + yellowColor + "Found Words" + resetColor + ": Show the words you've already found.");
+    System.out.println("5. " + yellowColor + "Guess" + resetColor + ": Enter a word you think is valid.");
+    System.out.println("6. " + yellowColor + "Shuffle" + resetColor + ": Shuffle the 7 letters to get a new arrangement.");
+    System.out.println("7. " + yellowColor + "Save Puzzle" + resetColor + ": Save the current puzzle for later.");
+    System.out.println("8. " + yellowColor + "Save Current" + resetColor + ": Save your progress in the current game.");
+    System.out.println("9. " + yellowColor + "Load Puzzle" + resetColor + ": Load a previously saved puzzle.");
+    System.out.println("10. " + yellowColor + "Show Status" + resetColor + ": Display your current game status.");
+    System.out.println("11. " + yellowColor + "Exit" + resetColor + ": Quit the game.");
+
+    System.out.println("Now that you know the commands, let's start playing! Have fun and find as many words as you can!");
+    System.out.println();
 }
+}
+
 
 
 
