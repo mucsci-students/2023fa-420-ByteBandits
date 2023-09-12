@@ -359,7 +359,7 @@ private static List<String> acceptedWords(String baseWord, char reqLetter) throw
  * session of guesses.
  */
 
-private static void guess(String baseWord, List<String> acceptedWords){
+private static List<String> guess(String baseWord, List<String> acceptedWords){
     List<String> foundWords = new ArrayList<>();
     
     Scanner guessedWord = new Scanner(System.in);
@@ -382,7 +382,9 @@ private static void guess(String baseWord, List<String> acceptedWords){
             System.out.println("\nNot a valid word, try again!\n");
         }
         
-    } 
+    }
+    
+    return foundWords;
 
 }
 
@@ -396,10 +398,46 @@ private static void guess(String baseWord, List<String> acceptedWords){
  * This function is used to display the rank and player points
  * of the pllayer during the current session.
  */
+
 private static void puzzleStatus (String playerRank){
 
     System.out.println("YOUR CURRENT RANK: " + playerRank);
     System.out.println("YOUR CURRENT POINTS: " + totalPoints);
+
+}
+
+/*********************************************************/
+/*********************************************************/
+
+/*
+ * foundWordList
+ * param: N/A
+ * returns: N/A
+ * This function is used to display the rank and player points
+ * of the pllayer during the current session.
+ */
+
+private static void foundWordList (){
+    
+    String yellowColor = "\u001B[33m";
+
+    String resetColor = "\u001B[0m";
+
+    System.out.printf("%-2sFOUND WORD LIST%n", ""); 
+    
+    for (int i = 0; i <= 18; i++){
+        System.out.print(yellowColor + "*" + resetColor);
+    }
+
+    System.out.println();
+
+    for(int j = 0; j < foundWords.size(); j++){
+        System.out.printf(yellowColor + "* " + resetColor + "%-16s" + yellowColor + "*%n", foundWords.get(j));
+    }
+
+     for (int k = 0; k <= 18; k++){
+        System.out.print(yellowColor + "*" + resetColor);
+    }
 
 }
 
