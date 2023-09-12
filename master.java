@@ -21,6 +21,7 @@ public static void main(String args[]) throws FileNotFoundException, Interrupted
     String baseWord = getBaseWord(dictionaryFile());
     char reqLetter = getReqLetter(baseWord);
     List<String> acceptedWordList = acceptedWords(baseWord, reqLetter);
+    String shuffleWord = baseWord;
     
     intro();
     Scanner inputScanner = new Scanner(System.in);
@@ -46,19 +47,56 @@ public static void main(String args[]) throws FileNotFoundException, Interrupted
                 System.out.println("\u001B[33m" + "Buzz...\n" + "\u001B[0m");
                 Thread.sleep(500);
                 
-                display(baseWord, reqLetter);
+                shuffleWord = shuffle(baseWord, reqLetter);
                 guess(baseWord, acceptedWordList);
                 
                 System.out.println();
                 break;
             case "/basepuzzle":
-                //insert base puzzle command call here
+            totalPoints = 0;
+            String yellowColor = "\u001B[33m";
+            foundWords = new ArrayList<>();
+            Scanner console = new Scanner(System.in);
+            System.out.println("Please choose a baseword: ");
+            baseWord = console.next();
+            reqLetter = getReqLetter(baseWord);
+
+            acceptedWordList = acceptedWords(baseWord, reqLetter);
+            System.out.println("\u001B[33m" + "\nBuzzing for a new word..." + "\u001B[0m");
+            Thread.sleep(500);
+            System.out.println("\u001B[33m" + "Buzz..." + "\u001B[0m");
+            Thread.sleep(500);
+            System.out.println("\u001B[33m" + "Buzz...\n" + "\u001B[0m");
+            Thread.sleep(500);
+        
+            if (baseWord.length() >= 8 || baseWord.length() <= 6) 
+            {
+                System.out.println(yellowColor + "Uh oh, word has to have 7 letters!");
+                break; 
+            }
+        
+            if (!acceptedWordList.contains(baseWord)) 
+            {
+                System.out.println(yellowColor + "Are you making stuff up now!  Make sure you type a valid word!");
+                break; 
+            }
+        
+            if (!isUnique(baseWord))
+            {
+                System.out.println(yellowColor + "Oops, all letters have to be unique!");
+                break; // Add this break statement to exit the case
+            }
+        
+            shuffleWord = shuffle(baseWord, reqLetter);
+            guess(baseWord, acceptedWordList);
+        
+            System.out.println();
                 break;
             case "/guess":
                 guess(baseWord, acceptedWordList);
                 break;
             case "/showpuzzle":
-                display(baseWord, reqLetter);
+                display(shuffleWord, reqLetter);
                 break;
             case "/foundwords":
                 foundWordList();
@@ -68,7 +106,7 @@ public static void main(String args[]) throws FileNotFoundException, Interrupted
                 Thread.sleep(1000);
                 System.out.println("\u001B[33m" + "Bzzzzzzzzzzz!\n" + "\u001B[0m");
                 Thread.sleep(500);
-                shuffle(baseWord, reqLetter);
+                shuffleWord = shuffle(baseWord, reqLetter);
                 break;
             case "/savepuzzle":
                 playerData.savePlayerData(baseWord, String.valueOf(reqLetter), 10, "cool");
@@ -285,20 +323,20 @@ private static String playerRank(String baseWord, int playerPoints, List<String>
   
 private static void help()
 {
-
+   String yellowColor = "\u001B[33m";
    String [] commandLines = {
-      "New Puzzle",
-      "Base Puzzle",
-      "Show Puzzle",
-      "Found Words",
-      "Guess",
-      "Shuffle",
-      "Save Puzzle",
-      "Save Current",
-      "Load Puzzle",
-      "Show Status",
-      "Help",
-      "Exit"
+      "/newpuzzle",
+      "/basepuzzle",
+      "/showpuzzle",
+      "/foundwords",
+      "/guess",
+      "/shuffle",
+      "/savepuzzle",
+      "/savecurrent",
+      "/loadpuzzle",
+      "/showstatus",
+      "/help",
+      "/exit"
    };
    String [] explanations = {
       "Generates a new puzzle with 7 unique letters and a required letter",
@@ -315,14 +353,14 @@ private static void help()
       "Leave the application"
    };
    System.out.println();
-   System.out.println("The WordyWasps game allows players to create words using 7 unique letters with a required letter. ");
+   System.out.println(yellowColor + "The WordyWasps game allows players to create words using 7 unique letters with a required letter. ");
    System.out.println("- Words must contain at least 4 letters");
    System.out.println("- Words must include the required letter");
    System.out.println("- Letters can be used more than once");
    System.out.println("");
-   System.out.println("Command Line    |   Explanation");
+   System.out.println(yellowColor + "Command Line    |   Explanation");
 
-        System.out.println("---------------------------------------");
+        System.out.println(yellowColor + "---------------------------------------");
         for (int i = 0; i < commandLines.length; i++) {
           System.out.printf("%-15s |   %s%n", commandLines[i], explanations[i]);
         }
@@ -334,11 +372,11 @@ private static void help()
 /*
  * display
  * param: String baseword, char required
- * returns: nothing
+ * returns: String
  * This function creates a cool display for the puzzle.
  */
 
-private static void display(String baseword, char required)
+private static String display(String baseword, char required)
 {
     String result = removeChar(baseword, required);
     
@@ -360,6 +398,8 @@ private static void display(String baseword, char required)
 
     System.out.println("/");
     System.out.println("   -----");
+
+    return baseword;
 }
     
 /*********************************************************/
@@ -368,11 +408,11 @@ private static void display(String baseword, char required)
 /*
  * shuffle
  * param: String curr, char required
- * returns: N/A
+ * returns: String
  * This function shuffles the letters of a current puzzle.
  */
   
-private static void shuffle (String curr, char required)
+private static String shuffle (String curr, char required)
 {
 
     char[] charArray = curr.toCharArray();
@@ -391,7 +431,7 @@ private static void shuffle (String curr, char required)
     String shuffled = new String(charArray);
 
     display (shuffled, required);
-    
+    return shuffled;
 }
 
 /*********************************************************/
@@ -596,7 +636,6 @@ public static void intro()
     System.out.println("Now that you know the commands, let's start playing! Have fun and find as many words as you can!");
     System.out.println();
 }
-
 }
 
 
