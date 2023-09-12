@@ -386,6 +386,23 @@ private static void guess(String baseWord, List<String> acceptedWords){
 
 }
 
+/*********************************************************/
+/*********************************************************/
+
+/*
+ * puzzleStatus
+ * param: String playerRank
+ * returns: N/A
+ * This function is used to display the rank and player points
+ * of the pllayer during the current session.
+ */
+private static void puzzleStatus (String playerRank){
+
+    System.out.println("YOUR CURRENT RANK: " + playerRank);
+    System.out.println("YOUR CURRENT POINTS: " + totalPoints);
+
+}
+
 }
 
 
