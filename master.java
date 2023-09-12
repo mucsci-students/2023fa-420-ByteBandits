@@ -460,9 +460,6 @@ private static void guess(String baseWord, List<String> acceptedWords){
         }
         
     }
-    
-    return foundWords;
-
 
 }
 
