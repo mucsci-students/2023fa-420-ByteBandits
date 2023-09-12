@@ -145,8 +145,6 @@ private static String playerRank(String baseWord, int playerPoints, List<String>
 
     int posPoints = possiblePoints(baseWord,possiblewords);
 
-    System.out.println(posPoints);
-
     double goodStart = 0.02 * posPoints;
     double movingUp = 0.05 * posPoints;
     double good = 0.08 * posPoints;
@@ -308,6 +306,8 @@ public static void shuffle (String curr, char required)
     }
 
     String shuffled = new String(charArray);
+
+    display (shuffled, required);
     
 }
 
