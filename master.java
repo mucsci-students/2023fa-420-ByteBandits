@@ -34,6 +34,7 @@ public static void main(String args[]) throws FileNotFoundException, Interrupted
         switch (input.toLowerCase())
         {
             case "/newpuzzle":
+                totalPoints = 0;
                 foundWords = new ArrayList<>();
                 baseWord = getBaseWord(dictionaryFile());
                 reqLetter = getReqLetter(baseWord);
@@ -60,7 +61,7 @@ public static void main(String args[]) throws FileNotFoundException, Interrupted
                 display(baseWord, reqLetter);
                 break;
             case "/foundwords":
-                //insert found words command call here
+                foundWordList();
                 break;
             case "/shuffle":
                 System.out.println("\u001B[33m" + "\nShaking up the hive!" + "\u001B[0m");
@@ -78,7 +79,7 @@ public static void main(String args[]) throws FileNotFoundException, Interrupted
                 System.out.println("Game Status Loaded!");
                 break;
             case "/showstatus":
-                //playerRank(reqLetter);
+                puzzleStatus(playerRank(baseWord, totalPoints, acceptedWordList));
                 break;
             case "/help":
                 help();
@@ -196,6 +197,9 @@ private static int pointsPWord(String baseWord, String userGuess){
             
             if (sameChars(baseWord, userGuess)){
                 points += 7;
+                System.out.println();
+                System.out.println("\u001B[33m" + "Your guess was a PANGRAM!" + "\u001B[0m");
+                System.out.println("\u001B[33m" + "BONUS +7!\n" + "\u001B[0m");
             }
 
             System.out.println("\u001B[33m" + "Awesome! +" + points + " pts\n" + "\u001B[0m");
@@ -477,8 +481,16 @@ private static void guess(String baseWord, List<String> acceptedWords){
 
 private static void puzzleStatus (String playerRank){
 
-    System.out.println("YOUR CURRENT RANK: " + playerRank);
-    System.out.println("YOUR CURRENT POINTS: " + totalPoints);
+    String yellowColor = "\u001B[33m";
+
+    String resetColor = "\u001B[0m";
+
+    System.out.println();
+
+    System.out.println("YOUR CURRENT RANK IS: " + yellowColor + playerRank + resetColor);
+    System.out.println("YOUR CURRENT POINTS ARE: " + yellowColor + totalPoints + resetColor);
+
+    System.out.println();
 
 }
 
@@ -499,6 +511,8 @@ private static void foundWordList (){
 
     String resetColor = "\u001B[0m";
 
+    System.out.println();
+
     System.out.printf("%-2sFOUND WORD LIST%n", ""); 
     
     for (int i = 0; i <= 18; i++){
@@ -514,6 +528,9 @@ private static void foundWordList (){
      for (int k = 0; k <= 18; k++){
         System.out.print(yellowColor + "*" + resetColor);
     }
+    
+    System.out.println();
+    System.out.println();
 
 }
 
