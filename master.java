@@ -7,15 +7,19 @@
 import java.io.*;
 import java.util.*;
 
+
 /**********************************************************/
 /**********************************************************/
 
 public class master extends helpers{
+    static int totalPoints = 0;
 public static void main(String args[]) throws FileNotFoundException{
+    
     playerData saveFile = new playerData();
-    String baseWord = getBaseWord(dictionaryFile());
-    char reqLetter = getReqLetter(baseWord);   
+    String baseWord = "planets";
+    char reqLetter = 'n';   
     List<String> acceptedWordList = acceptedWords(baseWord, reqLetter);
+
 }
 
 /**********************************************************/
@@ -30,7 +34,7 @@ public static void main(String args[]) throws FileNotFoundException{
  * of all the words on the file that have all unique letters.
  */
 
-public static List<String> dictionaryFile() throws FileNotFoundException{
+private static List<String> dictionaryFile() throws FileNotFoundException{
     Scanner scanner = new Scanner(new File("7-letter-words.txt"));
     List<String> sevenLetterWords = new ArrayList<>();
     int i = 0;
@@ -57,7 +61,7 @@ public static List<String> dictionaryFile() throws FileNotFoundException{
  * is then returned and acts as our base word.
  */
 
-public static String getBaseWord(List<String> dictionary) throws FileNotFoundException{
+private static String getBaseWord(List<String> dictionary) throws FileNotFoundException{
     Random rand = new Random();
     int upperBound = dictionaryFile().size();
     int randomInt = rand.nextInt(upperBound);
@@ -79,7 +83,7 @@ public static String getBaseWord(List<String> dictionary) throws FileNotFoundExc
  * our required character.
  */
 
-public static char getReqLetter(String baseWord){
+private static char getReqLetter(String baseWord){
     Random rand = new Random();
     int upperBound = 7;
     int randomInt = rand.nextInt(upperBound);
@@ -203,7 +207,7 @@ private static String playerRank(String baseWord, int playerPoints, List<String>
  * each command line does. 
  */
   
-public static void help()
+private static void help()
 {
 
    String [] commandLines = {
@@ -255,7 +259,7 @@ public static void help()
  * This function creates a cool display for the puzzle.
  */
 
-public static void display(String baseword, char required)
+private static void display(String baseword, char required)
 {
     String result = removeChar(baseword, required);
     
@@ -289,7 +293,7 @@ public static void display(String baseword, char required)
  * This function shuffles the letters of a current puzzle.
  */
   
-public static void shuffle (String curr, char required)
+private static void shuffle (String curr, char required)
 {
 
     char[] charArray = curr.toCharArray();
@@ -325,7 +329,7 @@ public static void shuffle (String curr, char required)
  * and then finally returns it. 
  */
 
-public static List<String> acceptedWords(String baseWord, char reqLetter) throws FileNotFoundException{
+private static List<String> acceptedWords(String baseWord, char reqLetter) throws FileNotFoundException{
     Scanner scanner = new Scanner(new File("4-15_Dictionary.txt"));
     List<String> acceptedWordList = new ArrayList<>();
     String reqLetter2 = Character.toString(reqLetter);
@@ -339,6 +343,47 @@ public static List<String> acceptedWords(String baseWord, char reqLetter) throws
     }
 
     return acceptedWordList;
+}
+
+/*********************************************************/
+/*********************************************************/
+
+/*
+ * guess
+ * param: String baseWord, acceptedWords 
+ * returns: int
+ * This function is invoked via a command from the user.
+ * When a user is in this function, they will keep making
+ * guesses until they invoke to stop guessing.
+ * The total points are then returned from this
+ * session of guesses.
+ */
+
+private static void guess(String baseWord, List<String> acceptedWords){
+    List<String> foundWords = new ArrayList<>();
+    
+    Scanner guessedWord = new Scanner(System.in);
+    
+    while(true){
+        System.out.print("Guess a word: ");
+        
+        String validWord = guessedWord.nextLine();
+        
+        if(validWord.equals("/quit")){
+            guessedWord.close();
+            break;
+        }
+
+        if(acceptedWords.contains(validWord)){
+            
+            foundWords.add(validWord);
+            totalPoints += pointsPWord(baseWord, validWord);
+        }else{
+            System.out.println("\nNot a valid word, try again!\n");
+        }
+        
+    } 
+
 }
 
 }
