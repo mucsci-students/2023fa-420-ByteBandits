@@ -18,7 +18,7 @@ public class playerData {
     * a String to be found in the load state later. 
     */
 
-    public void savePlayerData(String chosenWord, String reqLetterString, int score, String rank){
+    public static void savePlayerData(String chosenWord, String reqLetterString, int score, String rank){
         Preferences prefs = Preferences.userNodeForPackage(playerData.class);
         prefs.put("ChosenWord", chosenWord);
         prefs.put("ReqLetter", reqLetterString);
@@ -45,3 +45,5 @@ public class playerData {
         String rank = prefs.get("Rank", "EMPTY");
     }
 }
+
+//json simple for saving?

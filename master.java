@@ -11,7 +11,7 @@ import java.util.*;
 /**********************************************************/
 
 public class master extends helpers{
-public static void main(String args[]) throws FileNotFoundException{
+public static void main(String args[]) throws FileNotFoundException, InterruptedException{
     playerData saveFile = new playerData();
     String baseWord = getBaseWord(dictionaryFile());
     char reqLetter = getReqLetter(baseWord);
@@ -28,13 +28,21 @@ public static void main(String args[]) throws FileNotFoundException{
         switch (input.toLowerCase())
         {
             case "new puzzle":
-                //insert new puzzle command call here
+                System.out.println("\u001B[33m" + "Buzzing for a new word..." + "\u001B[0m");
+                Thread.sleep(500);
+                System.out.println("\u001B[33m" + "Buzz..." + "\u001B[0m");
+                Thread.sleep(500);
+                System.out.println("\u001B[33m" + "Buzz..." + "\u001B[0m");
+                Thread.sleep(500);
+                baseWord = getBaseWord(dictionaryFile());
+                reqLetter = getReqLetter(baseWord);
+                shuffle(baseWord, reqLetter);
                 break;
             case "base puzzle":
                 //insert base puzzle command call here
                 break;
             case "show puzzle":
-                //display(basword, required letter)
+                display(baseWord, reqLetter);
                 break;
             case "found words":
                 //insert found words command call here
@@ -43,10 +51,12 @@ public static void main(String args[]) throws FileNotFoundException{
                 //insert guess command call here
                 break;
             case "shuffle":
-                //shuffle (String curr, char required)
+                System.out.println("\u001B[33m" + "Shaking up the hive!" + "\u001B[0m");
+                Thread.sleep(2000);
+                shuffle(baseWord, reqLetter);
                 break;
             case "save puzzle":
-                //savePlayerData(String chosenWord, String reqLetterString, int score, String rank)
+                playerData.savePlayerData(baseWord, String.valueOf(reqLetter), 10, "cool");
                 System.out.println("Game Status Saved!");
                 break;
             case "load puzzle":
@@ -56,12 +66,16 @@ public static void main(String args[]) throws FileNotFoundException{
             case "show status":
                 //playerRank(reqLetter);
                 break;
+            case "help":
+                help();
+                System.out.println();
+                break;
         }
     }
     while (!input.equalsIgnoreCase("exit"));
     inputScanner.close();
     System.out.println("Thanks for playing! :)");
-    
+
     //------------------------------------------------------//
 }
 
@@ -233,7 +247,9 @@ public static void help()
       "Save Current",
       "Load Puzzle",
       "Show Status",
+      "Help",
       "Exit"
+      //NOTE: Commands may be taken in as word guesses
    };
    String [] explanations = {
       "Generates a new puzzle with 7 unique letters and a required letter",
@@ -246,6 +262,7 @@ public static void help()
       "Lets the players save a puzzle that may have been partially played",
       "The player can load a saved game",
       "The player can see their rank and progress on a current puzzle",
+      "Shows the help information",
       "Leave the application"
    };
    System.out.println("The WordyWasps game allows players to create words using 7 unique letters with a required letter. ");
@@ -314,6 +331,8 @@ public static void display(String baseword, char required)
     System.out.println("   -----");
 }
 
+
+
 /*********************************************************/
 /*********************************************************/
  /*
@@ -378,8 +397,7 @@ public static void shuffle (String curr, char required)
     String shuffled = new String(charArray);
     
     //This will display the shuffled word in the format we like
-    //display (shuffled, required);
-    //commenting it out until I have display merged with master
+    display (shuffled, required);
 }
   
 /*********************************************************/
@@ -430,7 +448,8 @@ public static void intro()
     System.out.println("8. " + yellowColor + "Save Current" + resetColor + ": Save your progress in the current game.");
     System.out.println("9. " + yellowColor + "Load Puzzle" + resetColor + ": Load a previously saved puzzle.");
     System.out.println("10. " + yellowColor + "Show Status" + resetColor + ": Display your current game status.");
-    System.out.println("11. " + yellowColor + "Exit" + resetColor + ": Quit the game.");
+    System.out.println("11. " + yellowColor + "Help" + resetColor + ": Display help information.");
+    System.out.println("12. " + yellowColor + "Exit" + resetColor + ": Quit the game.");
 
     System.out.println("Now that you know the commands, let's start playing! Have fun and find as many words as you can!");
     System.out.println();
