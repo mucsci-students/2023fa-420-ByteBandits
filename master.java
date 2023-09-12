@@ -7,18 +7,24 @@
 import java.io.*;
 import java.util.*;
 
+
 /**********************************************************/
 /**********************************************************/
 
 public class master extends helpers{
+  static int totalPoints = 0;
+
 public static void main(String args[]) throws FileNotFoundException, InterruptedException{
     playerData saveFile = new playerData();
     String baseWord = getBaseWord(dictionaryFile());
     char reqLetter = getReqLetter(baseWord);
+    List<String> acceptedWordList = acceptedWords(baseWord, reqLetter);
+  
     intro();
     
     Scanner inputScanner = new Scanner(System.in);
     String input;
+  
     //------------------------------------------------------//
     //LOGIC FOR COMMAND INPUT
     do
@@ -76,7 +82,6 @@ public static void main(String args[]) throws FileNotFoundException, Interrupted
     inputScanner.close();
     System.out.println("Thanks for playing! :)");
 
-    //------------------------------------------------------//
 }
 
 /**********************************************************/
@@ -91,7 +96,8 @@ public static void main(String args[]) throws FileNotFoundException, Interrupted
  * of all the words on the file.
  */
 
-public static String[] dictionaryFile() throws FileNotFoundException{
+
+private static List<String> dictionaryFile() throws FileNotFoundException{
     Scanner scanner = new Scanner(new File("7-letter-words.txt"));
     String[] sevenLetterWords = new String[25251];
     int i = 0;
@@ -115,7 +121,8 @@ public static String[] dictionaryFile() throws FileNotFoundException{
  * is then returned and acts as our base word.
  */
 
-public static String getBaseWord(String[] dictionary){
+
+private static String getBaseWord(List<String> dictionary) throws FileNotFoundException{
     Random rand = new Random();
     int upperBound = 25250;
     int randomInt = rand.nextInt(upperBound);
@@ -137,7 +144,7 @@ public static String getBaseWord(String[] dictionary){
  * our required character.
  */
 
-public static char getReqLetter(String baseWord){
+private static char getReqLetter(String baseWord){
     Random rand = new Random();
     int upperBound = 7;
     int randomInt = rand.nextInt(upperBound);
@@ -150,37 +157,41 @@ public static char getReqLetter(String baseWord){
 
 /*
  * pointsPWord
- * param: String userGuess
+ * param: String baseWord, String userGuess
  * returns: int 
- * This function recieves a String as a parameter,
+ * This function recieves two Strings as parameters,
  * the length of the string is then retrived. After 
- * the amount of points is determined be the length
+ * the amount of points is determined by the length,
  * it will return that point value.
  */
 
-private static int pointsPWord(String userGuess){
+private static int pointsPWord(String baseWord, String userGuess){
     int length = userGuess.length();
 
     int points = 0;
 
     switch(length){
         case 4:
-        points = 2;
-        break;
-        case 5:
-        points = 5;
-        break;
-        case 6:
-        points = 7;
-        break;
-        case 7:
-        points = 9;
+        points = 1;
+        System.out.println("Good! +1 pt");
         break;
         default:
-        points = 10;
+        points = length;
+        if (length == 5 || length == 6){
+
+            System.out.println("Great! +" + points + " pts");
+        }
+        else{
+            
+            if (sameChars(baseWord, userGuess)){
+                points += 7;
+            }
+
+            System.out.println("Awesome! +" + points + " pts");
+        }
         break;
     }
-    
+
     return points;
 }
 
@@ -189,33 +200,57 @@ private static int pointsPWord(String userGuess){
 
 /*
  * playerRank
- * param: int playerPoints
+ * param: String baseWord, int playerPoints, List<String> possibleWords
  * returns: String
  * This function receives an int as a parameter, the int value
  * is used to determine the rank of the player. 
  */
 
-private static String playerRank(int playerPoints){
+private static String playerRank(String baseWord, int playerPoints, List<String> possiblewords){
 
+    int posPoints = possiblePoints(baseWord,possiblewords);
+
+    double goodStart = 0.02 * posPoints;
+    double movingUp = 0.05 * posPoints;
+    double good = 0.08 * posPoints;
+    double solid = 0.15 * posPoints;
+    double nice = 0.25 * posPoints;
+    double great = 0.40 * posPoints;
+    double amazing = 0.50 * posPoints;
+    double genuis = 0.70 * posPoints;
+    double queenBee = 1 * posPoints;
+    
     String playerRank = "";
 
-    if (isBetween(playerPoints, 0, 99)){
-        playerRank += "Novice";
+    if (playerPoints < goodStart){
+        playerRank = "Beginner";
     }
-    if (isBetween(playerPoints, 100, 199)){
-        playerRank += "Amateur";
+    if (isBetween(playerPoints, goodStart, movingUp)){
+        playerRank = "Good Start";
     }
-    if (isBetween(playerPoints, 200, 299)){
-        playerRank += "Expert";
+    if (isBetween(playerPoints, movingUp, good)){
+        playerRank = "Moving Up";
     }
-    if(isBetween(playerPoints, 300, 399)){
-        playerRank += "Master";
+    if(isBetween(playerPoints, good, solid)){
+        playerRank = "Good";
     }
-    if(isBetween(playerPoints, 400, 499)){
-        playerRank += "Legend";
+    if(isBetween(playerPoints, solid, nice)){
+        playerRank = "Solid";
     }
-    if(playerPoints >= 500){
-        playerRank += "Immortal";
+    if(isBetween(playerPoints, nice, great)){
+        playerRank = "Nice";
+    }
+    if(isBetween(playerPoints, great, amazing)){
+        playerRank = "great";
+    }
+    if(isBetween(playerPoints, amazing, genuis)){
+        playerRank = "Amazing";
+    }
+    if(isBetween(playerPoints, genuis, queenBee)){
+        playerRank = "Genius";
+    }
+    if(playerPoints == queenBee ){
+        playerRank = "Queen Bee";
     }
 
     return playerRank;
@@ -226,14 +261,14 @@ private static String playerRank(int playerPoints){
   
  /*
  * help
- * param: nothing
+ * param: N/A
  * returns: String
  * This function tells the player the rules of the game and shows
  * a table of all the command lines the player can use and what 
  * each command line does. 
  */
   
-public static void help()
+private static void help()
 {
 
    String [] commandLines = {
@@ -277,49 +312,29 @@ public static void help()
           System.out.printf("%-15s |   %s%n", commandLines[i], explanations[i]);
         }
 }
-  
-/*********************************************************/
-/*********************************************************/
-
-/*
- * exit
- * param: nothing
- * returns: exit status code
- * This function forcibly exits out of the game
- * when the player invokes it. 
- */
-
-public static void exit()
-{
-   System.exit(0);
-}
 
 /*********************************************************/
 /*********************************************************/
 
 /*
  * display
- * param: String baseword
- * param: char required
- * returns: nothiing
- * This function creates a cool display for the puzzle
+ * param: String baseword, char required
+ * returns: nothing
+ * This function creates a cool display for the puzzle.
  */
 
-public static void display(String baseword, char required)
+private static void display(String baseword, char required)
 {
-    //Remove the required character from the baseword
     String result = removeChar(baseword, required);
     
-    
-    //Convert the result (shuffled characters without the required word)
     char[] charArray = result.toCharArray(); 
 
-    //Display the characters in a specific format
     System.out.println("   -----");
     System.out.print(" / ");
     for (int i = 0; i < 3; i++) {
         System.out.print(charArray[i] + " ");
     }
+
     System.out.print( "\\");
     System.out.println();
     System.out.println("||   " + required + "   ||");
@@ -327,94 +342,129 @@ public static void display(String baseword, char required)
     for (int i = 3; i < 6; i++) {
         System.out.print(charArray[i] + " ");
     }
+
     System.out.println("/");
     System.out.println("   -----");
 }
-
-
-
-/*********************************************************/
-/*********************************************************/
- /*
- * removeChar
- * param: String current
- * param: char remove
- * returns: String
- * This is a helper function for display.  It gets rid of the 
- * required letter from the baseword.
- */
-
- private static String removeChar(String current, char remove)
- {
-     //Create a StringBuilder to construct the new string without the required letter
-     StringBuilder builder = new StringBuilder();
-
-     //Iterate through each character in the input string
-     for (char c : current.toCharArray())
-     {
-         //Check if the current character is not equal to the character to be removed
-         if (c != remove)
-         {
-             //Append the character to the StringBuilder if it's not the character to  be removed
-             builder.append(c);
-         }
-     }
-     //Convert the StringBuilder to a string and return the updated string
-     return builder.toString();
- }
     
 /*********************************************************/
 /*********************************************************/
 
 /*
  * shuffle
- * param: String curr
- * param: char required
- * returns: nothing
- * This function shuffles the letters of a current puzzle 
+ * param: String curr, char required
+ * returns: N/A
+ * This function shuffles the letters of a current puzzle.
  */
   
-public static void shuffle (String curr, char required)
+private static void shuffle (String curr, char required)
 {
-    //Convert the input string to a character array
+
     char[] charArray = curr.toCharArray();
 
-    //Create a random number generator
     Random rand = new Random();
 
-    //Loop through the character array for shuffling
     for (int i = charArray.length - 1; i > 0; i--)
     {
-        //Generate a random index between 0 and i
         int j = rand.nextInt(i + 1);
 
-        //Swap the characters at positions i and j
         char temp = charArray[i];
         charArray[i] = charArray[j];
         charArray[j] = temp;
     }
-    //Convert the shuffled character array back to a string 
+
     String shuffled = new String(charArray);
-    
-    //This will display the shuffled word in the format we like
+
     display (shuffled, required);
+    
 }
-  
+
 /*********************************************************/
 /*********************************************************/
-  
-/* 
-* getCurrent
-* param: String baseword
-* param: char required
-* returns: a nice display of current puzzle
-* This function gets the current word of the puzzle and 
-* displays it in a nice way 
-*/
-  
-public static void getCurrent(String baseword, char required)
-{
-    display (baseword, required);
+
+/*
+ * acceptedWords
+ * param: String baseWord, char reqLetter
+ * returns: List<String>
+ * This function scans through each string in the dictionary
+ * and makes sure each char in that string is also included 
+ * in baseWord as well as making sure it inlcudes the reqLetter.
+ * It then adds any string that passes the test into the List<String>
+ * and then finally returns it. 
+ */
+
+private static List<String> acceptedWords(String baseWord, char reqLetter) throws FileNotFoundException{
+    Scanner scanner = new Scanner(new File("4-15_Dictionary.txt"));
+    List<String> acceptedWordList = new ArrayList<>();
+    String reqLetter2 = Character.toString(reqLetter);
+    
+    String sNL = scanner.nextLine();
+    while(scanner.hasNextLine()){
+        if(sameChars(baseWord, sNL) && sNL.contains(reqLetter2)){
+            acceptedWordList.add(sNL);
+        }
+        sNL = scanner.nextLine();  
+    }
+
+    return acceptedWordList;
+}
+
+/*********************************************************/
+/*********************************************************/
+
+/*
+ * guess
+ * param: String baseWord, acceptedWords 
+ * returns: int
+ * This function is invoked via a command from the user.
+ * When a user is in this function, they will keep making
+ * guesses until they invoke to stop guessing.
+ * The total points are then returned from this
+ * session of guesses.
+ */
+
+private static void guess(String baseWord, List<String> acceptedWords){
+    List<String> foundWords = new ArrayList<>();
+    
+    Scanner guessedWord = new Scanner(System.in);
+    
+    while(true){
+        System.out.print("Guess a word: ");
+        
+        String validWord = guessedWord.nextLine();
+        
+        if(validWord.equals("/quit")){
+            guessedWord.close();
+            break;
+        }
+
+        if(acceptedWords.contains(validWord)){
+            
+            foundWords.add(validWord);
+            totalPoints += pointsPWord(baseWord, validWord);
+        }else{
+            System.out.println("\nNot a valid word, try again!\n");
+        }
+        
+    } 
+
+}
+
+/*********************************************************/
+/*********************************************************/
+
+/*
+ * puzzleStatus
+ * param: String playerRank
+ * returns: N/A
+ * This function is used to display the rank and player points
+ * of the pllayer during the current session.
+ */
+private static void puzzleStatus (String playerRank){
+
+    System.out.println("YOUR CURRENT RANK: " + playerRank);
+    System.out.println("YOUR CURRENT POINTS: " + totalPoints);
+
 }
 
 /*********************************************************/
