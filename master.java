@@ -636,38 +636,6 @@ public static void intro()
     System.out.println("Now that you know the commands, let's start playing! Have fun and find as many words as you can!");
     System.out.println();
 }
-
-/*********************************************************/
-/*********************************************************/  
-  
-/*
- * userBased
- * param: int points, List<String> acceptedWords
- * returns: String
- * This function is used for the player to create their own baseword.
- */
-/*public static String userBased(List<String> acceptedWords)
-{
-    String yellowColor = "\u001B[33m";
-    Scanner console = new Scanner(System.in);
-    System.out.println(yellowColor + "Please choose a baseword: ");
-    String baseword = console.next();
-    case baseword.length() >= 8 || baseword.length() <= 6:
-    {
-        System.out.println(yellowColor + "Uh oh, word has to have 7 letters!");
-    }
-    if(!acceptedWords.contains(baseword))
-    {
-        System.out.println(yellowColor + "Are you making stuff up now!  Make sure you type a valid word!");
-    }
-    if(isUnique(baseword) == false)
-    {
-        System.out.println(yellowColor + "Oops, all letters have be unique!");
-    }
-    return baseword;
-}*/
-
-
 }
 
 
