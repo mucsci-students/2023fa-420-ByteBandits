@@ -13,6 +13,8 @@ import java.util.*;
 
 public class master extends helpers{
     static int totalPoints = 0;
+    static List<String> foundWords = new ArrayList<>();
+    
 public static void main(String args[]) throws FileNotFoundException, InterruptedException{
     
     playerData saveFile = new playerData();
@@ -32,6 +34,7 @@ public static void main(String args[]) throws FileNotFoundException, Interrupted
         switch (input.toLowerCase())
         {
             case "/newpuzzle":
+                foundWords = new ArrayList<>();
                 baseWord = getBaseWord(dictionaryFile());
                 reqLetter = getReqLetter(baseWord);
                 acceptedWordList = acceptedWords(baseWord, reqLetter);
@@ -42,9 +45,9 @@ public static void main(String args[]) throws FileNotFoundException, Interrupted
                 System.out.println("\u001B[33m" + "Buzz...\n" + "\u001B[0m");
                 Thread.sleep(500);
                 
-                shuffle(baseWord, reqLetter);
+                display(baseWord, reqLetter);
                 guess(baseWord, acceptedWordList);
-                System.out.println("Exited guessing phase. Enter a new command, or do /guess to guess again!");
+                
                 System.out.println();
                 break;
             case "/basepuzzle":
@@ -60,9 +63,9 @@ public static void main(String args[]) throws FileNotFoundException, Interrupted
                 //insert found words command call here
                 break;
             case "/shuffle":
-                System.out.println("\u001B[33m" + "Shaking up the hive!" + "\u001B[0m");
+                System.out.println("\u001B[33m" + "\nShaking up the hive!" + "\u001B[0m");
                 Thread.sleep(1000);
-                System.out.println("\u001B[33m" + "Bzzzzzzzzzzz!" + "\u001B[0m");
+                System.out.println("\u001B[33m" + "Bzzzzzzzzzzz!\n" + "\u001B[0m");
                 Thread.sleep(500);
                 shuffle(baseWord, reqLetter);
                 break;
@@ -83,9 +86,9 @@ public static void main(String args[]) throws FileNotFoundException, Interrupted
                 break;
         }
     }
-    while (!input.equalsIgnoreCase("exit"));
+    while (!input.equalsIgnoreCase("/exit"));
     inputScanner.close();
-    System.out.println("Thanks for playing! :)");
+    System.out.println("\u001B[33m" + "\nThanks for playing! :)" + "\u001B[0m");
 
     //------------------------------------------------------//
 
@@ -181,13 +184,13 @@ private static int pointsPWord(String baseWord, String userGuess){
     switch(length){
         case 4:
         points = 1;
-        System.out.println("Good! +1 pt");
+        System.out.println("\u001B[33m" + "Good! +1 pt\n" + "\u001B[0m");
         break;
         default:
         points = length;
         if (length == 5 || length == 6){
 
-            System.out.println("Great! +" + points + " pts");
+            System.out.println("\u001B[33m" + "Great! +" + points + " pts\n" + "\u001B[0m");
         }
         else{
             
@@ -195,7 +198,7 @@ private static int pointsPWord(String baseWord, String userGuess){
                 points += 7;
             }
 
-            System.out.println("Awesome! +" + points + " pts");
+            System.out.println("\u001B[33m" + "Awesome! +" + points + " pts\n" + "\u001B[0m");
         }
         break;
     }
@@ -432,7 +435,6 @@ private static List<String> acceptedWords(String baseWord, char reqLetter) throw
  */
 
 private static void guess(String baseWord, List<String> acceptedWords){
-    List<String> foundWords = new ArrayList<>();
     
     Scanner guessedWord = new Scanner(System.in);
     System.out.println("\u001B[33m" + "\nBzz. Do /q when you're done guessing! Bzz." + "\u001B[0m");
@@ -443,20 +445,25 @@ private static void guess(String baseWord, List<String> acceptedWords){
         String validWord = guessedWord.nextLine();
         
         if(validWord.equals("/q")){
+            System.out.println("\u001B[33m" + "\nExited guessing phase. Enter a new command, or do /guess to guess again!\n" + "\u001B[0m");
             break;
         }
 
-        if(acceptedWords.contains(validWord)){
+        if(acceptedWords.contains(validWord) && foundWords.contains(validWord)){
+            System.out.println("\u001B[33m" + "\nYou already guessed that word correctly, try another one!\n" + "\u001B[0m");
             
+        }else if(acceptedWords.contains(validWord)){
             foundWords.add(validWord);
             totalPoints += pointsPWord(baseWord, validWord);
         }else{
-            System.out.println("\nNot a valid word, try again!\n");
+            System.out.println("\u001B[33m" + "\nNot a valid word, try again!\n" + "\u001B[0m");
         }
         
     } 
 
+
 }
+
 
 /*********************************************************/
 /*********************************************************/
@@ -491,7 +498,7 @@ public static void intro()
     // ANSI escape code for resetting the color
     String resetColor = "\u001B[0m";
 
-    System.out.println("Welcome to " + yellowColor + "WordyWasps - A Word Puzzle Game!" + resetColor);
+    System.out.println("\nWelcome to " + yellowColor + "WordyWasps - A Word Puzzle Game!" + resetColor);
     System.out.println("In WordyWasps, you'll be given a set of 7 letters and 1 required letter. Your goal is to create words from them.");
     System.out.println("Here are the " + yellowColor + "basic commands" + resetColor + " you can use to play the game:");
 
@@ -520,18 +527,18 @@ public static void intro()
     System.out.println();
 
 
-    System.out.println(yellowColor + "/newpuzzle" + resetColor + ": Start a new puzzle.");
-    System.out.println(yellowColor + "/basepuzzle" + resetColor + ": Restart the current puzzle with the same set of letters.");
-    System.out.println(yellowColor + "/showpuzzle" + resetColor + ": Display the current set of 7 letters.");
-    System.out.println(yellowColor + "/foundwords" + resetColor + ": Show the words you've already found.");
-    System.out.println(yellowColor + "/guess" + resetColor + ": Enter a word you think is valid.");
-    System.out.println(yellowColor + "/shuffle" + resetColor + ": Shuffle the 7 letters to get a new arrangement.");
-    System.out.println(yellowColor + "/savepuzzle" + resetColor + ": Save the current puzzle for later.");
+    System.out.println(yellowColor + "/newpuzzle" + resetColor + ":   Start a new puzzle.");
+    System.out.println(yellowColor + "/basepuzzle" + resetColor + ":  Restart the current puzzle with the same set of letters.");
+    System.out.println(yellowColor + "/showpuzzle" + resetColor + ":  Display the current set of 7 letters.");
+    System.out.println(yellowColor + "/foundwords" + resetColor + ":  Show the words you've already found.");
+    System.out.println(yellowColor + "/guess" + resetColor + ":       Enter a word you think is valid.");
+    System.out.println(yellowColor + "/shuffle" + resetColor + ":     Shuffle the 7 letters to get a new arrangement.");
+    System.out.println(yellowColor + "/savepuzzle" + resetColor + ":  Save the current puzzle for later.");
     System.out.println(yellowColor + "/savecurrent" + resetColor + ": Save your progress in the current game.");
-    System.out.println(yellowColor + "/loadpuzzle" + resetColor + ": Load a previously saved puzzle.");
-    System.out.println(yellowColor + "/showstatus" + resetColor + ": Display your current game status.");
-    System.out.println(yellowColor + "/help" + resetColor + ": Display help information.");
-    System.out.println(yellowColor + "/exit" + resetColor + ": Quit the game.");
+    System.out.println(yellowColor + "/loadpuzzle" + resetColor + ":  Load a previously saved puzzle.");
+    System.out.println(yellowColor + "/showstatus" + resetColor + ":  Display your current game status.");
+    System.out.println(yellowColor + "/help" + resetColor + ":        Display help information.");
+    System.out.println(yellowColor + "/exit" + resetColor + ":        Quit the game.");
     System.out.println();
 
     System.out.println("Now that you know the commands, let's start playing! Have fun and find as many words as you can!");
