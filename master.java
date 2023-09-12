@@ -14,6 +14,7 @@ import java.util.*;
 public class master extends helpers{
     static int totalPoints = 0;
     static List<String> foundWords = new ArrayList<>();
+    
 public static void main(String args[]) throws FileNotFoundException, InterruptedException{
     
     playerData saveFile = new playerData();
