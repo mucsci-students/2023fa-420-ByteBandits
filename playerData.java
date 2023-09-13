@@ -1,7 +1,11 @@
 //Authors: Joshua Dawson
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.json.JSONObject;
+import org.json.JSONArray;
 import org.json.JSONException;
 
 /*
@@ -16,6 +20,7 @@ public class playerData {
     private String reqLetterString;
     private int score;
     private String rank;
+    private List<String> acceptedWordList = new ArrayList<>();
 
    /*
     * saveGameData
@@ -24,7 +29,7 @@ public class playerData {
     * This function saves game data into game_data.json. 
     */
 
-    public void saveGameData(String chosenWord, String reqLetterString, int score, String rank) 
+    public void saveGameData(String chosenWord, String reqLetterString, int score, String rank, List<String> acceptedWordList) 
     {
         try (FileWriter fileWriter = new FileWriter("game_data.json"))
         {
@@ -34,6 +39,7 @@ public class playerData {
             gameData.put("reqLetterString", reqLetterString);
             gameData.put("score", score);
             gameData.put("rank", rank);
+            gameData.put("acceptedWordList", acceptedWordList);
     
             // Write the JSON object to the file
             fileWriter.write(gameData.toString());
@@ -70,7 +76,11 @@ public class playerData {
             reqLetterString = gameData.getString("reqLetterString");
             score = gameData.getInt("score");
             rank = gameData.getString("rank");
-
+            JSONArray acceptedWordListArray = gameData.getJSONArray("acceptedWordList");
+            for(int i = 0; i < acceptedWordListArray.length(); ++i)
+            {
+                acceptedWordList.add(acceptedWordListArray.getString(i));
+            }
         } 
         catch (IOException | JSONException e)
         {
@@ -103,5 +113,9 @@ public class playerData {
 
     public String getRank() {
         return rank;
+    }
+
+    public List<String> getAcceptedWordList(){
+        return acceptedWordList;
     }
 }
