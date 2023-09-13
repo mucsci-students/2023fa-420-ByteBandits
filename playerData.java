@@ -1,6 +1,8 @@
 //Authors: Joshua Dawson
 
-import java.util.prefs.Preferences;
+import java.io.*;
+import org.json.JSONObject;
+import org.json.JSONException;
 
 /*
  *PlayerData class
@@ -8,40 +10,98 @@ import java.util.prefs.Preferences;
  *NOTE: Char for required letter must be converted to string before calling this class for savefile to work. 
  */
 
+
 public class playerData {
+    private String chosenWord;
+    private String reqLetterString;
+    private int score;
+    private String rank;
 
    /*
-    * savePlayerData
+    * saveGameData
     * param: String chosenWord, String reqLetterString, int score, String rank
     * returns: N/A
-    * This function uses preferences to store player data. This information is assigned to 
-    * a String to be found in the load state later. 
+    * This function saves game data into game_data.json. 
     */
 
-    public static void savePlayerData(String chosenWord, String reqLetterString, int score, String rank){
-        Preferences prefs = Preferences.userNodeForPackage(playerData.class);
-        prefs.put("ChosenWord", chosenWord);
-        prefs.put("ReqLetter", reqLetterString);
-        prefs.putInt("Score", score);
-        prefs.put("Rank", rank);
-    }
+    public void saveGameData(String chosenWord, String reqLetterString, int score, String rank) 
+    {
+        try (FileWriter fileWriter = new FileWriter("game_data.json"))
+        {
+            // Create a JSON object to hold the game data
+            JSONObject gameData = new JSONObject();
+            gameData.put("chosenWord", chosenWord);
+            gameData.put("reqLetterString", reqLetterString);
+            gameData.put("score", score);
+            gameData.put("rank", rank);
     
+            // Write the JSON object to the file
+            fileWriter.write(gameData.toString());
+        } 
+        catch (IOException e) 
+        {
+            e.printStackTrace();
+        }
+    }
 /**********************************************************/
 /**********************************************************/
 
     /*
-    * loadPlayerData
+    * loadGameData
     * param: N/A
     * returns: N/A
-    * This function uses preferences to load player data. This information is gathered from the associated
-    * names from the savePlayerData method. 
+    * This function loads save data from game_data.json.
     */
 
-    public static void loadPlayerData(){
-        Preferences prefs = Preferences.userNodeForPackage(playerData.class);
-        String chosenWord = prefs.get("ChosenWord", "EMPTY");
-        String reqLetterString = prefs.get("ReqLetter", "EMPTY");
-        int score = prefs.getInt("Score", 0);
-        String rank = prefs.get("Rank", "EMPTY");
+    public void loadGameData() 
+    {
+        try (BufferedReader reader = new BufferedReader(new FileReader("game_data.json"))) 
+        {
+            StringBuilder jsonData = new StringBuilder();
+            String line;
+            reqLetterString = "";
+            while ((line = reader.readLine()) != null) 
+            {
+                jsonData.append(line);
+            }
+            JSONObject gameData = new JSONObject(jsonData.toString());
+
+            chosenWord = gameData.getString("chosenWord");
+            reqLetterString = gameData.getString("reqLetterString");
+            score = gameData.getInt("score");
+            rank = gameData.getString("rank");
+
+        } 
+        catch (IOException | JSONException e)
+        {
+            // Handle any errors that may occur during file I/O or data parsing
+            e.printStackTrace();
+        }
+    }
+
+/**********************************************************/
+/**********************************************************/
+
+    /*
+    * Getter Functions
+    * param: N/A
+    * returns: chosenWord, reqLetterString, score, rank
+    * These functions serve to allow access to private types from master.java. 
+    */
+
+    public String getChosenWord() {
+        return chosenWord;
+    }
+
+    public String getReqLetterString() {
+        return reqLetterString;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public String getRank() {
+        return rank;
     }
 }
