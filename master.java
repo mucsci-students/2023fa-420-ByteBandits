@@ -13,6 +13,9 @@ import java.util.*;
 
 public class master extends helpers{
     static int totalPoints = 0;
+
+    static String playerRank = "";
+
     static List<String> foundWords = new ArrayList<>();
     
 public static void main(String args[]) throws FileNotFoundException, InterruptedException{
@@ -109,12 +112,19 @@ public static void main(String args[]) throws FileNotFoundException, Interrupted
                 shuffleWord = shuffle(baseWord, reqLetter);
                 break;
             case "/savepuzzle":
-                playerData.savePlayerData(baseWord, String.valueOf(reqLetter), 10, "cool");
-                System.out.println("Game Status Saved!");
+                saveFile.saveGameData(baseWord, String.valueOf(reqLetter), totalPoints, playerRank);
+                System.out.println("Game Status Saved!\n");
                 break;
             case "/loadpuzzle":
-                playerData.loadPlayerData();
-                System.out.println("Game Status Loaded!");
+                saveFile.loadGameData();
+                baseWord = saveFile.getChosenWord();
+                reqLetter = saveFile.getReqLetterString().charAt(0);
+                totalPoints = saveFile.getScore();
+                playerRank = saveFile.getRank();
+                shuffle(baseWord, reqLetter);
+                System.out.println("\nTotal Points: " + "\u001B[33m" + totalPoints + "\u001B[0m");
+                System.out.println("Rank: " + "\u001B[33m" + playerRank + "\u001B[0m" + "\n");
+                System.out.println("Game Status Loaded!\n");
                 break;
             case "/showstatus":
                 puzzleStatus(playerRank(baseWord, totalPoints, acceptedWordList));
