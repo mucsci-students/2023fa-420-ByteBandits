@@ -101,21 +101,25 @@ public static void main(String args[]) throws FileNotFoundException, Interrupted
             case "/showpuzzle":
                 if(baseWord.charAt(1) == ' ')
                 {
-                    System.out.println("\u001B[33m" + "\nYou haven't created a new puzzle! Do /newpuzzle or /basepuzzle to create one! BUZZ!\n" + "\u001B[0m");
+                    System.out.println("\u001B[33m" + "\nYou haven't created a new puzzle! Do /loadpuzzle, /newpuzzle, or /basepuzzle to get one up! BUZZ!\n" + "\u001B[0m");
                     break;
                 }
                 display(shuffleWord, reqLetter);
                 break;
             
             case "/foundwords":
-
+                if(baseWord.charAt(1) == ' ')
+                {
+                    System.out.println("\u001B[33m" + "\nYou haven't created a new puzzle! Do /loadpuzzle, /newpuzzle, or /basepuzzle to get one up! BUZZ!\n" + "\u001B[0m");
+                    break;
+                }
                 foundWordList();
                 break;
 
             case "/shuffle":
                 if(baseWord.charAt(1) == ' ')
                 {
-                    System.out.println("\u001B[33m" + "\nYou haven't created a new puzzle! Do /newpuzzle or /basepuzzle to create one! BUZZ!\n" + "\u001B[0m");
+                    System.out.println("\u001B[33m" + "\nYou haven't created a new puzzle! Do /loadpuzzle, /newpuzzle, or /basepuzzle to get one up! BUZZ!\n" + "\u001B[0m");
                     break;
                 }
                 System.out.println("\u001B[33m" + "\nShaking up the hive!" + "\u001B[0m");
@@ -126,6 +130,11 @@ public static void main(String args[]) throws FileNotFoundException, Interrupted
                 break;
 
             case "/savepuzzle":
+                if(baseWord.charAt(1) == ' ')
+                {
+                    System.out.println("\u001B[33m" + "\nYou haven't created a new puzzle! Do /loadpuzzle, /newpuzzle, or /basepuzzle to get one up! BUZZ!\n" + "\u001B[0m");
+                    break;
+                }
                 if(totalPoints != 0)
                 {
                     System.out.println("\u001B[33m" + "\nBuzz. There's already progress on this puzzle! Please use /savecurr to save instead!\n" + "\u001B[0m");
@@ -137,6 +146,11 @@ public static void main(String args[]) throws FileNotFoundException, Interrupted
                 break;
 
             case "/savecurr":
+                if(baseWord.charAt(1) == ' ')
+                {
+                    System.out.println("\u001B[33m" + "\nYou haven't created a new puzzle! Do /loadpuzzle, /newpuzzle, or /basepuzzle to get one up! BUZZ!\n" + "\u001B[0m");
+                    break;
+                }
                 rank = playerRank(baseWord, reqLetter, acceptedWordList);
                 saveFile.saveGameData(shuffleWord, String.valueOf(reqLetter), totalPoints, rank, foundWords);
                 System.out.println("\nGame Status Saved!\n");
@@ -156,6 +170,11 @@ public static void main(String args[]) throws FileNotFoundException, Interrupted
                 break;
 
             case "/showstatus":
+                if(baseWord.charAt(1) == ' ')
+                {
+                    System.out.println("\u001B[33m" + "\nYou haven't created a new puzzle! Do /loadpuzzle, /newpuzzle, or /basepuzzle to get one up! BUZZ!\n" + "\u001B[0m");
+                    break;
+                }
                 puzzleStatus(playerRank(baseWord, totalPoints, acceptedWordList));
                 break;
 
