@@ -62,8 +62,14 @@ public static void main(String args[]) throws FileNotFoundException, Interrupted
             Scanner console = new Scanner(System.in);
             System.out.println("Please choose a baseword: ");
             baseWord = console.next();
+            
+            if (baseWord.length() != 7) 
+            {
+                baseWord = shuffleWord;
+                System.out.println(yellowColor + "Bzzuh Bzzoh, word has to have 7 letters! Buzz.");
+                break; 
+            }
             reqLetter = getReqLetter(baseWord);
-
             acceptedWordList = acceptedWords(baseWord, reqLetter);
             System.out.println("\u001B[33m" + "\nBuzzing for a new word..." + "\u001B[0m");
             Thread.sleep(500);
@@ -71,31 +77,23 @@ public static void main(String args[]) throws FileNotFoundException, Interrupted
             Thread.sleep(500);
             System.out.println("\u001B[33m" + "Buzz...\n" + "\u001B[0m");
             Thread.sleep(500);
-        
-            if (baseWord.length() >= 8 || baseWord.length() <= 6) 
-            {
-                System.out.println(yellowColor + "Bzzuh Bzzoh, word has to have 7 letters! Buzz.");
-                break; 
-            }
-        
             if (!acceptedWordList.contains(baseWord)) 
             {
+                baseWord = shuffleWord;
                 System.out.println(yellowColor + "Buzz. Are you making stuff up now!  Make sure you type a valid word! Buzz.");
                 break; 
             }
-        
             if (!isUnique(baseWord))
             {
+                baseWord = shuffleWord;
                 System.out.println(yellowColor + "Bzzt. Oops, all letters have to be unique! Bzz.");
-                break; // Add this break statement to exit the case
+                break; 
             }
-        
             shuffleWord = shuffle(baseWord, reqLetter);
             guess(baseWord, acceptedWordList);
         
             System.out.println();
                 break;
-
             case "/guess":
                 guess(baseWord, acceptedWordList);
                 break;
@@ -115,6 +113,11 @@ public static void main(String args[]) throws FileNotFoundException, Interrupted
                 break;
 
             case "/shuffle":
+                if(baseWord.charAt(1) == ' ')
+                {
+                    System.out.println("\u001B[33m" + "\nYou haven't created a new puzzle! Do /newpuzzle or /basepuzzle to create one! BUZZ!\n" + "\u001B[0m");
+                    break;
+                }
                 System.out.println("\u001B[33m" + "\nShaking up the hive!" + "\u001B[0m");
                 Thread.sleep(1000);
                 System.out.println("\u001B[33m" + "Bzzzzzzzzzzz!\n" + "\u001B[0m");
