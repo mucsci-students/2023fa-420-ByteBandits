@@ -51,19 +51,26 @@ public static void main(String args[]) throws FileNotFoundException, Interrupted
                 Thread.sleep(500);
                 
                 shuffleWord = shuffle(baseWord, reqLetter);
-                guess(baseWord, acceptedWordList);
+                guess(baseWord, acceptedWordList, playerRank(baseWord, totalPoints, acceptedWordList));
                 
                 System.out.println();
                 break;
             case "/basepuzzle":
             totalPoints = 0;
+            playerRank = "";
             String yellowColor = "\u001B[33m";
             foundWords = new ArrayList<>();
             Scanner console = new Scanner(System.in);
             System.out.println("Please choose a baseword: ");
             baseWord = console.next();
+            
+            if (baseWord.length() != 7) 
+            {
+                baseWord = shuffleWord;
+                System.out.println(yellowColor + "Bzzuh Bzzoh, word has to have 7 letters! Buzz.");
+                break; 
+            }
             reqLetter = getReqLetter(baseWord);
-
             acceptedWordList = acceptedWords(baseWord, reqLetter);
             System.out.println("\u001B[33m" + "\nBuzzing for a new word..." + "\u001B[0m");
             Thread.sleep(500);
@@ -71,50 +78,51 @@ public static void main(String args[]) throws FileNotFoundException, Interrupted
             Thread.sleep(500);
             System.out.println("\u001B[33m" + "Buzz...\n" + "\u001B[0m");
             Thread.sleep(500);
-        
-            if (baseWord.length() >= 8 || baseWord.length() <= 6) 
-            {
-                System.out.println(yellowColor + "Bzzuh Bzzoh, word has to have 7 letters! Buzz.");
-                break; 
-            }
-        
             if (!acceptedWordList.contains(baseWord)) 
             {
+                baseWord = shuffleWord;
                 System.out.println(yellowColor + "Buzz. Are you making stuff up now!  Make sure you type a valid word! Buzz.");
                 break; 
             }
-        
             if (!isUnique(baseWord))
             {
+                baseWord = shuffleWord;
                 System.out.println(yellowColor + "Bzzt. Oops, all letters have to be unique! Bzz.");
-                break; // Add this break statement to exit the case
+                break; 
             }
-        
             shuffleWord = shuffle(baseWord, reqLetter);
-            guess(baseWord, acceptedWordList);
+            guess(baseWord, acceptedWordList, playerRank(baseWord, totalPoints, acceptedWordList));
         
             System.out.println();
                 break;
-
             case "/guess":
-                guess(baseWord, acceptedWordList);
+                guess(baseWord, acceptedWordList, playerRank(baseWord, totalPoints, acceptedWordList));
                 break;
 
             case "/showpuzzle":
                 if(baseWord.charAt(1) == ' ')
                 {
-                    System.out.println("\u001B[33m" + "\nYou haven't created a new puzzle! Do /newpuzzle or /basepuzzle to create one! BUZZ!\n" + "\u001B[0m");
+                    System.out.println("\u001B[33m" + "\nYou haven't created a new puzzle! Do /loadpuzzle, /newpuzzle, or /basepuzzle to get one up! BUZZ!\n" + "\u001B[0m");
                     break;
                 }
                 display(shuffleWord, reqLetter);
                 break;
             
             case "/foundwords":
-
+                if(baseWord.charAt(1) == ' ')
+                {
+                    System.out.println("\u001B[33m" + "\nYou haven't created a new puzzle! Do /loadpuzzle, /newpuzzle, or /basepuzzle to get one up! BUZZ!\n" + "\u001B[0m");
+                    break;
+                }
                 foundWordList();
                 break;
 
             case "/shuffle":
+                if(baseWord.charAt(1) == ' ')
+                {
+                    System.out.println("\u001B[33m" + "\nYou haven't created a new puzzle! Do /loadpuzzle, /newpuzzle, or /basepuzzle to get one up! BUZZ!\n" + "\u001B[0m");
+                    break;
+                }
                 System.out.println("\u001B[33m" + "\nShaking up the hive!" + "\u001B[0m");
                 Thread.sleep(1000);
                 System.out.println("\u001B[33m" + "Bzzzzzzzzzzz!\n" + "\u001B[0m");
@@ -123,6 +131,11 @@ public static void main(String args[]) throws FileNotFoundException, Interrupted
                 break;
 
             case "/savepuzzle":
+                if(baseWord.charAt(1) == ' ')
+                {
+                    System.out.println("\u001B[33m" + "\nYou haven't created a new puzzle! Do /loadpuzzle, /newpuzzle, or /basepuzzle to get one up! BUZZ!\n" + "\u001B[0m");
+                    break;
+                }
                 if(totalPoints != 0)
                 {
                     System.out.println("\u001B[33m" + "\nBuzz. There's already progress on this puzzle! Please use /savecurr to save instead!\n" + "\u001B[0m");
@@ -134,7 +147,13 @@ public static void main(String args[]) throws FileNotFoundException, Interrupted
                 break;
 
             case "/savecurr":
-                rank = playerRank(baseWord, reqLetter, acceptedWordList);
+                if(baseWord.charAt(1) == ' ')
+                {
+                    System.out.println("\u001B[33m" + "\nYou haven't created a new puzzle! Do /loadpuzzle, /newpuzzle, or /basepuzzle to get one up! BUZZ!\n" + "\u001B[0m");
+                    break;
+                }
+                //rank = playerRank(baseWord, reqLetter, acceptedWordList);
+                rank = playerRank(baseWord, totalPoints, acceptedWordList);
                 saveFile.saveGameData(shuffleWord, String.valueOf(reqLetter), totalPoints, rank, foundWords);
                 System.out.println("\nGame Status Saved!\n");
                 break;
@@ -153,6 +172,11 @@ public static void main(String args[]) throws FileNotFoundException, Interrupted
                 break;
 
             case "/showstatus":
+                if(baseWord.charAt(1) == ' ')
+                {
+                    System.out.println("\u001B[33m" + "\nYou haven't created a new puzzle! Do /loadpuzzle, /newpuzzle, or /basepuzzle to get one up! BUZZ!\n" + "\u001B[0m");
+                    break;
+                }
                 puzzleStatus(playerRank(baseWord, totalPoints, acceptedWordList));
                 break;
 
@@ -515,7 +539,8 @@ private static List<String> acceptedWords(String baseWord, char reqLetter) throw
  * session of guesses.
  */
 
-private static void guess(String baseWord, List<String> acceptedWords){
+
+ private static void guess(String baseWord, List<String> acceptedWords, String playerRank){
     
     Scanner guessedWord = new Scanner(System.in);
     System.out.println("\u001B[33m" + "\nBzz. Do /q when you're done guessing! Bzz." + "\u001B[0m");
@@ -536,6 +561,10 @@ private static void guess(String baseWord, List<String> acceptedWords){
         }else if(acceptedWords.contains(validWord)){
             foundWords.add(validWord);
             totalPoints += pointsPWord(baseWord, validWord);
+            playerRank = playerRank(baseWord, totalPoints, acceptedWords);
+            System.out.println("YOUR CURRENT RANK IS: " + "\u001B[33m" +  playerRank + "\u001B[0m");
+            System.out.println("YOUR CURRENT POINTS ARE: " + "\u001B[33m" + totalPoints + "\u001B[0m");
+            calculateRankDifference( playerRank, totalPoints, acceptedWords, baseWord);
         }else{
             System.out.println("\u001B[33m" + "\nNot a valid word, try again!\n" + "\u001B[0m");
         }
@@ -543,7 +572,6 @@ private static void guess(String baseWord, List<String> acceptedWords){
     }
 
 }
-
 
 /*********************************************************/
 /*********************************************************/

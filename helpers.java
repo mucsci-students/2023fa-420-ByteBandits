@@ -13,7 +13,8 @@ import java.util.Set;
 /*********************************************************/
 
 public class helpers {
-    
+
+ 
 /*
 * isBetween
 * param: int val, int min, int max
@@ -23,8 +24,9 @@ public class helpers {
 * True will be returned is val is between min and max false otherwise.
 */
 
+
 public static Boolean isBetween(int val, double min, double max){
-    return val >= min && val < max;
+ return val >= min && val < max;
 }
 
 /*********************************************************/
@@ -94,7 +96,7 @@ public static boolean sameChars(String baseWord, String dicString) {
  * special cases for four-letter words and pangrams.
  */
 
-public static int possiblePoints(String baseWord, List<String> possibleWords){
+ public static int possiblePoints(String baseWord, List<String> possibleWords){
     
     int posPoints = 0;
     
@@ -139,4 +141,82 @@ public static int possiblePoints(String baseWord, List<String> possibleWords){
      return builder.toString();
  }
 
+/*********************************************************/
+/*********************************************************/
+
+ /*
+ * calculateRankDifference
+ * param: String currentRank, int playerPoints, List<String> possibleWords, String baseword
+ * returns: N/A
+ * This is a helper function for guess. It calculates and shows
+ * the differences between the current and next rank.
+ */
+ 
+ public static void calculateRankDifference(String currentRank, int playerPoints, List<String> possibleWords, String baseWord) {
+    String nextRank = "";
+    int pointsRequired = 0;
+
+    int currentRankIndex = Arrays.asList("Beginner", "Good Start", "Moving Up", "Good", "Solid", "Nice", "Great", "Amazing", "Genius", "Queen Bee").indexOf(currentRank);
+
+    if (currentRankIndex >= 0) {
+        switch (currentRankIndex) {
+            case 0:
+                nextRank = "Good Start";
+                pointsRequired = (int) (0.02 * possiblePoints(baseWord, possibleWords));
+                break;
+            case 1:
+                nextRank = "Moving Up";
+                pointsRequired = (int) (0.05 * possiblePoints(baseWord, possibleWords));
+                break;
+            case 2:
+                nextRank = "Good";
+                pointsRequired = (int) (0.08 * possiblePoints(baseWord, possibleWords));
+                break;
+            case 3:
+                nextRank = "Solid";
+                pointsRequired = (int) (0.15 * possiblePoints(baseWord, possibleWords));
+                break;
+            case 4:
+                nextRank = "Nice";
+                pointsRequired = (int) (0.25 * possiblePoints(baseWord, possibleWords));
+                break;
+            case 5:
+                nextRank = "Great";
+                pointsRequired = (int) (0.40 * possiblePoints(baseWord, possibleWords));
+                break;
+            case 6:
+                nextRank = "Amazing";
+                pointsRequired = (int) (0.50 * possiblePoints(baseWord, possibleWords));
+                break;
+            case 7:
+                nextRank = "Genius";
+                pointsRequired = (int) (0.70 * possiblePoints(baseWord, possibleWords));
+                break;
+            case 8:
+                nextRank = "Queen Bee";
+                pointsRequired = (int) (1.0 * possiblePoints(baseWord, possibleWords));
+                break;
+            default:
+                System.out.println("Invalid current rank");
+                return;
+        }
+
+        int difference = pointsRequired - playerPoints;
+
+        System.out.println("TOTAL POINTS NEEDED FOR NEXT RANK " + "\u001B[33m" + nextRank + "\u001B[0m" + ": " + "\u001B[33m" + pointsRequired + "\u001B[0m");
+        System.out.println("POINTS NEEDED TO REACH NEXT RANK: " + "\u001B[33m" + difference + "\u001B[0m");
+    } else {
+        System.out.println("Invalid current rank");
+    }
 }
+
+}
+
+
+
+
+    
+
+
+
+
