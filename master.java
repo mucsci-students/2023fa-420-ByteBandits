@@ -573,10 +573,6 @@ private static List<String> acceptedWords(String baseWord, char reqLetter) throw
 
 }
 
-
-
-
-
 /*********************************************************/
 /*********************************************************/
 

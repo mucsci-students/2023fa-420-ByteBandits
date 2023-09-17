@@ -116,9 +116,6 @@ public static boolean sameChars(String baseWord, String dicString) {
     return posPoints;
 }
 
-
-
-
 /*********************************************************/
 /*********************************************************/
 
