@@ -3,7 +3,6 @@
 /*********************************************************/
 /*********************************************************/
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -204,7 +203,7 @@ public static boolean sameChars(String baseWord, String dicString) {
         int difference = pointsRequired - playerPoints;
 
         System.out.println("TOTAL POINTS NEEDED FOR NEXT RANK " + "\u001B[33m" + nextRank + "\u001B[0m" + ": " + "\u001B[33m" + pointsRequired + "\u001B[0m");
-        System.out.println("POINTS NEEDED TO REACH NEXT RANK: " + "\u001B[33m" + difference + "\u001B[0m");
+        System.out.println("POINTS NEEDED TO REACH NEXT RANK: " + "\u001B[33m" + difference + "\u001B[0m\n");
     } else {
         System.out.println("Invalid current rank");
     }
