@@ -27,15 +27,16 @@ public static void main(String args[]) throws FileNotFoundException, Interrupted
     String shuffleWord = baseWord;
     
     intro();
+    
     Scanner inputScanner = new Scanner(System.in);
     String input;
-    //------------------------------------------------------//
-    //LOGIC FOR COMMAND INPUT
+    
     do
     {
         System.out.print("\u001B[33m" + ">" + "\u001B[0m"); 
         input = inputScanner.nextLine();
         switch (input.toLowerCase())
+
         {
             case "/newpuzzle":
                 totalPoints = 0;
@@ -54,7 +55,9 @@ public static void main(String args[]) throws FileNotFoundException, Interrupted
                 guess(baseWord, acceptedWordList, playerRank(baseWord, totalPoints, acceptedWordList));
                 
                 System.out.println();
+
                 break;
+
             case "/basepuzzle":
             totalPoints = 0;
             playerRank = "";
@@ -68,53 +71,75 @@ public static void main(String args[]) throws FileNotFoundException, Interrupted
             {
                 baseWord = shuffleWord;
                 System.out.println(yellowColor + "Bzzuh Bzzoh, word has to have 7 letters! Buzz.");
+
                 break; 
             }
+
             reqLetter = getReqLetter(baseWord);
             acceptedWordList = acceptedWords(baseWord, reqLetter);
+
             System.out.println("\u001B[33m" + "\nBuzzing for a new word..." + "\u001B[0m");
             Thread.sleep(500);
             System.out.println("\u001B[33m" + "Buzz..." + "\u001B[0m");
             Thread.sleep(500);
             System.out.println("\u001B[33m" + "Buzz...\n" + "\u001B[0m");
             Thread.sleep(500);
+
             if (!acceptedWordList.contains(baseWord)) 
             {
                 baseWord = shuffleWord;
                 System.out.println(yellowColor + "Buzz. Are you making stuff up now!  Make sure you type a valid word! Buzz.");
                 break; 
             }
+
             if (!isUnique(baseWord))
             {
                 baseWord = shuffleWord;
                 System.out.println(yellowColor + "Bzzt. Oops, all letters have to be unique! Bzz.");
                 break; 
             }
+
             shuffleWord = shuffle(baseWord, reqLetter);
             guess(baseWord, acceptedWordList, playerRank(baseWord, totalPoints, acceptedWordList));
         
             System.out.println();
-                break;
+
+            break;
+
             case "/guess":
+                if(baseWord.charAt(1) == ' ')
+                {
+                    System.out.println("\u001B[33m" + "\nYou haven't created a new puzzle! Do /loadpuzzle, /newpuzzle, or /basepuzzle to get one up! BUZZ!\n" + "\u001B[0m");
+
+                    break;
+                }
+
                 guess(baseWord, acceptedWordList, playerRank(baseWord, totalPoints, acceptedWordList));
+
                 break;
 
             case "/showpuzzle":
                 if(baseWord.charAt(1) == ' ')
                 {
                     System.out.println("\u001B[33m" + "\nYou haven't created a new puzzle! Do /loadpuzzle, /newpuzzle, or /basepuzzle to get one up! BUZZ!\n" + "\u001B[0m");
+
                     break;
                 }
+
                 display(shuffleWord, reqLetter);
+
                 break;
             
             case "/foundwords":
                 if(baseWord.charAt(1) == ' ')
                 {
                     System.out.println("\u001B[33m" + "\nYou haven't created a new puzzle! Do /loadpuzzle, /newpuzzle, or /basepuzzle to get one up! BUZZ!\n" + "\u001B[0m");
+
                     break;
                 }
+
                 foundWordList();
+
                 break;
 
             case "/shuffle":
@@ -123,11 +148,14 @@ public static void main(String args[]) throws FileNotFoundException, Interrupted
                     System.out.println("\u001B[33m" + "\nYou haven't created a new puzzle! Do /loadpuzzle, /newpuzzle, or /basepuzzle to get one up! BUZZ!\n" + "\u001B[0m");
                     break;
                 }
+
                 System.out.println("\u001B[33m" + "\nShaking up the hive!" + "\u001B[0m");
                 Thread.sleep(1000);
                 System.out.println("\u001B[33m" + "Bzzzzzzzzzzz!\n" + "\u001B[0m");
                 Thread.sleep(500);
+
                 shuffleWord = shuffle(baseWord, reqLetter);
+
                 break;
 
             case "/savepuzzle":
@@ -141,9 +169,12 @@ public static void main(String args[]) throws FileNotFoundException, Interrupted
                     System.out.println("\u001B[33m" + "\nBuzz. There's already progress on this puzzle! Please use /savecurr to save instead!\n" + "\u001B[0m");
                     break;
                 }
+
                 String rank = "Beginner";
                 saveFile.saveGameData(shuffleWord, String.valueOf(reqLetter), totalPoints, rank, foundWords);
+
                 System.out.println("Game Status Saved!\n");
+
                 break;
 
             case "/savecurr":
@@ -152,29 +183,40 @@ public static void main(String args[]) throws FileNotFoundException, Interrupted
                     System.out.println("\u001B[33m" + "\nYou haven't created a new puzzle! Do /loadpuzzle, /newpuzzle, or /basepuzzle to get one up! BUZZ!\n" + "\u001B[0m");
                     break;
                 }
-                //rank = playerRank(baseWord, reqLetter, acceptedWordList);
+            
                 rank = playerRank(baseWord, totalPoints, acceptedWordList);
                 saveFile.saveGameData(shuffleWord, String.valueOf(reqLetter), totalPoints, rank, foundWords);
                 System.out.println("\nGame Status Saved!\n");
+
                 break;
 
             case "/loadpuzzle":
+                if(baseWord == saveFile.getChosenWord() && totalPoints == saveFile.getScore()){
+                    System.out.println("\u001B[33m" + "\nThis puzzle is already loaded!\n" + "\u001B[0m");
+                    break;
+                }    
+
                 saveFile.loadGameData();
+                
                 baseWord = saveFile.getChosenWord();
                 reqLetter = saveFile.getReqLetterString().charAt(0);
                 totalPoints = saveFile.getScore();
                 playerRank = saveFile.getRank();
                 foundWords = saveFile.getAcceptedWordList();
+                acceptedWordList = acceptedWords(baseWord, reqLetter);
                 shuffleWord = display(baseWord, reqLetter);
+
                 System.out.println("\nTotal Points: " + "\u001B[33m" + totalPoints + "\u001B[0m");
                 System.out.println("Rank: " + "\u001B[33m" + playerRank + "\u001B[0m" + "\n");
                 System.out.println("Game Status Loaded!\n");
+
                 break;
 
             case "/showstatus":
                 if(baseWord.charAt(1) == ' ')
                 {
                     System.out.println("\u001B[33m" + "\nYou haven't created a new puzzle! Do /loadpuzzle, /newpuzzle, or /basepuzzle to get one up! BUZZ!\n" + "\u001B[0m");
+
                     break;
                 }
                 puzzleStatus(playerRank(baseWord, totalPoints, acceptedWordList));
@@ -183,14 +225,16 @@ public static void main(String args[]) throws FileNotFoundException, Interrupted
             case "/help":
                 help();
                 System.out.println();
+
                 break;
         }
     }
-    while (!input.equalsIgnoreCase("/exit"));
-    inputScanner.close();
-    System.out.println("\u001B[33m" + "\nThanks for playing! :)" + "\u001B[0m");
 
-    //------------------------------------------------------//
+    while (!input.equalsIgnoreCase("/exit"));
+
+    inputScanner.close();
+
+    System.out.println("\u001B[33m" + "\nThanks for playing! :)" + "\u001B[0m");
 
 }
 
@@ -209,14 +253,15 @@ public static void main(String args[]) throws FileNotFoundException, Interrupted
 private static List<String> dictionaryFile() throws FileNotFoundException{
     Scanner scanner = new Scanner(new File("7-letter-words.txt"));
     List<String> sevenLetterWords = new ArrayList<>();
-    int i = 0;
+
     while(scanner.hasNextLine()){
         String a = scanner.nextLine();
+
         if(isUnique(a)){
             sevenLetterWords.add(a);
-            i++;
         }
     } 
+
     return sevenLetterWords;
 }
 
@@ -278,7 +323,6 @@ private static char getReqLetter(String baseWord){
 
 private static int pointsPWord(String baseWord, String userGuess){
     int length = userGuess.length();
-
     int points = 0;
 
     switch(length){
@@ -286,16 +330,17 @@ private static int pointsPWord(String baseWord, String userGuess){
         points = 1;
         System.out.println("\u001B[33m" + "Good! +1 pt\n" + "\u001B[0m");
         break;
+
         default:
         points = length;
         if (length == 5 || length == 6){
-
             System.out.println("\u001B[33m" + "Great! +" + points + " pts\n" + "\u001B[0m");
         }
         else{
             
             if (sameChars(baseWord, userGuess)){
                 points += 7;
+
                 System.out.println();
                 System.out.println("\u001B[33m" + "Your guess was a PANGRAM!" + "\u001B[0m");
                 System.out.println("\u001B[33m" + "BONUS +7!\n" + "\u001B[0m");
@@ -373,7 +418,7 @@ private static String playerRank(String baseWord, int playerPoints, List<String>
 /*********************************************************/
 /*********************************************************/
   
- /*
+/*
  * help
  * param: N/A
  * returns: String
@@ -385,6 +430,7 @@ private static String playerRank(String baseWord, int playerPoints, List<String>
 private static void help()
 {
    String yellowColor = "\u001B[33m";
+   
    String [] commandLines = {
       "/newpuzzle",
       "/basepuzzle",
@@ -399,6 +445,7 @@ private static void help()
       "/help",
       "/exit"
    };
+
    String [] explanations = {
       "Generates a new puzzle with 7 unique letters and a required letter",
       "Generates a new puzzle with a word of the player's choice with 7 unique letters and a required letter",
@@ -413,6 +460,7 @@ private static void help()
       "Displays help information",
       "Leave the application"
    };
+
    System.out.println();
    System.out.println(yellowColor + "The WordyWasps game allows players to create words using 7 unique letters with a required letter. ");
    System.out.println("- Words must contain at least 4 letters");
@@ -420,11 +468,11 @@ private static void help()
    System.out.println("- Letters can be used more than once");
    System.out.println("");
    System.out.println(yellowColor + "Command Line    |   Explanation");
-
-        System.out.println(yellowColor + "---------------------------------------");
-        for (int i = 0; i < commandLines.length; i++) {
-          System.out.printf("%-15s |   %s%n", commandLines[i], explanations[i]);
-        }
+   System.out.println(yellowColor + "---------------------------------------");
+        
+    for (int i = 0; i < commandLines.length; i++) {
+        System.out.printf("%-15s |   %s%n", commandLines[i], explanations[i]);
+    }
 }
 
 /*********************************************************/
@@ -440,11 +488,11 @@ private static void help()
 private static String display(String baseword, char required)
 {
     String result = removeChar(baseword, required);
-    
     char[] charArray = result.toCharArray(); 
 
     System.out.println("   -----");
     System.out.print(" / ");
+
     for (int i = 0; i < 3; i++) {
         System.out.print(charArray[i] + " ");
     }
@@ -453,6 +501,7 @@ private static String display(String baseword, char required)
     System.out.println();
     System.out.println("||   " + "\u001B[33m" + required + "\u001B[0m" + "   ||");
     System.out.print(" \\ ");
+
     for (int i = 3; i < 6; i++) {
         System.out.print(charArray[i] + " ");
     }
@@ -475,7 +524,6 @@ private static String display(String baseword, char required)
   
 private static String shuffle (String curr, char required)
 {
-
     char[] charArray = curr.toCharArray();
 
     Random rand = new Random();
@@ -483,8 +531,8 @@ private static String shuffle (String curr, char required)
     for (int i = charArray.length - 1; i > 0; i--)
     {
         int j = rand.nextInt(i + 1);
-
         char temp = charArray[i];
+
         charArray[i] = charArray[j];
         charArray[j] = temp;
     }
@@ -492,6 +540,7 @@ private static String shuffle (String curr, char required)
     String shuffled = new String(charArray);
 
     display (shuffled, required);
+
     return shuffled;
 }
 
@@ -519,6 +568,7 @@ private static List<String> acceptedWords(String baseWord, char reqLetter) throw
         if(sameChars(baseWord, sNL) && sNL.contains(reqLetter2)){
             acceptedWordList.add(sNL);
         }
+
         sNL = scanner.nextLine();  
     }
 
@@ -539,12 +589,12 @@ private static List<String> acceptedWords(String baseWord, char reqLetter) throw
  * session of guesses.
  */
 
-
  private static void guess(String baseWord, List<String> acceptedWords, String playerRank){
     
     Scanner guessedWord = new Scanner(System.in);
     System.out.println("\u001B[33m" + "\nBzz. Do /q when you're done guessing! Bzz." + "\u001B[0m");
     System.out.println();
+
     while(true){
         System.out.print("Guess a word: ");
         
@@ -562,9 +612,12 @@ private static List<String> acceptedWords(String baseWord, char reqLetter) throw
             foundWords.add(validWord);
             totalPoints += pointsPWord(baseWord, validWord);
             playerRank = playerRank(baseWord, totalPoints, acceptedWords);
+
             System.out.println("YOUR CURRENT RANK IS: " + "\u001B[33m" +  playerRank + "\u001B[0m");
             System.out.println("YOUR CURRENT POINTS ARE: " + "\u001B[33m" + totalPoints + "\u001B[0m");
+            
             calculateRankDifference( playerRank, totalPoints, acceptedWords, baseWord);
+
         }else{
             System.out.println("\u001B[33m" + "\nNot a valid word, try again!\n" + "\u001B[0m");
         }
@@ -587,7 +640,6 @@ private static List<String> acceptedWords(String baseWord, char reqLetter) throw
 private static void puzzleStatus (String playerRank){
 
     String yellowColor = "\u001B[33m";
-
     String resetColor = "\u001B[0m";
 
     System.out.println();
@@ -613,11 +665,9 @@ private static void puzzleStatus (String playerRank){
 private static void foundWordList (){
     
     String yellowColor = "\u001B[33m";
-
     String resetColor = "\u001B[0m";
 
     System.out.println();
-
     System.out.printf("%-2sFOUND WORD LIST%n", ""); 
     
     for (int i = 0; i <= 18; i++){
@@ -630,7 +680,7 @@ private static void foundWordList (){
         System.out.printf(yellowColor + "* " + resetColor + "%-16s" + yellowColor + "*%n", foundWords.get(j));
     }
 
-     for (int k = 0; k <= 18; k++){
+    for (int k = 0; k <= 18; k++){
         System.out.print(yellowColor + "*" + resetColor);
     }
     
@@ -650,9 +700,8 @@ private static void foundWordList (){
  */
 public static void intro()
 {
-    // ANSI escape code for red color
     String yellowColor = "\u001B[33m";
-    // ANSI escape code for resetting the color
+    
     String resetColor = "\u001B[0m";
 
     System.out.println("\nWelcome to " + yellowColor + "WordyWasps - A Word Puzzle Game!" + resetColor);

@@ -77,6 +77,7 @@ public class playerData {
             score = gameData.getInt("score");
             rank = gameData.getString("rank");
             JSONArray acceptedWordListArray = gameData.getJSONArray("acceptedWordList");
+            acceptedWordList = new ArrayList<>();
             for(int i = 0; i < acceptedWordListArray.length(); ++i)
             {
                 acceptedWordList.add(acceptedWordListArray.getString(i));
