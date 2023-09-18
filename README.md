@@ -5,6 +5,7 @@ WORDY WASPS - A Word Puzzle Game
 Table of Contents
 -----------------
 - Introduction
+- Building and Running the Game
 - Game Commands
 - Getting Started
 - Gameplay
@@ -25,6 +26,24 @@ Words must include the required letter.
 Letters can be used more than once.
 Are you up for the challenge? Dive into the world of WordyWasps and start buzzing!
 
+Building and Running the Game
+-----------------
+**Prerequisites:**
+- Make sure you have Java installed on your system.
+
+**To Build and Run:**
+1. Clone this repository to your local machine using `git clone` or download the ZIP file and extract it.
+   
+2. Navigate to the project directory:
+   ```shell
+   cd 2023fa-420-ByteBandits
+   
+3. Compile java source files:
+   javac *.java
+
+4. Run the game!
+   java master
+   
 Game Commands
 -----------------
 
