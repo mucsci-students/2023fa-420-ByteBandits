@@ -1,7 +1,14 @@
+// Authors: Joshua Dawson, Logan Wasmer, Jose De La Cruz, Ilynd Rapant
+/***************************************************************/
+/***************************************************************/
+//Imports
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+/***************************************************************/
+/***************************************************************/
 
 public class mainframe {
     private JFrame mainFrame;
@@ -11,6 +18,7 @@ public class mainframe {
 
     /*************************************************************/
     /*******************BACKGORUND PANEL**************************/
+
     class BackgroundPanel extends JPanel {
         private Image backgroundImage;
 
@@ -56,7 +64,7 @@ public class mainframe {
         centerPanel.setOpaque(false);
 
         // Load the waspGif
-        ImageIcon gifIcon1 = new ImageIcon("C:\\Users\\17176\\git repository\\2023fa-420-ByteBandits\\guicontent\\waspGif.gif");
+        ImageIcon gifIcon1 = new ImageIcon("C:\\Users\\17176\\git repository\\2023fa-420-ByteBandits\\guicontent\\waspGif2.gif");
         JLabel gifLabel1 = new JLabel(gifIcon1);
         centerPanel.add(gifLabel1, BorderLayout.CENTER);
 
@@ -82,6 +90,7 @@ public class mainframe {
     /************************************************************/
     /*********************SECOND SCREEN**************************/
     //Shows after player clicks PLAY
+
     private void showSecondScreen() {
         mainFrame.setVisible(false);
 
@@ -124,6 +133,9 @@ public class mainframe {
         guiToCliButton.setFont(buttonFont);
         exitButton.setFont(buttonFont);
 
+    /**********************************************************************/
+    /***********************NEW PUZZLE BUTTON LOGIC************************/
+
         newPuzzleButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -131,6 +143,11 @@ public class mainframe {
             }
         });
 
+    /**********************************************************************/
+    /**********************************************************************/
+
+    /**********************************************************************/
+    /*********************LOAD PUZZLE LOGIC********************************/
         loadPuzzleButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -138,26 +155,50 @@ public class mainframe {
             }
         });
 
+    /***********************************************************************/
+    /*********************HOW TO PLAY BUTTON LOGIC**************************/
+    
+        JTextArea helpTextArea = new JTextArea();
+        helpTextArea.setEditable(false); // Make it non-editable
+        helpTextArea.setWrapStyleWord(true);
+        helpTextArea.setLineWrap(true);
+        helpTextArea.setOpaque(false); // Make it transparent
+        helpTextArea.setFont(new Font("SansSerif", Font.PLAIN, 16)); // Set the font and size
+        helpTextArea.setForeground(Color.BLACK); // Set the text color
         howToPlayButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //Logic for "How to Play" here
+                helpTextArea.setText(master.help());
             }
         });
+        secondFrame.add(new JScrollPane(helpTextArea), BorderLayout.CENTER);
 
+    /**********************************************************************/
+    /**********************************************************************/
+
+    /**********************************************************************/
+    /*********************GUI->CLI BUTTON LOGIC****************************/
         guiToCliButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //Logic for "How to Play" here
+                //Logic for "GUI->CLI" here
             }
         });
 
+    /**********************************************************************/
+    /**********************************************************************/
+
+    /**********************************************************************/
+    /************************EXIT BUTTON LOGIC*****************************/
         exitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.exit(0);
             }
         });
+
+    /**********************************************************************/
+    /**********************************************************************/
 
         // Add buttons to the button panel
         buttonPanel.add(newPuzzleButton);
@@ -169,6 +210,7 @@ public class mainframe {
         secondFrame.add(buttonPanel, BorderLayout.SOUTH);
         secondFrame.setVisible(true);
     }
+    //IF YOU WANT TO ADD EXTRA SCREENS START HERE//
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
