@@ -9,8 +9,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
 import java.util.*;
-
-
 /***************************************************************/
 /***************************************************************/
 
@@ -470,7 +468,13 @@ public class mainframe {
         guiToCliButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-               
+               secondFrame.dispose();
+                try {
+                master.main(new String[0]);
+                secondFrame.dispose();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }  
             }
         });
 

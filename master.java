@@ -172,7 +172,6 @@ public static void main(String args[]) throws FileNotFoundException, Interrupted
                     break;
                 }
 
-                
                 saveFile.saveGameData(shuffleWord, foundWords, totalPoints, String.valueOf(reqLetter), possiblePoints);
 
                 System.out.println("Game Status Saved!\n");
@@ -751,6 +750,5 @@ public static void intro()
     System.out.println();
 }
 }
-
 
 
