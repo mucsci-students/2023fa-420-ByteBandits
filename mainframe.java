@@ -3,10 +3,14 @@
 /***************************************************************/
 //Imports
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.text.DefaultCaret;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 import java.awt.*;
+import java.awt.event.*;
 import java.util.List;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.*;
 import java.util.*;
 /***************************************************************/
@@ -21,6 +25,7 @@ public class mainframe {
     char reqLetter = master.getReqLetter(baseWord);
     String shuffleWord = baseWord;
     List<String> acceptedWordList;
+    char[] bWLetters = baseWord.toCharArray();
     
     private JFrame mainFrame;
     private JFrame secondFrame;
@@ -162,18 +167,27 @@ public class mainframe {
         buttonPanel2.setBackground(new Color(255, 255, 153));
 
         // Create buttons for the second screen
+
+        String bW1 = Character.toString(bWLetters[0]);
+        String bW2 = Character.toString(bWLetters[1]);
+        String bW3 = Character.toString(bWLetters[2]);
+        String bW4 = Character.toString(bWLetters[3]);
+        String bW5 = Character.toString(bWLetters[4]);
+        String bW6 = Character.toString(bWLetters[5]);
+        String bW7 = Character.toString(bWLetters[6]);
+
         JButton newPuzzleButton = new JButton("NEW PUZZLE");
         JButton newUserPuzzleButton = new JButton("CUSTOM PUZZLE");
         JButton loadPuzzleButton = new JButton("LOAD PUZZLE");
         JButton howToPlayButton = new JButton("HOW TO PLAY");
         JButton exitButton = new JButton("EXIT");
-        JButton letterbutton1 = new JButton("H");
-        JButton letterbutton2 = new JButton("H");
-        JButton letterbutton3 = new JButton("H");
-        JButton letterbutton4 = new JButton("H");
-        JButton letterbutton5 = new JButton("H");
-        JButton letterbutton6 = new JButton("H");
-        JButton letterbutton7 = new JButton("H");
+        JButton letterbutton1 = new JButton(bW1);
+        JButton letterbutton2 = new JButton(bW2);
+        JButton letterbutton3 = new JButton(bW3);
+        JButton letterbutton4 = new JButton(bW4);
+        JButton letterbutton5 = new JButton(bW5);
+        JButton letterbutton6 = new JButton(bW6);
+        JButton letterbutton7 = new JButton(bW7);
 
         Color darkYellow = new Color(204, 153, 0);
         Color black = new Color(0,0,0);
@@ -189,6 +203,14 @@ public class mainframe {
         letterbutton5.setBackground(darkYellow);
         letterbutton6.setBackground(darkYellow);
         letterbutton7.setBackground(darkYellow);
+
+        letterbutton1.setForeground(Color.BLACK);
+        letterbutton2.setForeground(Color.BLACK);
+        letterbutton3.setForeground(Color.BLACK);
+        letterbutton4.setForeground(darkYellow);
+        letterbutton5.setForeground(Color.BLACK);
+        letterbutton6.setForeground(Color.BLACK);
+        letterbutton7.setForeground(Color.BLACK);
 
         Dimension buttonSize = new Dimension(280, 80); 
         newPuzzleButton.setPreferredSize(buttonSize);
@@ -234,8 +256,29 @@ public class mainframe {
                 master.foundWords = new ArrayList<>();
                 
                 shuffleWord = master.shuffle(baseWord, reqLetter);
-                
+
+                baseWord = shuffleWord;
+
+                String noReqLetter = master.removeChar(baseWord, reqLetter);
+
+                char[] bWLetters = noReqLetter.toCharArray();
+
+                String bW1 = Character.toString(bWLetters[0]);
+                String bW2 = Character.toString(bWLetters[1]);
+                String bW3 = Character.toString(bWLetters[2]);
+                String bW4 = Character.toString(reqLetter);
+                String bW5 = Character.toString(bWLetters[3]);
+                String bW6 = Character.toString(bWLetters[4]);
+                String bW7 = Character.toString(bWLetters[5]);
+
                 // Letter change code goes here after letters are created
+                letterbutton1.setText(bW1.toUpperCase());
+                letterbutton2.setText(bW2.toUpperCase());
+                letterbutton3.setText(bW3.toUpperCase());
+                letterbutton4.setText(bW4.toUpperCase());
+                letterbutton5.setText(bW5.toUpperCase());
+                letterbutton6.setText(bW6.toUpperCase());
+                letterbutton7.setText(bW7.toUpperCase());
             }
         });
 
@@ -265,12 +308,15 @@ public class mainframe {
 
                     reqLetter = master.getReqLetter(userWord);
 
+                    userWord = userWord.toLowerCase();
+
                     try {
                         acceptedWordList = master.acceptedWords(userWord, reqLetter);
                     } catch (FileNotFoundException e1) {
                         e1.printStackTrace();
                     }
 
+                    
                     if (!acceptedWordList.contains(userWord)){
                         
                         JOptionPane.showMessageDialog(secondFrame, "Buzz. Are you making stuff up now!  Make sure you type a valid word! Buzz.");
@@ -306,7 +352,29 @@ public class mainframe {
                 shuffleWord = master.shuffle(baseWord, reqLetter);
                 
                 // Letter change code goes here after letters are created
+                baseWord = shuffleWord;
 
+                String noReqLetter = master.removeChar(baseWord, reqLetter);
+
+                char[] bWLetters = noReqLetter.toCharArray();
+
+                String bW1 = Character.toString(bWLetters[0]);
+                String bW2 = Character.toString(bWLetters[1]);
+                String bW3 = Character.toString(bWLetters[2]);
+                String bW4 = Character.toString(reqLetter);
+                String bW5 = Character.toString(bWLetters[3]);
+                String bW6 = Character.toString(bWLetters[4]);
+                String bW7 = Character.toString(bWLetters[5]);
+
+                // Letter change code goes here after letters are created
+                letterbutton1.setText(bW1.toUpperCase());
+                letterbutton2.setText(bW2.toUpperCase());
+                letterbutton3.setText(bW3.toUpperCase());
+                letterbutton4.setText(bW4.toUpperCase());
+                letterbutton5.setText(bW5.toUpperCase());
+                letterbutton6.setText(bW6.toUpperCase());
+                letterbutton7.setText(bW7.toUpperCase());
+                
             }
         });
 
@@ -442,6 +510,77 @@ public class mainframe {
         }
     });
     secondFrame.add(letterbutton7);
+
+    // Code for textbox
+
+    class NoCaret extends DefaultCaret {
+        @Override
+        public void paint(Graphics g) {
+            
+        }
+    }
+    
+    JPanel panel = new JPanel(null);
+    panel.setOpaque(false); 
+    secondFrame.add(panel);
+    
+    JTextPane textPane = new JTextPane();
+    textPane.setOpaque(false);
+    textPane.setBorder(BorderFactory.createEmptyBorder());
+    StyledDocument doc = textPane.getStyledDocument();
+    SimpleAttributeSet center = new SimpleAttributeSet();
+    StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
+    doc.setParagraphAttributes(0, doc.getLength(), center, false);
+    
+    int textFieldWidth = 590;
+    int textFieldHeight = 80;
+    int maxCharacterCount = 15;
+    
+    Font textFieldFont = new Font("SansSerif", Font.BOLD, 50);
+    textPane.setFont(textFieldFont);
+    
+    int xCenter = (secondFrame.getWidth() - textFieldWidth) / 2;
+    int y = (secondFrame.getHeight() - textFieldHeight) / 2 - 400;
+    
+    textPane.setBounds(xCenter, y, textFieldWidth, textFieldHeight);
+    panel.add(textPane);
+    
+    textPane.setCaret(new NoCaret());
+    
+    textPane.addKeyListener(new KeyAdapter() {
+        @Override
+        public void keyTyped(KeyEvent e) {
+            StyledDocument doc = textPane.getStyledDocument();
+            if (doc.getLength() >= maxCharacterCount) {
+                e.consume();
+            }
+        }
+    });
+    
+    String defaultText = "";
+    textPane.setText(defaultText);
+    
+    Border goldBorder = BorderFactory.createLineBorder(new Color(204, 153, 0), 4);
+
+    textPane.setBorder(goldBorder);
+
+    textPane.addFocusListener(new FocusAdapter() {
+        @Override
+        public void focusGained(FocusEvent e) {
+            if (textPane.getText().equals(defaultText)) {
+                textPane.setText("");
+            }
+        }
+    
+        @Override
+        public void focusLost(FocusEvent e) {
+            if (textPane.getText().isEmpty()) {
+                textPane.setText(defaultText);
+            }
+        }
+    });
+    
+    secondFrame.setVisible(true);
 
     /***********************************************************************/
     /*********************HOW TO PLAY BUTTON LOGIC**************************/
