@@ -13,6 +13,7 @@ import java.awt.event.ActionListener;
 public class mainframe {
     private JFrame mainFrame;
     private JFrame secondFrame;
+    private JDialog howToPlayDialog;
     final private Font mainFont = new Font("SansSerif", Font.BOLD, 18);
     final private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
@@ -154,24 +155,53 @@ public class mainframe {
                 //Logic for "Load Puzzle" here
             }
         });
+    /***********************************************************************/
+    /**********************************************************************/
 
     /***********************************************************************/
     /*********************HOW TO PLAY BUTTON LOGIC**************************/
-    
-        JTextArea helpTextArea = new JTextArea();
-        helpTextArea.setEditable(false); // Make it non-editable
-        helpTextArea.setWrapStyleWord(true);
-        helpTextArea.setLineWrap(true);
-        helpTextArea.setOpaque(false); // Make it transparent
-        helpTextArea.setFont(new Font("SansSerif", Font.PLAIN, 16)); // Set the font and size
-        helpTextArea.setForeground(Color.BLACK); // Set the text color
-        howToPlayButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                helpTextArea.setText(master.help());
+
+    howToPlayButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (howToPlayDialog == null) {
+                howToPlayDialog = new JDialog(mainFrame, "How To Play", true);
+                howToPlayDialog.setSize(400, 300);
+                howToPlayDialog.setLocationRelativeTo(mainFrame);
+                JTextArea helpTextArea = new JTextArea();
+                helpTextArea.setEditable(false);
+                helpTextArea.setWrapStyleWord(true);
+                helpTextArea.setLineWrap(true);
+                helpTextArea.setFont(new Font("SansSerif", Font.PLAIN, 16));
+                helpTextArea.setForeground(Color.BLACK);
+                helpTextArea.setText("Instructions:\n"
+                        + "- Your goal is to create words using 7 unique letters with a required letter.\n"
+                        + "- Words must contain at least 4 letters.\n"
+                        + "- Words must include the required letter.\n"
+                        + "- Letters can be used more than once.\n"
+                        + "Commands:\n"
+                        + "1. /newpuzzle: Generates a new puzzle with 7 unique letters and a required letter.\n"
+                        + "2. /basepuzzle: Generates a new puzzle with a word of your choice using 7 unique letters and a required letter.\n"
+                        + "3. /showpuzzle: Shows the current puzzle you are working on.\n"
+                        + "4. /foundwords: Generates a list of words that you have found.\n"
+                        + "5. /guess: Allows you to guess your words.\n"
+                        + "6. /shuffle: Allows you to shuffle around the letters.\n"
+                        + "7. /savepuzzle: Lets you save a blank puzzle.\n"
+                        + "8. /savecurr: Lets you save a puzzle that may have been partially played.\n"
+                        + "9. /loadpuzzle: The player can load a saved game.\n"
+                        + "10. /showstatus : The player can see their rank and progress on a current puzzle.\n"
+                        + "11. /exit : Leave the application."
+                        
+                );
+                howToPlayDialog.add(new JScrollPane(helpTextArea));
             }
-        });
-        secondFrame.add(new JScrollPane(helpTextArea), BorderLayout.CENTER);
+            if (!howToPlayDialog.isVisible()) {
+                howToPlayDialog.setVisible(true);
+            } else {
+                howToPlayDialog.setVisible(false);
+            }
+        }
+    });
 
     /**********************************************************************/
     /**********************************************************************/
