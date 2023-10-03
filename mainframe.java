@@ -6,11 +6,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 /***************************************************************/
 /***************************************************************/
 
 public class mainframe {
+    private playerData playerGameData = new playerData();
     private JFrame mainFrame;
     private JFrame secondFrame;
     final private Font mainFont = new Font("SansSerif", Font.BOLD, 18);
@@ -151,37 +153,43 @@ public class mainframe {
         loadPuzzleButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //Logic for "Load Puzzle" here
-            }
-        });
 
-    /***********************************************************************/
-    /*********************HOW TO PLAY BUTTON LOGIC**************************/
-    
-        JTextArea helpTextArea = new JTextArea();
-        helpTextArea.setEditable(false); // Make it non-editable
-        helpTextArea.setWrapStyleWord(true);
-        helpTextArea.setLineWrap(true);
-        helpTextArea.setOpaque(false); // Make it transparent
-        helpTextArea.setFont(new Font("SansSerif", Font.PLAIN, 16)); // Set the font and size
-        helpTextArea.setForeground(Color.BLACK); // Set the text color
-        howToPlayButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                helpTextArea.setText(master.help());
-            }
-        });
-        secondFrame.add(new JScrollPane(helpTextArea), BorderLayout.CENTER);
-
-    /**********************************************************************/
-    /**********************************************************************/
-
-    /**********************************************************************/
-    /*********************GUI->CLI BUTTON LOGIC****************************/
-        guiToCliButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                //Logic for "GUI->CLI" here
+                playerGameData.loadGameData(); // Load game data from the JSON file
+        
+                String baseWord = playerGameData.getBaseWord();
+                List<String> foundWords = playerGameData.getFoundWords();
+                int playerPoints = playerGameData.getPlayerPoints();
+                String requiredLetter = playerGameData.getRequiredLetter();
+                int maxPoints = playerGameData.getMaxPoints();
+        
+                // Create JLabel components to display the variables
+                JLabel baseWordLabel = new JLabel("Base Word: " + baseWord);
+                JLabel foundWordsLabel = new JLabel("Found Words: " + foundWords);
+                JLabel playerPointsLabel = new JLabel("Player Points: " + playerPoints);
+                JLabel requiredLetterLabel = new JLabel("Required Letter: " + requiredLetter);
+                JLabel maxPointsLabel = new JLabel("Max Points: " + maxPoints);
+        
+                // Create a JPanel to hold the labels
+                JPanel labelsPanel = new JPanel();
+                labelsPanel.setLayout(new GridLayout(5, 1));
+                labelsPanel.add(baseWordLabel);
+                labelsPanel.add(foundWordsLabel);
+                labelsPanel.add(playerPointsLabel);
+                labelsPanel.add(requiredLetterLabel);
+                labelsPanel.add(maxPointsLabel);
+        
+                // Set the background color for the labels panel
+                labelsPanel.setBackground(new Color(204, 153, 0));
+        
+                // Remove all components from the mainFrame's content pane
+                mainFrame.getContentPane().removeAll();
+        
+                // Add the labels panel to the mainFrame's content pane
+                mainFrame.getContentPane().add(labelsPanel, BorderLayout.CENTER);
+        
+                // Repaint the mainFrame to update the display
+                mainFrame.revalidate();
+                mainFrame.repaint();
             }
         });
 

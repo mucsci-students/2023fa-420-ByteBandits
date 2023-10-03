@@ -85,6 +85,7 @@ public static void main(String args[]) throws FileNotFoundException, Interrupted
             System.out.println("\u001B[33m" + "Buzz...\n" + "\u001B[0m");
             Thread.sleep(500);
 
+            
             if (!acceptedWordList.contains(baseWord)) 
             {
                 baseWord = shuffleWord;
@@ -159,6 +160,7 @@ public static void main(String args[]) throws FileNotFoundException, Interrupted
                 break;
 
             case "/savepuzzle":
+                int possiblePoints = possiblePoints(baseWord, acceptedWordList);
                 if(baseWord.charAt(1) == ' ')
                 {
                     System.out.println("\u001B[33m" + "\nYou haven't created a new puzzle! Do /loadpuzzle, /newpuzzle, or /basepuzzle to get one up! BUZZ!\n" + "\u001B[0m");
@@ -170,39 +172,42 @@ public static void main(String args[]) throws FileNotFoundException, Interrupted
                     break;
                 }
 
-                String rank = "Beginner";
-                saveFile.saveGameData(shuffleWord, String.valueOf(reqLetter), totalPoints, rank, foundWords);
+                
+                saveFile.saveGameData(shuffleWord, foundWords, totalPoints, String.valueOf(reqLetter), possiblePoints);
 
                 System.out.println("Game Status Saved!\n");
 
                 break;
 
             case "/savecurr":
+                
                 if(baseWord.charAt(1) == ' ')
                 {
                     System.out.println("\u001B[33m" + "\nYou haven't created a new puzzle! Do /loadpuzzle, /newpuzzle, or /basepuzzle to get one up! BUZZ!\n" + "\u001B[0m");
                     break;
                 }
             
-                rank = playerRank(baseWord, totalPoints, acceptedWordList);
-                saveFile.saveGameData(shuffleWord, String.valueOf(reqLetter), totalPoints, rank, foundWords);
+                saveFile.saveGameData(shuffleWord, foundWords, totalPoints, String.valueOf(reqLetter), possiblePoints(baseWord, acceptedWordList));
                 System.out.println("\nGame Status Saved!\n");
 
                 break;
 
             case "/loadpuzzle":
-                if(baseWord == saveFile.getChosenWord() && totalPoints == saveFile.getScore()){
+                if(baseWord == saveFile.getBaseWord() && totalPoints == saveFile.getPlayerPoints()){
                     System.out.println("\u001B[33m" + "\nThis puzzle is already loaded!\n" + "\u001B[0m");
                     break;
                 }    
 
                 saveFile.loadGameData();
                 
-                baseWord = saveFile.getChosenWord();
-                reqLetter = saveFile.getReqLetterString().charAt(0);
-                totalPoints = saveFile.getScore();
-                playerRank = saveFile.getRank();
-                foundWords = saveFile.getAcceptedWordList();
+                baseWord = saveFile.getBaseWord();
+                foundWords = saveFile.getFoundWords();
+                totalPoints = saveFile.getMaxPoints();
+                reqLetter = saveFile.getRequiredLetter().charAt(0);
+                possiblePoints = saveFile.getMaxPoints();
+
+                
+                
                 acceptedWordList = acceptedWords(baseWord, reqLetter);
                 shuffleWord = display(baseWord, reqLetter);
 
