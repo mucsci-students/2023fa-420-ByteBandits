@@ -250,7 +250,7 @@ public static void main(String args[]) throws FileNotFoundException, Interrupted
  * of all the words on the file that have all unique letters.
  */
 
-private static List<String> dictionaryFile() throws FileNotFoundException{
+public static List<String> dictionaryFile() throws FileNotFoundException{
     Scanner scanner = new Scanner(new File("7-letter-words.txt"));
     List<String> sevenLetterWords = new ArrayList<>();
 
@@ -278,7 +278,7 @@ private static List<String> dictionaryFile() throws FileNotFoundException{
  * is then returned and acts as our base word.
  */
 
-private static String getBaseWord(List<String> dictionary) throws FileNotFoundException{
+public static String getBaseWord(List<String> dictionary) throws FileNotFoundException{
     Random rand = new Random();
     int upperBound = dictionaryFile().size();
     int randomInt = rand.nextInt(upperBound);
@@ -300,7 +300,7 @@ private static String getBaseWord(List<String> dictionary) throws FileNotFoundEx
  * our required character.
  */
 
-private static char getReqLetter(String baseWord){
+public static char getReqLetter(String baseWord){
     Random rand = new Random();
     int upperBound = 7;
     int randomInt = rand.nextInt(upperBound);
@@ -321,7 +321,7 @@ private static char getReqLetter(String baseWord){
  * it will return that point value.
  */
 
-private static int pointsPWord(String baseWord, String userGuess){
+public static int pointsPWord(String baseWord, String userGuess){
     int length = userGuess.length();
     int points = 0;
 
@@ -365,7 +365,7 @@ private static int pointsPWord(String baseWord, String userGuess){
  * is used to determine the rank of the player. 
  */
 
-private static String playerRank(String baseWord, int playerPoints, List<String> possiblewords){
+public static String playerRank(String baseWord, int playerPoints, List<String> possiblewords){
 
     int posPoints = possiblePoints(baseWord,possiblewords);
 
@@ -485,7 +485,7 @@ public static String help()
  * This function creates a cool display for the puzzle.
  */
 
-private static String display(String baseword, char required)
+public static String display(String baseword, char required)
 {
     String result = removeChar(baseword, required);
     char[] charArray = result.toCharArray(); 
@@ -522,7 +522,7 @@ private static String display(String baseword, char required)
  * This function shuffles the letters of a current puzzle.
  */
   
-private static String shuffle (String curr, char required)
+public static String shuffle (String curr, char required)
 {
     char[] charArray = curr.toCharArray();
 
@@ -558,7 +558,7 @@ private static String shuffle (String curr, char required)
  * and then finally returns it. 
  */
 
-private static List<String> acceptedWords(String baseWord, char reqLetter) throws FileNotFoundException{
+public static List<String> acceptedWords(String baseWord, char reqLetter) throws FileNotFoundException{
     Scanner scanner = new Scanner(new File("4-15_Dictionary.txt"));
     List<String> acceptedWordList = new ArrayList<>();
     String reqLetter2 = Character.toString(reqLetter);
@@ -589,7 +589,7 @@ private static List<String> acceptedWords(String baseWord, char reqLetter) throw
  * session of guesses.
  */
 
- private static void guess(String baseWord, List<String> acceptedWords, String playerRank){
+public static void guess(String baseWord, List<String> acceptedWords, String playerRank){
     
     Scanner guessedWord = new Scanner(System.in);
     System.out.println("\u001B[33m" + "\nBzz. Do /q when you're done guessing! Bzz." + "\u001B[0m");
@@ -637,7 +637,7 @@ private static List<String> acceptedWords(String baseWord, char reqLetter) throw
  * of the pllayer during the current session.
  */
 
-private static void puzzleStatus (String playerRank){
+public static void puzzleStatus (String playerRank){
 
     String yellowColor = "\u001B[33m";
     String resetColor = "\u001B[0m";
@@ -662,7 +662,7 @@ private static void puzzleStatus (String playerRank){
  * of the pllayer during the current session.
  */
 
-private static void foundWordList (){
+public static void foundWordList (){
     
     String yellowColor = "\u001B[33m";
     String resetColor = "\u001B[0m";
