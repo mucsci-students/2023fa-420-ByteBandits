@@ -197,6 +197,15 @@ public class mainframe {
     /**********************************************************************/
 
     /**********************************************************************/
+    /*********************GUI->CLI BUTTON LOGIC****************************/
+        guiToCliButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+               
+            }
+        });
+
+    /**********************************************************************/
     /************************EXIT BUTTON LOGIC*****************************/
         exitButton.addActionListener(new ActionListener() {
             @Override
