@@ -4,17 +4,32 @@
 //Imports
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import java.util.List;
+import java.io.*;
+import java.util.*;
+
 
 /***************************************************************/
 /***************************************************************/
 
 public class mainframe {
+
     private playerData playerGameData = new playerData();
+    private master masterInstance = new master();
+    
+    playerData saveFile = new playerData();
+    String baseWord = "       ";
+    char reqLetter = master.getReqLetter(baseWord);
+    String shuffleWord = baseWord;
+    List<String> acceptedWordList;
+    
     private JFrame mainFrame;
     private JFrame secondFrame;
+    private JDialog howToPlayDialog;
     final private Font mainFont = new Font("SansSerif", Font.BOLD, 18);
     final private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
@@ -40,7 +55,11 @@ public class mainframe {
     /**********************************************************/
 
     public mainframe() {
+        
         mainFrame = new JFrame("Welcome to Wordy Wasps");
+        mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH); 
+        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
         mainFrame.setSize(screenSize); 
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -98,6 +117,9 @@ public class mainframe {
 
         // Create the second frame
         secondFrame = new JFrame("Wordy Wasps - Main Menu");
+        secondFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        secondFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
         secondFrame.setSize(screenSize);
         secondFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         secondFrame.getContentPane().setBackground(new Color(255, 255, 153));
@@ -107,22 +129,45 @@ public class mainframe {
         buttonPanel.setOpaque(false); 
         buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
 
+        JPanel buttonPanel2 = new JPanel();
+        buttonPanel.setOpaque(false); 
+        buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        buttonPanel2.setBackground(new Color(255, 255, 153));
+
         // Create buttons for the second screen
         JButton newPuzzleButton = new JButton("NEW PUZZLE");
+        JButton newUserPuzzleButton = new JButton("CUSTOM PUZZLE");
         JButton loadPuzzleButton = new JButton("LOAD PUZZLE");
         JButton howToPlayButton = new JButton("HOW TO PLAY");
         JButton guiToCliButton = new JButton("GUI -> CLI");
         JButton exitButton = new JButton("EXIT");
+        JButton letterbutton1 = new JButton("H");
+        JButton letterbutton2 = new JButton("H");
+        JButton letterbutton3 = new JButton("H");
+        JButton letterbutton4 = new JButton("H");
+        JButton letterbutton5 = new JButton("H");
+        JButton letterbutton6 = new JButton("H");
+        JButton letterbutton7 = new JButton("H");
 
         Color darkYellow = new Color(204, 153, 0);
+        Color black = new Color(0,0,0);
         newPuzzleButton.setBackground(darkYellow); 
+        newUserPuzzleButton.setBackground(darkYellow);
         loadPuzzleButton.setBackground(darkYellow); 
         howToPlayButton.setBackground(darkYellow); 
         guiToCliButton.setBackground(darkYellow); 
         exitButton.setBackground(darkYellow);
+        letterbutton1.setBackground(darkYellow);
+        letterbutton2.setBackground(darkYellow);
+        letterbutton3.setBackground(darkYellow);
+        letterbutton4.setBackground(black);
+        letterbutton5.setBackground(darkYellow);
+        letterbutton6.setBackground(darkYellow);
+        letterbutton7.setBackground(darkYellow);
 
         Dimension buttonSize = new Dimension(280, 80); 
         newPuzzleButton.setPreferredSize(buttonSize);
+        newUserPuzzleButton.setPreferredSize(buttonSize);
         loadPuzzleButton.setPreferredSize(buttonSize);
         howToPlayButton.setPreferredSize(buttonSize);
         guiToCliButton.setPreferredSize(buttonSize);
@@ -130,10 +175,20 @@ public class mainframe {
 
         Font buttonFont = new Font("SansSerif", Font.BOLD, 24);
         newPuzzleButton.setFont(buttonFont);
+        newUserPuzzleButton.setFont(buttonFont);
         loadPuzzleButton.setFont(buttonFont);
         howToPlayButton.setFont(buttonFont);
         guiToCliButton.setFont(buttonFont);
         exitButton.setFont(buttonFont);
+        letterbutton1.setFont(buttonFont);
+        letterbutton2.setFont(buttonFont);
+        letterbutton3.setFont(buttonFont);
+        letterbutton4.setFont(buttonFont);
+        letterbutton5.setFont(buttonFont);
+        letterbutton6.setFont(buttonFont);
+        letterbutton7.setFont(buttonFont);
+
+        letterbutton4.setForeground(darkYellow);
 
     /**********************************************************************/
     /***********************NEW PUZZLE BUTTON LOGIC************************/
@@ -141,7 +196,94 @@ public class mainframe {
         newPuzzleButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //Logic for "New Puzzle" here
+                master.totalPoints = 0;
+                try {
+                    baseWord = master.getBaseWord(master.dictionaryFile());
+                } catch (FileNotFoundException e1) {
+                    e1.printStackTrace();
+                }
+                reqLetter = master.getReqLetter(baseWord);
+                try {
+                    acceptedWordList = master.acceptedWords(baseWord, reqLetter);
+                } catch (FileNotFoundException e1) {
+                    e1.printStackTrace();
+                }
+                master.foundWords = new ArrayList<>();
+                
+                shuffleWord = master.shuffle(baseWord, reqLetter);
+                
+                // Letter change code goes here after letters are created
+            }
+        });
+
+    /**********************************************************************/
+    /**********************************************************************/
+
+    /*********************************************************************/
+    /********************NEW USER PUZZLE BUTTON LOGIC*********************/
+
+        newUserPuzzleButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String baseSave = baseWord;
+                char reqSave = reqLetter;
+
+                String userWord = JOptionPane.showInputDialog(secondFrame, "Enter a base word for the puzzle:");
+
+                if (userWord != null && !userWord.isEmpty() && userWord.length() == 7) {
+
+                    if (!master.isUnique(userWord)){
+
+                        JOptionPane.showMessageDialog(secondFrame, "Bzzt. Oops, all letters have to be unique! Bzz.");
+                        baseWord = baseSave;
+                        reqLetter = reqSave;
+                        return;
+                    }
+
+                    reqLetter = master.getReqLetter(userWord);
+
+                    try {
+                        acceptedWordList = master.acceptedWords(userWord, reqLetter);
+                    } catch (FileNotFoundException e1) {
+                        e1.printStackTrace();
+                    }
+
+                    if (!acceptedWordList.contains(userWord)){
+                        
+                        JOptionPane.showMessageDialog(secondFrame, "Buzz. Are you making stuff up now!  Make sure you type a valid word! Buzz.");
+                        baseWord = baseSave;
+                        reqLetter = reqSave;
+                        
+                        try {
+                            acceptedWordList = master.acceptedWords(baseWord, reqLetter);
+                        } catch (FileNotFoundException e1) {
+                            e1.printStackTrace();
+                        }
+
+                        return;
+                    }
+                    
+                    baseWord = userWord.toUpperCase(); 
+                    reqLetter = master.getReqLetter(baseWord);
+
+                }else{
+                    if(userWord.length() == 0){
+                        return;
+                    }
+
+                    JOptionPane.showMessageDialog(secondFrame, "Bzzuh Bzzoh, word has to have 7 letters! Buzz.");
+                    return;
+                }
+
+
+                master.totalPoints = 0;
+
+                master.foundWords = new ArrayList<>();
+                
+                shuffleWord = master.shuffle(baseWord, reqLetter);
+                
+                // Letter change code goes here after letters are created
+
             }
         });
 
@@ -153,6 +295,142 @@ public class mainframe {
         loadPuzzleButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
+                //Logic for "Load Puzzle" here
+            }
+        });
+    /***********************************************************************/
+    /**********************************************************************/
+
+    
+    letterbutton1.setPreferredSize(new Dimension(80, 80)); 
+    letterbutton1.setFont(new Font("SansSerif", Font.BOLD, 24)); 
+    letterbutton1.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // Handle button click here
+           
+        }
+    });
+    secondFrame.add(letterbutton1);
+
+        
+    letterbutton2.setPreferredSize(new Dimension(80, 80)); 
+    letterbutton2.setFont(new Font("SansSerif", Font.BOLD, 24)); 
+    letterbutton2.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // Handle button click here
+           
+        }
+    });
+    secondFrame.add(letterbutton2);
+
+        
+    letterbutton3.setPreferredSize(new Dimension(80, 80)); 
+    letterbutton3.setFont(new Font("SansSerif", Font.BOLD, 24)); 
+    letterbutton3.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // Handle button click here
+           
+        }
+    });
+    secondFrame.add(letterbutton3);
+
+        
+    letterbutton4.setPreferredSize(new Dimension(80, 80)); 
+    letterbutton4.setFont(new Font("SansSerif", Font.BOLD, 24)); 
+    letterbutton4.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // Handle button click here
+           
+        }
+    });
+    secondFrame.add(letterbutton4);
+
+        
+    letterbutton5.setPreferredSize(new Dimension(80, 80)); 
+    letterbutton5.setFont(new Font("SansSerif", Font.BOLD, 24)); 
+    letterbutton5.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // Handle button click here
+           
+        }
+    });
+    secondFrame.add(letterbutton5);
+
+        
+    letterbutton6.setPreferredSize(new Dimension(80, 80)); 
+    letterbutton6.setFont(new Font("SansSerif", Font.BOLD, 24)); 
+    letterbutton6.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // Handle button click here
+           
+        }
+    });
+    secondFrame.add(letterbutton6);
+
+        
+    letterbutton7.setPreferredSize(new Dimension(80, 80)); 
+    letterbutton7.setFont(new Font("SansSerif", Font.BOLD, 24)); 
+    letterbutton7.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // Handle button click here
+           
+        }
+    });
+    secondFrame.add(letterbutton7);
+
+    /***********************************************************************/
+    /*********************HOW TO PLAY BUTTON LOGIC**************************/
+
+    howToPlayButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (howToPlayDialog == null) {
+                howToPlayDialog = new JDialog(mainFrame, "How To Play", true);
+                howToPlayDialog.setSize(400, 300);
+                howToPlayDialog.setLocationRelativeTo(mainFrame);
+                JTextArea helpTextArea = new JTextArea();
+                helpTextArea.setEditable(false);
+                helpTextArea.setWrapStyleWord(true);
+                helpTextArea.setLineWrap(true);
+                helpTextArea.setFont(new Font("SansSerif", Font.PLAIN, 16));
+                helpTextArea.setForeground(Color.BLACK);
+                helpTextArea.setText("Instructions:\n"
+                        + "- Your goal is to create words using 7 unique letters with a required letter.\n"
+                        + "- Words must contain at least 4 letters.\n"
+                        + "- Words must include the required letter.\n"
+                        + "- Letters can be used more than once.\n"
+                        + "Commands:\n"
+                        + "1. /newpuzzle: Generates a new puzzle with 7 unique letters and a required letter.\n"
+                        + "2. /basepuzzle: Generates a new puzzle with a word of your choice using 7 unique letters and a required letter.\n"
+                        + "3. /showpuzzle: Shows the current puzzle you are working on.\n"
+                        + "4. /foundwords: Generates a list of words that you have found.\n"
+                        + "5. /guess: Allows you to guess your words.\n"
+                        + "6. /shuffle: Allows you to shuffle around the letters.\n"
+                        + "7. /savepuzzle: Lets you save a blank puzzle.\n"
+                        + "8. /savecurr: Lets you save a puzzle that may have been partially played.\n"
+                        + "9. /loadpuzzle: The player can load a saved game.\n"
+                        + "10. /showstatus : The player can see their rank and progress on a current puzzle.\n"
+                        + "11. /exit : Leave the application."
+                        
+                );
+                howToPlayDialog.add(new JScrollPane(helpTextArea));
+            }
+            if (!howToPlayDialog.isVisible()) {
+                howToPlayDialog.setVisible(true);
+            } else {
+                howToPlayDialog.setVisible(false);
+            }
+        }
+    });
+
 
                 playerGameData.loadGameData(); // Load game data from the JSON file
         
@@ -209,13 +487,22 @@ public class mainframe {
     /**********************************************************************/
 
         // Add buttons to the button panel
+        buttonPanel.add(newUserPuzzleButton);
         buttonPanel.add(newPuzzleButton);
         buttonPanel.add(loadPuzzleButton);
         buttonPanel.add(howToPlayButton);
         buttonPanel.add(guiToCliButton);
         buttonPanel.add(exitButton);
+        buttonPanel2.add(letterbutton1);
+        buttonPanel2.add(letterbutton2);
+        buttonPanel2.add(letterbutton3);
+        buttonPanel2.add(letterbutton4);
+        buttonPanel2.add(letterbutton5);
+        buttonPanel2.add(letterbutton6);
+        buttonPanel2.add(letterbutton7);
 
         secondFrame.add(buttonPanel, BorderLayout.SOUTH);
+        secondFrame.add(buttonPanel2, BorderLayout.CENTER);
         secondFrame.setVisible(true);
     }
     //IF YOU WANT TO ADD EXTRA SCREENS START HERE//
@@ -224,7 +511,9 @@ public class mainframe {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
+                
                 new mainframe();
+                
             }
         });
     }
