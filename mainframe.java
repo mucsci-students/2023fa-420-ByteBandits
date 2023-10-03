@@ -10,19 +10,19 @@ import java.awt.event.ActionListener;
 import java.io.*;
 import java.util.*;
 
+
 /***************************************************************/
 /***************************************************************/
 
 public class mainframe {
-    private master masterInstance = new master();
+
+    private playerData playerGameData = new playerData();
     
     playerData saveFile = new playerData();
     String baseWord = "       ";
     char reqLetter = master.getReqLetter(baseWord);
     String shuffleWord = baseWord;
     List<String> acceptedWordList;
-    
-
     
     private JFrame mainFrame;
     private JFrame secondFrame;
@@ -292,7 +292,42 @@ public class mainframe {
         loadPuzzleButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //Logic for "Load Puzzle" here
+                playerGameData.loadGameData(); // Load game data from the JSON file
+
+                String baseWord = playerGameData.getBaseWord();
+                List<String> foundWords = playerGameData.getFoundWords();
+                int playerPoints = playerGameData.getPlayerPoints();
+                String requiredLetter = playerGameData.getRequiredLetter();
+                int maxPoints = playerGameData.getMaxPoints();
+
+                // Create JLabel components to display the variables
+                JLabel baseWordLabel = new JLabel("Base Word: " + baseWord);
+                JLabel foundWordsLabel = new JLabel("Found Words: " + foundWords);
+                JLabel playerPointsLabel = new JLabel("Player Points: " + playerPoints);
+                JLabel requiredLetterLabel = new JLabel("Required Letter: " + requiredLetter);
+                JLabel maxPointsLabel = new JLabel("Max Points: " + maxPoints);
+
+                // Create a JPanel to hold the labels
+                JPanel labelsPanel = new JPanel();
+                labelsPanel.setLayout(new GridLayout(5, 1));
+                labelsPanel.add(baseWordLabel);
+                labelsPanel.add(foundWordsLabel);
+                labelsPanel.add(playerPointsLabel);
+                labelsPanel.add(requiredLetterLabel);
+                labelsPanel.add(maxPointsLabel);
+
+                // Set the background color for the labels panel
+                labelsPanel.setBackground(new Color(204, 153, 0));
+
+                // Remove all components from the mainFrame's content pane
+                mainFrame.getContentPane().removeAll();
+
+                // Add the labels panel to the mainFrame's content pane
+                mainFrame.getContentPane().add(labelsPanel, BorderLayout.CENTER);
+
+                // Repaint the mainFrame to update the display
+                mainFrame.revalidate();
+                mainFrame.repaint();
             }
         });
     /***********************************************************************/
@@ -435,12 +470,9 @@ public class mainframe {
         guiToCliButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //Logic for "GUI->CLI" here
+               
             }
         });
-
-    /**********************************************************************/
-    /**********************************************************************/
 
     /**********************************************************************/
     /************************EXIT BUTTON LOGIC*****************************/
