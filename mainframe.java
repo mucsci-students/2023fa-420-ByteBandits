@@ -30,6 +30,7 @@ public class mainframe {
     private JFrame mainFrame;
     private JFrame secondFrame;
     private JDialog howToPlayDialog;
+    private JDialog foundwords;
     final private Font mainFont = new Font("SansSerif", Font.BOLD, 18);
     final private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
@@ -180,6 +181,7 @@ public class mainframe {
         JButton newUserPuzzleButton = new JButton("CUSTOM PUZZLE");
         JButton loadPuzzleButton = new JButton("LOAD PUZZLE");
         JButton howToPlayButton = new JButton("HOW TO PLAY");
+        JButton foundWordsButton = new JButton("FOUND WORDS");
         JButton exitButton = new JButton("EXIT");
         JButton letterbutton1 = new JButton(bW1);
         JButton letterbutton2 = new JButton(bW2);
@@ -195,6 +197,7 @@ public class mainframe {
         newUserPuzzleButton.setBackground(darkYellow);
         loadPuzzleButton.setBackground(darkYellow); 
         howToPlayButton.setBackground(darkYellow); 
+        foundWordsButton.setBackground(darkYellow);
         exitButton.setBackground(darkYellow);
         letterbutton1.setBackground(darkYellow);
         letterbutton2.setBackground(darkYellow);
@@ -212,18 +215,20 @@ public class mainframe {
         letterbutton6.setForeground(Color.BLACK);
         letterbutton7.setForeground(Color.BLACK);
 
-        Dimension buttonSize = new Dimension(280, 80); 
+        Dimension buttonSize = new Dimension(220, 60); 
         newPuzzleButton.setPreferredSize(buttonSize);
         newUserPuzzleButton.setPreferredSize(buttonSize);
         loadPuzzleButton.setPreferredSize(buttonSize);
         howToPlayButton.setPreferredSize(buttonSize);
+        foundWordsButton.setPreferredSize(buttonSize);
         exitButton.setPreferredSize(buttonSize);
 
-        Font buttonFont = new Font("SansSerif", Font.BOLD, 24);
+        Font buttonFont = new Font("SansSerif", Font.BOLD, 16);
         newPuzzleButton.setFont(buttonFont);
         newUserPuzzleButton.setFont(buttonFont);
         loadPuzzleButton.setFont(buttonFont);
         howToPlayButton.setFont(buttonFont);
+        foundWordsButton.setFont(buttonFont);
         exitButton.setFont(buttonFont);
         letterbutton1.setFont(buttonFont);
         letterbutton2.setFont(buttonFont);
@@ -637,6 +642,38 @@ public class mainframe {
         }
     });
 
+    /***********************************************************************/
+    /*********************FOUND WORD LIST LOGIC****************************/
+        foundWordsButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (foundwords == null) {
+                foundwords = new JDialog(mainFrame, "FOUND WORD LIST", true);
+                foundwords.setSize(400, 300);
+                foundwords.setLocationRelativeTo(mainFrame);
+                JTextArea foundWordsArea = new JTextArea();
+                foundWordsArea.setEditable(false);
+                foundWordsArea.setWrapStyleWord(true);
+                foundWordsArea.setLineWrap(true);
+                foundWordsArea.setFont(new Font("SansSerif", Font.PLAIN, 16));
+                foundWordsArea.setForeground(Color.BLACK);
+                if(master.foundWords.isEmpty()){
+                    foundWordsArea.append("YOU HAVEN'T FOUND ANY WORDS");
+                }
+                for (String word : master.foundWords)
+                {
+                    foundWordsArea.append(word + "\n");
+                }
+                foundwords.add(new JScrollPane(foundWordsArea));
+            }
+            if (!foundwords.isVisible()) {
+                foundwords.setVisible(true);
+            } else {
+                foundwords.setVisible(false);
+            }
+        }
+    });
+
     /**********************************************************************/
     /************************EXIT BUTTON LOGIC*****************************/
     
@@ -655,6 +692,7 @@ public class mainframe {
         buttonPanel.add(newPuzzleButton);
         buttonPanel.add(loadPuzzleButton);
         buttonPanel.add(howToPlayButton);
+        buttonPanel.add(foundWordsButton);
         buttonPanel.add(exitButton);
         buttonPanel2.add(letterbutton1);
         buttonPanel2.add(letterbutton2);
