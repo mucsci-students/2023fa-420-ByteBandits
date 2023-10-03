@@ -217,7 +217,7 @@ public class mainframe {
         letterbutton6.setForeground(Color.BLACK);
         letterbutton7.setForeground(Color.BLACK);
 
-        Dimension buttonSize = new Dimension(220, 60); 
+        Dimension buttonSize = new Dimension(180, 50); 
 
         shufflePuzzle.setPreferredSize(buttonSize);
         newPuzzleButton.setPreferredSize(buttonSize);
@@ -227,7 +227,7 @@ public class mainframe {
         foundWordsButton.setPreferredSize(buttonSize);
         exitButton.setPreferredSize(buttonSize);
 
-        Font buttonFont = new Font("SansSerif", Font.BOLD, 16);
+        Font buttonFont = new Font("SansSerif", Font.BOLD, 15);
 
         shufflePuzzle.setFont(buttonFont);
         newPuzzleButton.setFont(buttonFont);
