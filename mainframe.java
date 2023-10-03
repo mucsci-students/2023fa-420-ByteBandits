@@ -97,6 +97,7 @@ public class mainframe {
     private JFrame mainFrame;
     private JFrame secondFrame;
     private JDialog howToPlayDialog;
+    private JDialog foundwords;
     final private Font mainFont = new Font("SansSerif", Font.BOLD, 18);
     final private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
@@ -243,6 +244,7 @@ public class mainframe {
         String bW6 = Character.toString(bWLetters[5]);
         String bW7 = Character.toString(bWLetters[6]);
 
+
         CustomButton newPuzzleButton = new CustomButton("NEW PUZZLE", false);
         CustomButton newUserPuzzleButton = new CustomButton("CUSTOM PUZZLE", false);
         CustomButton loadPuzzleButton = new CustomButton("LOAD PUZZLE", false);
@@ -263,14 +265,16 @@ public class mainframe {
         letterbutton5.setEnabled(false);
         letterbutton6.setEnabled(false);
         letterbutton7.setEnabled(false);
-        
 
-        
+        Color darkYellow = new Color(204, 153, 0);
+
         Color black = new Color(0,0,0);
+        shufflePuzzle.setBackground(darkYellow);
         newPuzzleButton.setBackground(darkYellow); 
         newUserPuzzleButton.setBackground(darkYellow);
         loadPuzzleButton.setBackground(darkYellow); 
         howToPlayButton.setBackground(darkYellow); 
+        foundWordsButton.setBackground(darkYellow);
         exitButton.setBackground(darkYellow);
         letterbutton1.setBackground(darkYellow);
         letterbutton2.setBackground(darkYellow);
@@ -288,18 +292,24 @@ public class mainframe {
         letterbutton6.setForeground(Color.BLACK);
         letterbutton7.setForeground(Color.BLACK);
 
-        Dimension buttonSize = new Dimension(280, 80); 
+        Dimension buttonSize = new Dimension(180, 50); 
+
+        shufflePuzzle.setPreferredSize(buttonSize);
         newPuzzleButton.setPreferredSize(buttonSize);
         newUserPuzzleButton.setPreferredSize(buttonSize);
         loadPuzzleButton.setPreferredSize(buttonSize);
         howToPlayButton.setPreferredSize(buttonSize);
+        foundWordsButton.setPreferredSize(buttonSize);
         exitButton.setPreferredSize(buttonSize);
 
-        Font buttonFont = new Font("SansSerif", Font.BOLD, 24);
+        Font buttonFont = new Font("SansSerif", Font.BOLD, 15);
+
+        shufflePuzzle.setFont(buttonFont);
         newPuzzleButton.setFont(buttonFont);
         newUserPuzzleButton.setFont(buttonFont);
         loadPuzzleButton.setFont(buttonFont);
         howToPlayButton.setFont(buttonFont);
+        foundWordsButton.setFont(buttonFont);
         exitButton.setFont(buttonFont);
         letterbutton1.setFont(buttonFont);
         letterbutton2.setFont(buttonFont);
@@ -412,6 +422,38 @@ public class mainframe {
     
     secondFrame.setVisible(true);
 
+
+    /**********************************************************************/
+    /***********************SHUFFLE BUTTON LOGIC***************************/
+
+        shufflePuzzle.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                shuffleWord = master.shuffle(baseWord, reqLetter);
+
+                baseWord = shuffleWord;
+                String noReqLetter = master.removeChar(baseWord, reqLetter);
+
+                char[] bWLetters = noReqLetter.toCharArray();
+
+                String bW1 = Character.toString(bWLetters[0]);
+                String bW2 = Character.toString(bWLetters[1]);
+                String bW3 = Character.toString(bWLetters[2]);
+                String bW4 = Character.toString(reqLetter);
+                String bW5 = Character.toString(bWLetters[3]);
+                String bW6 = Character.toString(bWLetters[4]);
+                String bW7 = Character.toString(bWLetters[5]);
+
+                letterbutton1.setText(bW1.toUpperCase());
+                letterbutton2.setText(bW2.toUpperCase());
+                letterbutton3.setText(bW3.toUpperCase());
+                letterbutton4.setText(bW4.toUpperCase());
+                letterbutton5.setText(bW5.toUpperCase());
+                letterbutton6.setText(bW6.toUpperCase());
+                letterbutton7.setText(bW7.toUpperCase());
+            
+              }
+        });   
 
     /**********************************************************************/
     /***********************NEW PUZZLE BUTTON LOGIC************************/
@@ -748,8 +790,11 @@ public class mainframe {
                 howToPlayDialog = new JDialog(mainFrame, "How To Play", true);
                 howToPlayDialog.setSize(400, 300);
                 howToPlayDialog.setLocationRelativeTo(mainFrame);
+                
                 JTextArea helpTextArea = new JTextArea();
                 helpTextArea.setEditable(false);
+                Color darkYellow = new Color(204, 153, 0);
+                helpTextArea.setBackground(darkYellow);
                 helpTextArea.setWrapStyleWord(true);
                 helpTextArea.setLineWrap(true);
                 helpTextArea.setFont(new Font("SansSerif", Font.PLAIN, 16));
@@ -771,14 +816,55 @@ public class mainframe {
                         + "9. /loadpuzzle: The player can load a saved game.\n"
                         + "10. /showstatus : The player can see their rank and progress on a current puzzle.\n"
                         + "11. /exit : Leave the application."
-                        
                 );
-                howToPlayDialog.add(new JScrollPane(helpTextArea));
+    
+                // Wrap the text area in a JScrollPane
+                JScrollPane scrollPane = new JScrollPane(helpTextArea);
+                scrollPane.setPreferredSize(new Dimension(380, 250)); // Set the preferred size of the scroll pane
+    
+                // Set the scroll pane as the content pane of the dialog
+                howToPlayDialog.setContentPane(scrollPane);
             }
+    
             if (!howToPlayDialog.isVisible()) {
                 howToPlayDialog.setVisible(true);
             } else {
                 howToPlayDialog.setVisible(false);
+            }
+        }
+    });
+    
+
+    /***********************************************************************/
+    /*********************FOUND WORD LIST LOGIC****************************/
+        foundWordsButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (foundwords == null) {
+                foundwords = new JDialog(mainFrame, "FOUND WORD LIST", true);
+                foundwords.setSize(400, 300);
+                foundwords.setLocationRelativeTo(mainFrame);
+                JTextArea foundWordsArea = new JTextArea();
+                Color darkYellow = new Color(204, 153, 0);
+                foundWordsArea.setBackground(darkYellow);
+                foundWordsArea.setEditable(false);
+                foundWordsArea.setWrapStyleWord(true);
+                foundWordsArea.setLineWrap(true);
+                foundWordsArea.setFont(new Font("SansSerif", Font.PLAIN, 16));
+                foundWordsArea.setForeground(Color.BLACK);
+                if(master.foundWords.isEmpty()){
+                    foundWordsArea.append("YOU HAVEN'T FOUND ANY WORDS");
+                }
+                for (String word : master.foundWords)
+                {
+                    foundWordsArea.append(word + "\n");
+                }
+                foundwords.add(new JScrollPane(foundWordsArea));
+            }
+            if (!foundwords.isVisible()) {
+                foundwords.setVisible(true);
+            } else {
+                foundwords.setVisible(false);
             }
         }
     });
@@ -797,10 +883,12 @@ public class mainframe {
     /**********************************************************************/
 
         // Add buttons to the button panel
+        buttonPanel.add(shufflePuzzle);
         buttonPanel.add(newUserPuzzleButton);
         buttonPanel.add(newPuzzleButton);
         buttonPanel.add(loadPuzzleButton);
         buttonPanel.add(howToPlayButton);
+        buttonPanel.add(foundWordsButton);
         buttonPanel.add(exitButton);
         buttonPanel2.add(letterbutton1);
         buttonPanel2.add(letterbutton2);
