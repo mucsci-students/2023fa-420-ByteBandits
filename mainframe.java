@@ -11,7 +11,6 @@ import java.awt.event.ActionListener;
 /***************************************************************/
 
 public class mainframe {
-    
     private JFrame mainFrame;
     private JFrame secondFrame;
     private JDialog howToPlayDialog;
@@ -161,12 +160,11 @@ public class mainframe {
 
     /***********************************************************************/
     /*********************HOW TO PLAY BUTTON LOGIC**************************/
-    
+
     howToPlayButton.addActionListener(new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
             if (howToPlayDialog == null) {
-                // Create the dialog if it doesn't exist
                 howToPlayDialog = new JDialog(mainFrame, "How To Play", true);
                 howToPlayDialog.setSize(400, 300);
                 howToPlayDialog.setLocationRelativeTo(mainFrame);
@@ -197,8 +195,6 @@ public class mainframe {
                 );
                 howToPlayDialog.add(new JScrollPane(helpTextArea));
             }
-
-            // Show or hide the dialog when the button is clicked
             if (!howToPlayDialog.isVisible()) {
                 howToPlayDialog.setVisible(true);
             } else {
@@ -206,8 +202,6 @@ public class mainframe {
             }
         }
     });
-
-        //secondFrame.add(new JScrollPane(helpTextArea), BorderLayout.CENTER);
 
     /**********************************************************************/
     /**********************************************************************/
