@@ -60,7 +60,7 @@ public class mainframe {
         mainFrame.setSize(screenSize); 
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        ImageIcon gifIcon = new ImageIcon("C:\\Users\\17176\\git repository\\2023fa-420-ByteBandits\\guicontent\\matrixGif.gif");
+        ImageIcon gifIcon = new ImageIcon("guicontent/matrixGif.gif");
         Image gifImage = gifIcon.getImage();
         BackgroundPanel backgroundPanel = new BackgroundPanel(gifImage);
         backgroundPanel.setLayout(new BorderLayout());
@@ -82,10 +82,14 @@ public class mainframe {
         centerPanel.setOpaque(false);
 
         // Load the waspGif
-        ImageIcon gifIcon1 = new ImageIcon("C:\\Users\\17176\\git repository\\2023fa-420-ByteBandits\\guicontent\\waspGif2.gif");
-        JLabel gifLabel1 = new JLabel(gifIcon1);
-        centerPanel.add(gifLabel1, BorderLayout.CENTER);
+        // Load the waspGif
+        ImageIcon gifIcon1 = new ImageIcon("guicontent/finalWaspGif.gif");
+        Image originalImage = gifIcon1.getImage();
+        Image resizedImage = originalImage.getScaledInstance(650, 500, Image.SCALE_DEFAULT);
+        ImageIcon resizedGifIcon = new ImageIcon(resizedImage);
+        JLabel gifLabel1 = new JLabel(resizedGifIcon);
 
+        centerPanel.add(gifLabel1, BorderLayout.CENTER);
         backgroundPanel.add(centerPanel, BorderLayout.CENTER);
 
         //"PLAY" button
