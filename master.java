@@ -255,7 +255,7 @@ public static void main(String args[]) throws FileNotFoundException, Interrupted
  * of all the words on the file that have all unique letters.
  */
 
-private static List<String> dictionaryFile() throws FileNotFoundException{
+public static List<String> dictionaryFile() throws FileNotFoundException{
     Scanner scanner = new Scanner(new File("7-letter-words.txt"));
     List<String> sevenLetterWords = new ArrayList<>();
 
@@ -283,7 +283,7 @@ private static List<String> dictionaryFile() throws FileNotFoundException{
  * is then returned and acts as our base word.
  */
 
-private static String getBaseWord(List<String> dictionary) throws FileNotFoundException{
+public static String getBaseWord(List<String> dictionary) throws FileNotFoundException{
     Random rand = new Random();
     int upperBound = dictionaryFile().size();
     int randomInt = rand.nextInt(upperBound);
@@ -305,7 +305,7 @@ private static String getBaseWord(List<String> dictionary) throws FileNotFoundEx
  * our required character.
  */
 
-private static char getReqLetter(String baseWord){
+public static char getReqLetter(String baseWord){
     Random rand = new Random();
     int upperBound = 7;
     int randomInt = rand.nextInt(upperBound);
@@ -326,7 +326,7 @@ private static char getReqLetter(String baseWord){
  * it will return that point value.
  */
 
-private static int pointsPWord(String baseWord, String userGuess){
+public static int pointsPWord(String baseWord, String userGuess){
     int length = userGuess.length();
     int points = 0;
 
@@ -370,7 +370,7 @@ private static int pointsPWord(String baseWord, String userGuess){
  * is used to determine the rank of the player. 
  */
 
-private static String playerRank(String baseWord, int playerPoints, List<String> possiblewords){
+public static String playerRank(String baseWord, int playerPoints, List<String> possiblewords){
 
     int posPoints = possiblePoints(baseWord,possiblewords);
 
@@ -432,54 +432,49 @@ private static String playerRank(String baseWord, int playerPoints, List<String>
  * each command line does. 
  */
   
-public static String help()
-{
-   String yellowColor = "\u001B[33m";
-   
-   String [] commandLines = {
-      "/newpuzzle",
-      "/basepuzzle",
-      "/showpuzzle",
-      "/foundwords",
-      "/guess",
-      "/shuffle",
-      "/savepuzzle",
-      "/savecurrent",
-      "/loadpuzzle",
-      "/showstatus",
-      "/help",
-      "/exit"
-   };
-
-   String [] explanations = {
-      "Generates a new puzzle with 7 unique letters and a required letter",
-      "Generates a new puzzle with a word of the player's choice with 7 unique letters and a required letter",
-      "Shows the current puzzle the player is working on",
-      "Generates a list of words that the player has found ",
-      "Allows the player to guess their words",
-      "Allows the player to shuffle around the words",
-      "Lets the player save a blank puzzle",
-      "Lets the players save a puzzle that may have been partially played",
-      "The player can load a saved game",
-      "The player can see their rank and progress on a current puzzle",
-      "Displays help information",
-      "Leave the application"
-   };
-   StringBuilder helpText = new StringBuilder();
-   helpText.append("\n");
-   helpText.append(yellowColor + "The WordyWasps game allows players to create words using 7 unique letters with a required letter. ");
-   helpText.append("- Words must contain at least 4 letters");
-   helpText.append("- Words must include the required letter");
-   helpText.append("- Letters can be used more than once");
-   helpText.append("");
-   helpText.append(yellowColor + "Command Line    |   Explanation");
-   helpText.append(yellowColor + "---------------------------------------");
-        
-    for (int i = 0; i < commandLines.length; i++) {
-        helpText.append(String.format("%-15s |   %s%n", commandLines[i], explanations[i]));
-    }
-    return helpText.toString();
-}
+ private static void help()
+ {
+    String yellowColor = "\u001B[33m";
+    String [] commandLines = {
+       "/newpuzzle",
+       "/basepuzzle",
+       "/showpuzzle",
+       "/foundwords",
+       "/guess",
+       "/shuffle",
+       "/savepuzzle",
+       "/savecurr",
+       "/loadpuzzle",
+       "/showstatus",
+       "/help",
+       "/exit"
+    };
+    String [] explanations = {
+       "Generates a new puzzle with 7 unique letters and a required letter",
+       "Generates a new puzzle with a word of the player's choice with 7 unique letters and a required letter",
+       "Shows the current puzzle the player is working on",
+       "Generates a list of words that the player has found ",
+       "Allows the player to guess their words",
+       "Allows the player to shuffle around the words",
+       "Lets the player save a blank puzzle",
+       "Lets the players save a puzzle that may have been partially played",
+       "The player can load a saved game",
+       "The player can see their rank and progress on a current puzzle",
+       "Displays help information",
+       "Leave the application"
+    };
+    System.out.println();
+    System.out.println(yellowColor + "The WordyWasps game allows players to create words using 7 unique letters with a required letter. ");
+    System.out.println("- Words must contain at least 4 letters");
+    System.out.println("- Words must include the required letter");
+    System.out.println("- Letters can be used more than once");
+    System.out.println("");
+    System.out.println(yellowColor + "Command Line    |   Explanation");
+         System.out.println(yellowColor + "---------------------------------------");
+         for (int i = 0; i < commandLines.length; i++) {
+           System.out.printf("%-15s |   %s%n", commandLines[i], explanations[i]);
+         }
+ }
 /*********************************************************/
 /*********************************************************/
 
@@ -490,7 +485,7 @@ public static String help()
  * This function creates a cool display for the puzzle.
  */
 
-private static String display(String baseword, char required)
+public static String display(String baseword, char required)
 {
     String result = removeChar(baseword, required);
     char[] charArray = result.toCharArray(); 
@@ -527,7 +522,7 @@ private static String display(String baseword, char required)
  * This function shuffles the letters of a current puzzle.
  */
   
-private static String shuffle (String curr, char required)
+public static String shuffle (String curr, char required)
 {
     char[] charArray = curr.toCharArray();
 
@@ -563,7 +558,7 @@ private static String shuffle (String curr, char required)
  * and then finally returns it. 
  */
 
-private static List<String> acceptedWords(String baseWord, char reqLetter) throws FileNotFoundException{
+public static List<String> acceptedWords(String baseWord, char reqLetter) throws FileNotFoundException{
     Scanner scanner = new Scanner(new File("4-15_Dictionary.txt"));
     List<String> acceptedWordList = new ArrayList<>();
     String reqLetter2 = Character.toString(reqLetter);
@@ -594,7 +589,7 @@ private static List<String> acceptedWords(String baseWord, char reqLetter) throw
  * session of guesses.
  */
 
- private static void guess(String baseWord, List<String> acceptedWords, String playerRank){
+public static void guess(String baseWord, List<String> acceptedWords, String playerRank){
     
     Scanner guessedWord = new Scanner(System.in);
     System.out.println("\u001B[33m" + "\nBzz. Do /q when you're done guessing! Bzz." + "\u001B[0m");
@@ -642,7 +637,7 @@ private static List<String> acceptedWords(String baseWord, char reqLetter) throw
  * of the pllayer during the current session.
  */
 
-private static void puzzleStatus (String playerRank){
+public static void puzzleStatus (String playerRank){
 
     String yellowColor = "\u001B[33m";
     String resetColor = "\u001B[0m";
@@ -667,7 +662,7 @@ private static void puzzleStatus (String playerRank){
  * of the pllayer during the current session.
  */
 
-private static void foundWordList (){
+public static void foundWordList (){
     
     String yellowColor = "\u001B[33m";
     String resetColor = "\u001B[0m";
