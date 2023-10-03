@@ -607,19 +607,22 @@ public static void guess(String baseWord, List<String> acceptedWords, String pla
 
         if(acceptedWords.contains(validWord) && foundWords.contains(validWord)){
             System.out.println("\u001B[33m" + "\nYou already guessed that word correctly, try another one!\n" + "\u001B[0m");
+            System.out.println("Bzz. Do /q when you're done guessing! Bzz.");
+            
             
         }else if(acceptedWords.contains(validWord)){
             foundWords.add(validWord);
             totalPoints += pointsPWord(baseWord, validWord);
             playerRank = playerRank(baseWord, totalPoints, acceptedWords);
-            System.out.println("Bzz. Do /q when you're done guessing! Bzz.");
             System.out.println("YOUR CURRENT RANK IS: " + "\u001B[33m" +  playerRank + "\u001B[0m");
             System.out.println("YOUR CURRENT POINTS ARE: " + "\u001B[33m" + totalPoints + "\u001B[0m");
             
             calculateRankDifference( playerRank, totalPoints, acceptedWords, baseWord);
+            System.out.println("Bzz. Do /q when you're done guessing! Bzz.");
 
         }else{
             System.out.println("\u001B[33m" + "\nNot a valid word, try again!\n" + "\u001B[0m");
+            System.out.println("Bzz. Do /q when you're done guessing! Bzz.");
         }
         
     }
