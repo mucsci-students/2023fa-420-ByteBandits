@@ -244,7 +244,8 @@ public class mainframe {
         String bW6 = Character.toString(bWLetters[5]);
         String bW7 = Character.toString(bWLetters[6]);
 
-
+        CustomButton foundWordsButton = new CustomButton("FOUND WORDS", false);
+        CustomButton shufflePuzzle = new CustomButton("SHUFFLE PUZZLE", false);
         CustomButton newPuzzleButton = new CustomButton("NEW PUZZLE", false);
         CustomButton newUserPuzzleButton = new CustomButton("CUSTOM PUZZLE", false);
         CustomButton loadPuzzleButton = new CustomButton("LOAD PUZZLE", false);
