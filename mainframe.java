@@ -4,13 +4,26 @@
 //Imports
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.*;
+import java.util.*;
 
 /***************************************************************/
 /***************************************************************/
 
 public class mainframe {
+    private master masterInstance = new master();
+    
+    playerData saveFile = new playerData();
+    String baseWord = "       ";
+    char reqLetter = master.getReqLetter(baseWord);
+    String shuffleWord = baseWord;
+    List<String> acceptedWordList;
+    
+
+    
     private JFrame mainFrame;
     private JFrame secondFrame;
     private JDialog howToPlayDialog;
@@ -39,7 +52,11 @@ public class mainframe {
     /**********************************************************/
 
     public mainframe() {
+        
         mainFrame = new JFrame("Welcome to Wordy Wasps");
+        mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH); 
+        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
         mainFrame.setSize(screenSize); 
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -97,6 +114,9 @@ public class mainframe {
 
         // Create the second frame
         secondFrame = new JFrame("Wordy Wasps - Main Menu");
+        secondFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        secondFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
         secondFrame.setSize(screenSize);
         secondFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         secondFrame.getContentPane().setBackground(new Color(255, 255, 153));
@@ -108,6 +128,7 @@ public class mainframe {
 
         // Create buttons for the second screen
         JButton newPuzzleButton = new JButton("NEW PUZZLE");
+        JButton newUserPuzzleButton = new JButton("CUSTOM PUZZLE");
         JButton loadPuzzleButton = new JButton("LOAD PUZZLE");
         JButton howToPlayButton = new JButton("HOW TO PLAY");
         JButton guiToCliButton = new JButton("GUI -> CLI");
@@ -115,6 +136,7 @@ public class mainframe {
 
         Color darkYellow = new Color(204, 153, 0);
         newPuzzleButton.setBackground(darkYellow); 
+        newUserPuzzleButton.setBackground(darkYellow);
         loadPuzzleButton.setBackground(darkYellow); 
         howToPlayButton.setBackground(darkYellow); 
         guiToCliButton.setBackground(darkYellow); 
@@ -122,6 +144,7 @@ public class mainframe {
 
         Dimension buttonSize = new Dimension(280, 80); 
         newPuzzleButton.setPreferredSize(buttonSize);
+        newUserPuzzleButton.setPreferredSize(buttonSize);
         loadPuzzleButton.setPreferredSize(buttonSize);
         howToPlayButton.setPreferredSize(buttonSize);
         guiToCliButton.setPreferredSize(buttonSize);
@@ -129,6 +152,7 @@ public class mainframe {
 
         Font buttonFont = new Font("SansSerif", Font.BOLD, 24);
         newPuzzleButton.setFont(buttonFont);
+        newUserPuzzleButton.setFont(buttonFont);
         loadPuzzleButton.setFont(buttonFont);
         howToPlayButton.setFont(buttonFont);
         guiToCliButton.setFont(buttonFont);
@@ -140,7 +164,94 @@ public class mainframe {
         newPuzzleButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //Logic for "New Puzzle" here
+                master.totalPoints = 0;
+                try {
+                    baseWord = master.getBaseWord(master.dictionaryFile());
+                } catch (FileNotFoundException e1) {
+                    e1.printStackTrace();
+                }
+                reqLetter = master.getReqLetter(baseWord);
+                try {
+                    acceptedWordList = master.acceptedWords(baseWord, reqLetter);
+                } catch (FileNotFoundException e1) {
+                    e1.printStackTrace();
+                }
+                master.foundWords = new ArrayList<>();
+                
+                shuffleWord = master.shuffle(baseWord, reqLetter);
+                
+                // Letter change code goes here after letters are created
+            }
+        });
+
+    /**********************************************************************/
+    /**********************************************************************/
+
+    /*********************************************************************/
+    /********************NEW USER PUZZLE BUTTON LOGIC*********************/
+
+        newUserPuzzleButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String baseSave = baseWord;
+                char reqSave = reqLetter;
+
+                String userWord = JOptionPane.showInputDialog(secondFrame, "Enter a base word for the puzzle:");
+
+                if (userWord != null && !userWord.isEmpty() && userWord.length() == 7) {
+
+                    if (!master.isUnique(userWord)){
+
+                        JOptionPane.showMessageDialog(secondFrame, "Bzzt. Oops, all letters have to be unique! Bzz.");
+                        baseWord = baseSave;
+                        reqLetter = reqSave;
+                        return;
+                    }
+
+                    reqLetter = master.getReqLetter(userWord);
+
+                    try {
+                        acceptedWordList = master.acceptedWords(userWord, reqLetter);
+                    } catch (FileNotFoundException e1) {
+                        e1.printStackTrace();
+                    }
+
+                    if (!acceptedWordList.contains(userWord)){
+                        
+                        JOptionPane.showMessageDialog(secondFrame, "Buzz. Are you making stuff up now!  Make sure you type a valid word! Buzz.");
+                        baseWord = baseSave;
+                        reqLetter = reqSave;
+                        
+                        try {
+                            acceptedWordList = master.acceptedWords(baseWord, reqLetter);
+                        } catch (FileNotFoundException e1) {
+                            e1.printStackTrace();
+                        }
+
+                        return;
+                    }
+                    
+                    baseWord = userWord.toUpperCase(); 
+                    reqLetter = master.getReqLetter(baseWord);
+
+                }else{
+                    if(userWord.length() == 0){
+                        return;
+                    }
+
+                    JOptionPane.showMessageDialog(secondFrame, "Bzzuh Bzzoh, word has to have 7 letters! Buzz.");
+                    return;
+                }
+
+
+                master.totalPoints = 0;
+
+                master.foundWords = new ArrayList<>();
+                
+                shuffleWord = master.shuffle(baseWord, reqLetter);
+                
+                // Letter change code goes here after letters are created
+
             }
         });
 
@@ -231,6 +342,7 @@ public class mainframe {
     /**********************************************************************/
 
         // Add buttons to the button panel
+        buttonPanel.add(newUserPuzzleButton);
         buttonPanel.add(newPuzzleButton);
         buttonPanel.add(loadPuzzleButton);
         buttonPanel.add(howToPlayButton);
@@ -246,7 +358,9 @@ public class mainframe {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
+                
                 new mainframe();
+                
             }
         });
     }
