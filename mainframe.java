@@ -106,19 +106,39 @@ public class mainframe {
         buttonPanel.setOpaque(false); 
         buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
 
+        JPanel buttonPanel2 = new JPanel();
+        buttonPanel.setOpaque(false); 
+        buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        buttonPanel2.setBackground(new Color(255, 255, 153));
+
         // Create buttons for the second screen
         JButton newPuzzleButton = new JButton("NEW PUZZLE");
         JButton loadPuzzleButton = new JButton("LOAD PUZZLE");
         JButton howToPlayButton = new JButton("HOW TO PLAY");
         JButton guiToCliButton = new JButton("GUI -> CLI");
         JButton exitButton = new JButton("EXIT");
+        JButton letterbutton1 = new JButton("H");
+        JButton letterbutton2 = new JButton("H");
+        JButton letterbutton3 = new JButton("H");
+        JButton letterbutton4 = new JButton("H");
+        JButton letterbutton5 = new JButton("H");
+        JButton letterbutton6 = new JButton("H");
+        JButton letterbutton7 = new JButton("H");
 
         Color darkYellow = new Color(204, 153, 0);
+        Color black = new Color(0,0,0);
         newPuzzleButton.setBackground(darkYellow); 
         loadPuzzleButton.setBackground(darkYellow); 
         howToPlayButton.setBackground(darkYellow); 
         guiToCliButton.setBackground(darkYellow); 
         exitButton.setBackground(darkYellow);
+        letterbutton1.setBackground(darkYellow);
+        letterbutton2.setBackground(darkYellow);
+        letterbutton3.setBackground(darkYellow);
+        letterbutton4.setBackground(black);
+        letterbutton5.setBackground(darkYellow);
+        letterbutton6.setBackground(darkYellow);
+        letterbutton7.setBackground(darkYellow);
 
         Dimension buttonSize = new Dimension(280, 80); 
         newPuzzleButton.setPreferredSize(buttonSize);
@@ -133,6 +153,15 @@ public class mainframe {
         howToPlayButton.setFont(buttonFont);
         guiToCliButton.setFont(buttonFont);
         exitButton.setFont(buttonFont);
+        letterbutton1.setFont(buttonFont);
+        letterbutton2.setFont(buttonFont);
+        letterbutton3.setFont(buttonFont);
+        letterbutton4.setFont(buttonFont);
+        letterbutton5.setFont(buttonFont);
+        letterbutton6.setFont(buttonFont);
+        letterbutton7.setFont(buttonFont);
+
+        letterbutton4.setForeground(darkYellow);
 
     /**********************************************************************/
     /***********************NEW PUZZLE BUTTON LOGIC************************/
@@ -157,6 +186,90 @@ public class mainframe {
         });
     /***********************************************************************/
     /**********************************************************************/
+
+    
+    letterbutton1.setPreferredSize(new Dimension(80, 80)); // Adjust the size as needed for your squares
+    letterbutton1.setFont(new Font("SansSerif", Font.BOLD, 24)); // Customize font and size
+    letterbutton1.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // Handle button click here
+           
+        }
+    });
+    secondFrame.add(letterbutton1);
+
+        
+    letterbutton2.setPreferredSize(new Dimension(80, 80)); // Adjust the size as needed for your squares
+    letterbutton2.setFont(new Font("SansSerif", Font.BOLD, 24)); // Customize font and size
+    letterbutton2.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // Handle button click here
+           
+        }
+    });
+    secondFrame.add(letterbutton2);
+
+        
+    letterbutton3.setPreferredSize(new Dimension(80, 80)); // Adjust the size as needed for your squares
+    letterbutton3.setFont(new Font("SansSerif", Font.BOLD, 24)); // Customize font and size
+    letterbutton3.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // Handle button click here
+           
+        }
+    });
+    secondFrame.add(letterbutton3);
+
+        
+    letterbutton4.setPreferredSize(new Dimension(80, 80)); // Adjust the size as needed for your squares
+    letterbutton4.setFont(new Font("SansSerif", Font.BOLD, 24)); // Customize font and size
+    letterbutton4.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // Handle button click here
+           
+        }
+    });
+    secondFrame.add(letterbutton4);
+
+        
+    letterbutton5.setPreferredSize(new Dimension(80, 80)); // Adjust the size as needed for your squares
+    letterbutton5.setFont(new Font("SansSerif", Font.BOLD, 24)); // Customize font and size
+    letterbutton5.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // Handle button click here
+           
+        }
+    });
+    secondFrame.add(letterbutton5);
+
+        
+    letterbutton6.setPreferredSize(new Dimension(80, 80)); // Adjust the size as needed for your squares
+    letterbutton6.setFont(new Font("SansSerif", Font.BOLD, 24)); // Customize font and size
+    letterbutton6.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // Handle button click here
+           
+        }
+    });
+    secondFrame.add(letterbutton6);
+
+        
+    letterbutton7.setPreferredSize(new Dimension(80, 80)); // Adjust the size as needed for your squares
+    letterbutton7.setFont(new Font("SansSerif", Font.BOLD, 24)); // Customize font and size
+    letterbutton7.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // Handle button click here
+           
+        }
+    });
+    secondFrame.add(letterbutton7);
 
     /***********************************************************************/
     /*********************HOW TO PLAY BUTTON LOGIC**************************/
@@ -236,8 +349,16 @@ public class mainframe {
         buttonPanel.add(howToPlayButton);
         buttonPanel.add(guiToCliButton);
         buttonPanel.add(exitButton);
+        buttonPanel2.add(letterbutton1);
+        buttonPanel2.add(letterbutton2);
+        buttonPanel2.add(letterbutton3);
+        buttonPanel2.add(letterbutton4);
+        buttonPanel2.add(letterbutton5);
+        buttonPanel2.add(letterbutton6);
+        buttonPanel2.add(letterbutton7);
 
         secondFrame.add(buttonPanel, BorderLayout.SOUTH);
+        secondFrame.add(buttonPanel2, BorderLayout.CENTER);
         secondFrame.setVisible(true);
     }
     //IF YOU WANT TO ADD EXTRA SCREENS START HERE//
