@@ -217,7 +217,7 @@ public class mainframe {
         letterbutton6.setForeground(Color.BLACK);
         letterbutton7.setForeground(Color.BLACK);
 
-        Dimension buttonSize = new Dimension(220, 60); 
+        Dimension buttonSize = new Dimension(180, 50); 
 
         shufflePuzzle.setPreferredSize(buttonSize);
         newPuzzleButton.setPreferredSize(buttonSize);
@@ -227,7 +227,7 @@ public class mainframe {
         foundWordsButton.setPreferredSize(buttonSize);
         exitButton.setPreferredSize(buttonSize);
 
-        Font buttonFont = new Font("SansSerif", Font.BOLD, 16);
+        Font buttonFont = new Font("SansSerif", Font.BOLD, 15);
 
         shufflePuzzle.setFont(buttonFont);
         newPuzzleButton.setFont(buttonFont);
@@ -645,8 +645,11 @@ public class mainframe {
                 howToPlayDialog = new JDialog(mainFrame, "How To Play", true);
                 howToPlayDialog.setSize(400, 300);
                 howToPlayDialog.setLocationRelativeTo(mainFrame);
+                
                 JTextArea helpTextArea = new JTextArea();
                 helpTextArea.setEditable(false);
+                Color darkYellow = new Color(204, 153, 0);
+                helpTextArea.setBackground(darkYellow);
                 helpTextArea.setWrapStyleWord(true);
                 helpTextArea.setLineWrap(true);
                 helpTextArea.setFont(new Font("SansSerif", Font.PLAIN, 16));
@@ -668,10 +671,16 @@ public class mainframe {
                         + "9. /loadpuzzle: The player can load a saved game.\n"
                         + "10. /showstatus : The player can see their rank and progress on a current puzzle.\n"
                         + "11. /exit : Leave the application."
-                        
                 );
-                howToPlayDialog.add(new JScrollPane(helpTextArea));
+    
+                // Wrap the text area in a JScrollPane
+                JScrollPane scrollPane = new JScrollPane(helpTextArea);
+                scrollPane.setPreferredSize(new Dimension(380, 250)); // Set the preferred size of the scroll pane
+    
+                // Set the scroll pane as the content pane of the dialog
+                howToPlayDialog.setContentPane(scrollPane);
             }
+    
             if (!howToPlayDialog.isVisible()) {
                 howToPlayDialog.setVisible(true);
             } else {
@@ -679,6 +688,7 @@ public class mainframe {
             }
         }
     });
+    
 
     /***********************************************************************/
     /*********************FOUND WORD LIST LOGIC****************************/
@@ -690,6 +700,8 @@ public class mainframe {
                 foundwords.setSize(400, 300);
                 foundwords.setLocationRelativeTo(mainFrame);
                 JTextArea foundWordsArea = new JTextArea();
+                Color darkYellow = new Color(204, 153, 0);
+                foundWordsArea.setBackground(darkYellow);
                 foundWordsArea.setEditable(false);
                 foundWordsArea.setWrapStyleWord(true);
                 foundWordsArea.setLineWrap(true);
