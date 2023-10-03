@@ -231,10 +231,11 @@ public static void main(String args[]) throws FileNotFoundException, Interrupted
                 System.out.println();
 
                 break;
+            default:
+                System.out.println("\u001B[33m" + "Invalid command! Type /help for a list of commands." + "\u001B[0m");
+                break;
         }
-    }
-
-    while (!input.equalsIgnoreCase("/exit"));
+    }while (!input.equalsIgnoreCase("/exit"));
 
     inputScanner.close();
 
@@ -611,7 +612,7 @@ public static void guess(String baseWord, List<String> acceptedWords, String pla
             foundWords.add(validWord);
             totalPoints += pointsPWord(baseWord, validWord);
             playerRank = playerRank(baseWord, totalPoints, acceptedWords);
-
+            System.out.println("Bzz. Do /q when you're done guessing! Bzz.");
             System.out.println("YOUR CURRENT RANK IS: " + "\u001B[33m" +  playerRank + "\u001B[0m");
             System.out.println("YOUR CURRENT POINTS ARE: " + "\u001B[33m" + totalPoints + "\u001B[0m");
             
