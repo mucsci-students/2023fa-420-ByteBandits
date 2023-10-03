@@ -427,88 +427,12 @@ public class mainframe {
     /***********************************************************************/
     /**********************************************************************/
 
-    
-    letterbutton1.setPreferredSize(new Dimension(80, 80)); 
-    letterbutton1.setFont(new Font("SansSerif", Font.BOLD, 24)); 
-    letterbutton1.addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            // Handle button click here
-           
-        }
-    });
     secondFrame.add(letterbutton1);
-
-        
-    letterbutton2.setPreferredSize(new Dimension(80, 80)); 
-    letterbutton2.setFont(new Font("SansSerif", Font.BOLD, 24)); 
-    letterbutton2.addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            // Handle button click here
-           
-        }
-    });
     secondFrame.add(letterbutton2);
-
-        
-    letterbutton3.setPreferredSize(new Dimension(80, 80)); 
-    letterbutton3.setFont(new Font("SansSerif", Font.BOLD, 24)); 
-    letterbutton3.addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            // Handle button click here
-           
-        }
-    });
     secondFrame.add(letterbutton3);
-
-        
-    letterbutton4.setPreferredSize(new Dimension(80, 80)); 
-    letterbutton4.setFont(new Font("SansSerif", Font.BOLD, 24)); 
-    letterbutton4.addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            // Handle button click here
-           
-        }
-    });
     secondFrame.add(letterbutton4);
-
-        
-    letterbutton5.setPreferredSize(new Dimension(80, 80)); 
-    letterbutton5.setFont(new Font("SansSerif", Font.BOLD, 24)); 
-    letterbutton5.addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            // Handle button click here
-           
-        }
-    });
     secondFrame.add(letterbutton5);
-
-        
-    letterbutton6.setPreferredSize(new Dimension(80, 80)); 
-    letterbutton6.setFont(new Font("SansSerif", Font.BOLD, 24)); 
-    letterbutton6.addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            // Handle button click here
-           
-        }
-    });
     secondFrame.add(letterbutton6);
-
-        
-    letterbutton7.setPreferredSize(new Dimension(80, 80)); 
-    letterbutton7.setFont(new Font("SansSerif", Font.BOLD, 24)); 
-    letterbutton7.addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            // Handle button click here
-           
-        }
-    });
     secondFrame.add(letterbutton7);
 
     // Code for textbox
@@ -581,6 +505,92 @@ public class mainframe {
     });
     
     secondFrame.setVisible(true);
+
+    /***********************LETTER BUTTONS***********************************/
+    
+    letterbutton1.setPreferredSize(new Dimension(80, 80)); 
+    letterbutton1.setFont(new Font("SansSerif", Font.BOLD, 24)); 
+    letterbutton1.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String currentText = textPane.getText();
+            String button1Text = letterbutton1.getText();
+            currentText += button1Text;
+            textPane.setText(currentText);
+        }
+    });
+
+    letterbutton2.setPreferredSize(new Dimension(80, 80)); 
+    letterbutton2.setFont(new Font("SansSerif", Font.BOLD, 24)); 
+    letterbutton2.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String currentText = textPane.getText();
+            String button2Text = letterbutton2.getText();
+            currentText += button2Text;
+            textPane.setText(currentText);
+        }
+    });
+
+    letterbutton3.setPreferredSize(new Dimension(80, 80)); 
+    letterbutton3.setFont(new Font("SansSerif", Font.BOLD, 24)); 
+    letterbutton3.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String currentText = textPane.getText();
+            String button3Text = letterbutton3.getText();
+            currentText += button3Text;
+            textPane.setText(currentText);
+        }
+    });
+
+    letterbutton4.setPreferredSize(new Dimension(80, 80)); 
+    letterbutton4.setFont(new Font("SansSerif", Font.BOLD, 24)); 
+    letterbutton4.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String currentText = textPane.getText();
+            String button4Text = letterbutton4.getText();
+            currentText += button4Text;
+            textPane.setText(currentText);
+        }
+    });
+
+    letterbutton5.setPreferredSize(new Dimension(80, 80)); 
+    letterbutton5.setFont(new Font("SansSerif", Font.BOLD, 24)); 
+    letterbutton5.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String currentText = textPane.getText();
+            String button5Text = letterbutton5.getText();
+            currentText += button5Text;
+            textPane.setText(currentText);   
+        }
+    });
+
+    letterbutton6.setPreferredSize(new Dimension(80, 80)); 
+    letterbutton6.setFont(new Font("SansSerif", Font.BOLD, 24)); 
+    letterbutton6.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String currentText = textPane.getText();
+            String button6Text = letterbutton6.getText();
+            currentText += button6Text;
+            textPane.setText(currentText);
+        }
+    });
+
+    letterbutton7.setPreferredSize(new Dimension(80, 80)); 
+    letterbutton7.setFont(new Font("SansSerif", Font.BOLD, 24)); 
+    letterbutton7.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String currentText = textPane.getText();
+            String button7Text = letterbutton7.getText();
+            currentText += button7Text;
+            textPane.setText(currentText);
+        }
+    });
 
     /***********************************************************************/
     /*********************HOW TO PLAY BUTTON LOGIC**************************/
