@@ -188,8 +188,8 @@ public class mainframe {
     /**********************************************************************/
 
     
-    letterbutton1.setPreferredSize(new Dimension(80, 80)); // Adjust the size as needed for your squares
-    letterbutton1.setFont(new Font("SansSerif", Font.BOLD, 24)); // Customize font and size
+    letterbutton1.setPreferredSize(new Dimension(80, 80)); 
+    letterbutton1.setFont(new Font("SansSerif", Font.BOLD, 24)); 
     letterbutton1.addActionListener(new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -200,8 +200,8 @@ public class mainframe {
     secondFrame.add(letterbutton1);
 
         
-    letterbutton2.setPreferredSize(new Dimension(80, 80)); // Adjust the size as needed for your squares
-    letterbutton2.setFont(new Font("SansSerif", Font.BOLD, 24)); // Customize font and size
+    letterbutton2.setPreferredSize(new Dimension(80, 80)); 
+    letterbutton2.setFont(new Font("SansSerif", Font.BOLD, 24)); 
     letterbutton2.addActionListener(new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -212,8 +212,8 @@ public class mainframe {
     secondFrame.add(letterbutton2);
 
         
-    letterbutton3.setPreferredSize(new Dimension(80, 80)); // Adjust the size as needed for your squares
-    letterbutton3.setFont(new Font("SansSerif", Font.BOLD, 24)); // Customize font and size
+    letterbutton3.setPreferredSize(new Dimension(80, 80)); 
+    letterbutton3.setFont(new Font("SansSerif", Font.BOLD, 24)); 
     letterbutton3.addActionListener(new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -224,8 +224,8 @@ public class mainframe {
     secondFrame.add(letterbutton3);
 
         
-    letterbutton4.setPreferredSize(new Dimension(80, 80)); // Adjust the size as needed for your squares
-    letterbutton4.setFont(new Font("SansSerif", Font.BOLD, 24)); // Customize font and size
+    letterbutton4.setPreferredSize(new Dimension(80, 80)); 
+    letterbutton4.setFont(new Font("SansSerif", Font.BOLD, 24)); 
     letterbutton4.addActionListener(new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -236,8 +236,8 @@ public class mainframe {
     secondFrame.add(letterbutton4);
 
         
-    letterbutton5.setPreferredSize(new Dimension(80, 80)); // Adjust the size as needed for your squares
-    letterbutton5.setFont(new Font("SansSerif", Font.BOLD, 24)); // Customize font and size
+    letterbutton5.setPreferredSize(new Dimension(80, 80)); 
+    letterbutton5.setFont(new Font("SansSerif", Font.BOLD, 24)); 
     letterbutton5.addActionListener(new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -248,8 +248,8 @@ public class mainframe {
     secondFrame.add(letterbutton5);
 
         
-    letterbutton6.setPreferredSize(new Dimension(80, 80)); // Adjust the size as needed for your squares
-    letterbutton6.setFont(new Font("SansSerif", Font.BOLD, 24)); // Customize font and size
+    letterbutton6.setPreferredSize(new Dimension(80, 80)); 
+    letterbutton6.setFont(new Font("SansSerif", Font.BOLD, 24)); 
     letterbutton6.addActionListener(new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -260,8 +260,8 @@ public class mainframe {
     secondFrame.add(letterbutton6);
 
         
-    letterbutton7.setPreferredSize(new Dimension(80, 80)); // Adjust the size as needed for your squares
-    letterbutton7.setFont(new Font("SansSerif", Font.BOLD, 24)); // Customize font and size
+    letterbutton7.setPreferredSize(new Dimension(80, 80)); 
+    letterbutton7.setFont(new Font("SansSerif", Font.BOLD, 24)); 
     letterbutton7.addActionListener(new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
