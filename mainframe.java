@@ -177,6 +177,7 @@ public class mainframe {
         String bW6 = Character.toString(bWLetters[5]);
         String bW7 = Character.toString(bWLetters[6]);
 
+        JButton shufflePuzzle = new JButton("SHUFFLE PUZZLE");
         JButton newPuzzleButton = new JButton("NEW PUZZLE");
         JButton newUserPuzzleButton = new JButton("CUSTOM PUZZLE");
         JButton loadPuzzleButton = new JButton("LOAD PUZZLE");
@@ -193,6 +194,7 @@ public class mainframe {
 
         Color darkYellow = new Color(204, 153, 0);
         Color black = new Color(0,0,0);
+        shufflePuzzle.setBackground(darkYellow);
         newPuzzleButton.setBackground(darkYellow); 
         newUserPuzzleButton.setBackground(darkYellow);
         loadPuzzleButton.setBackground(darkYellow); 
@@ -216,6 +218,8 @@ public class mainframe {
         letterbutton7.setForeground(Color.BLACK);
 
         Dimension buttonSize = new Dimension(220, 60); 
+
+        shufflePuzzle.setPreferredSize(buttonSize);
         newPuzzleButton.setPreferredSize(buttonSize);
         newUserPuzzleButton.setPreferredSize(buttonSize);
         loadPuzzleButton.setPreferredSize(buttonSize);
@@ -224,6 +228,8 @@ public class mainframe {
         exitButton.setPreferredSize(buttonSize);
 
         Font buttonFont = new Font("SansSerif", Font.BOLD, 16);
+
+        shufflePuzzle.setFont(buttonFont);
         newPuzzleButton.setFont(buttonFont);
         newUserPuzzleButton.setFont(buttonFont);
         loadPuzzleButton.setFont(buttonFont);
@@ -239,6 +245,38 @@ public class mainframe {
         letterbutton7.setFont(buttonFont);
 
         letterbutton4.setForeground(darkYellow);
+
+    /**********************************************************************/
+    /***********************SHUFFLE BUTTON LOGIC***************************/
+
+        shufflePuzzle.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                shuffleWord = master.shuffle(baseWord, reqLetter);
+
+                baseWord = shuffleWord;
+                String noReqLetter = master.removeChar(baseWord, reqLetter);
+
+                char[] bWLetters = noReqLetter.toCharArray();
+
+                String bW1 = Character.toString(bWLetters[0]);
+                String bW2 = Character.toString(bWLetters[1]);
+                String bW3 = Character.toString(bWLetters[2]);
+                String bW4 = Character.toString(reqLetter);
+                String bW5 = Character.toString(bWLetters[3]);
+                String bW6 = Character.toString(bWLetters[4]);
+                String bW7 = Character.toString(bWLetters[5]);
+
+                letterbutton1.setText(bW1.toUpperCase());
+                letterbutton2.setText(bW2.toUpperCase());
+                letterbutton3.setText(bW3.toUpperCase());
+                letterbutton4.setText(bW4.toUpperCase());
+                letterbutton5.setText(bW5.toUpperCase());
+                letterbutton6.setText(bW6.toUpperCase());
+                letterbutton7.setText(bW7.toUpperCase());
+            
+              }
+        });   
 
     /**********************************************************************/
     /***********************NEW PUZZLE BUTTON LOGIC************************/
@@ -688,6 +726,7 @@ public class mainframe {
     /**********************************************************************/
 
         // Add buttons to the button panel
+        buttonPanel.add(shufflePuzzle);
         buttonPanel.add(newUserPuzzleButton);
         buttonPanel.add(newPuzzleButton);
         buttonPanel.add(loadPuzzleButton);
