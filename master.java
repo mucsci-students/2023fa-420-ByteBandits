@@ -427,54 +427,49 @@ private static String playerRank(String baseWord, int playerPoints, List<String>
  * each command line does. 
  */
   
-public static String help()
-{
-   String yellowColor = "\u001B[33m";
-   
-   String [] commandLines = {
-      "/newpuzzle",
-      "/basepuzzle",
-      "/showpuzzle",
-      "/foundwords",
-      "/guess",
-      "/shuffle",
-      "/savepuzzle",
-      "/savecurrent",
-      "/loadpuzzle",
-      "/showstatus",
-      "/help",
-      "/exit"
-   };
-
-   String [] explanations = {
-      "Generates a new puzzle with 7 unique letters and a required letter",
-      "Generates a new puzzle with a word of the player's choice with 7 unique letters and a required letter",
-      "Shows the current puzzle the player is working on",
-      "Generates a list of words that the player has found ",
-      "Allows the player to guess their words",
-      "Allows the player to shuffle around the words",
-      "Lets the player save a blank puzzle",
-      "Lets the players save a puzzle that may have been partially played",
-      "The player can load a saved game",
-      "The player can see their rank and progress on a current puzzle",
-      "Displays help information",
-      "Leave the application"
-   };
-   StringBuilder helpText = new StringBuilder();
-   helpText.append("\n");
-   helpText.append(yellowColor + "The WordyWasps game allows players to create words using 7 unique letters with a required letter. ");
-   helpText.append("- Words must contain at least 4 letters");
-   helpText.append("- Words must include the required letter");
-   helpText.append("- Letters can be used more than once");
-   helpText.append("");
-   helpText.append(yellowColor + "Command Line    |   Explanation");
-   helpText.append(yellowColor + "---------------------------------------");
-        
-    for (int i = 0; i < commandLines.length; i++) {
-        helpText.append(String.format("%-15s |   %s%n", commandLines[i], explanations[i]));
-    }
-    return helpText.toString();
-}
+ private static void help()
+ {
+    String yellowColor = "\u001B[33m";
+    String [] commandLines = {
+       "/newpuzzle",
+       "/basepuzzle",
+       "/showpuzzle",
+       "/foundwords",
+       "/guess",
+       "/shuffle",
+       "/savepuzzle",
+       "/savecurr",
+       "/loadpuzzle",
+       "/showstatus",
+       "/help",
+       "/exit"
+    };
+    String [] explanations = {
+       "Generates a new puzzle with 7 unique letters and a required letter",
+       "Generates a new puzzle with a word of the player's choice with 7 unique letters and a required letter",
+       "Shows the current puzzle the player is working on",
+       "Generates a list of words that the player has found ",
+       "Allows the player to guess their words",
+       "Allows the player to shuffle around the words",
+       "Lets the player save a blank puzzle",
+       "Lets the players save a puzzle that may have been partially played",
+       "The player can load a saved game",
+       "The player can see their rank and progress on a current puzzle",
+       "Displays help information",
+       "Leave the application"
+    };
+    System.out.println();
+    System.out.println(yellowColor + "The WordyWasps game allows players to create words using 7 unique letters with a required letter. ");
+    System.out.println("- Words must contain at least 4 letters");
+    System.out.println("- Words must include the required letter");
+    System.out.println("- Letters can be used more than once");
+    System.out.println("");
+    System.out.println(yellowColor + "Command Line    |   Explanation");
+         System.out.println(yellowColor + "---------------------------------------");
+         for (int i = 0; i < commandLines.length; i++) {
+           System.out.printf("%-15s |   %s%n", commandLines[i], explanations[i]);
+         }
+ }
 /*********************************************************/
 /*********************************************************/
 
