@@ -50,59 +50,86 @@ public class mainframe {
     /**********************************************************/
 
     public mainframe() {
-        
         mainFrame = new JFrame("Welcome to Wordy Wasps");
-        mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH); 
+        mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        mainFrame.setSize(screenSize); 
+    
+        mainFrame.setSize(screenSize);
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+    
         ImageIcon gifIcon = new ImageIcon("C:\\Users\\17176\\git repository\\2023fa-420-ByteBandits\\guicontent\\matrixGif.gif");
         Image gifImage = gifIcon.getImage();
         BackgroundPanel backgroundPanel = new BackgroundPanel(gifImage);
         backgroundPanel.setLayout(new BorderLayout());
-
+    
         // Create a JPanel for the top section
         JPanel topPanel = new JPanel(new BorderLayout());
-        topPanel.setOpaque(false); 
-
+        topPanel.setOpaque(false);
+    
         // Centered JLabel
         JLabel welcomeLabel = new JLabel("<html><font color='black'>W</font><font color='#FFD700'>O</font><font color='black'>R</font><font color='#FFD700'>D</font><font color='black'>Y</font><font color='#FFD700'>W</font><font color='black'>A</font><font color='#FFD700'>S</font><font color='black'>P</font><font color='#FFD700'>S</font></html>", JLabel.CENTER);
         Font titleFont = new Font("SansSerif", Font.BOLD, 72);
         welcomeLabel.setFont(titleFont);
         topPanel.add(welcomeLabel, BorderLayout.CENTER);
-
+    
         backgroundPanel.add(topPanel, BorderLayout.NORTH);
-
-        //Panel for waspGif
+    
+        // Panel for waspGif
         JPanel centerPanel = new JPanel(new BorderLayout());
         centerPanel.setOpaque(false);
-
+    
         // Load the waspGif
         ImageIcon gifIcon1 = new ImageIcon("C:\\Users\\17176\\git repository\\2023fa-420-ByteBandits\\guicontent\\waspGif2.gif");
         JLabel gifLabel1 = new JLabel(gifIcon1);
         centerPanel.add(gifLabel1, BorderLayout.CENTER);
-
+    
         backgroundPanel.add(centerPanel, BorderLayout.CENTER);
-
-        //"PLAY" button
+    
+        // Create a panel for the buttons at the bottom
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        buttonPanel.setOpaque(false);
+    
+        // "PLAY" button
         JButton playButton = new JButton("PLAY");
         playButton.setBackground(new Color(204, 153, 0));
         playButton.setOpaque(true); // Make the button opaque
         playButton.setFont(new Font("SansSerif", Font.BOLD, 24));
-        playButton.setPreferredSize(new Dimension(200, 60));
-        playButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                showSecondScreen();
+        playButton.setPreferredSize(new Dimension(200, 60)); // Increase the width
+    playButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            showSecondScreen();
+        }
+    });
+    
+        // "GUI -> CLI" button
+        JButton guiToCliButton = new JButton("GUI -> CLI");
+        guiToCliButton.setBackground(new Color(204, 153, 0));
+        guiToCliButton.setOpaque(true); // Make the button opaque
+        guiToCliButton.setFont(new Font("SansSerif", Font.BOLD, 24));
+        guiToCliButton.setPreferredSize(new Dimension(200, 60)); // Increase the width
+        guiToCliButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            mainFrame.dispose();
+            try {
+                master.main(new String[0]);
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
-        });
-        backgroundPanel.add(playButton, BorderLayout.SOUTH);
-
+        }
+    });
+    
+        // Add both buttons to the button panel
+        buttonPanel.add(playButton);
+        buttonPanel.add(guiToCliButton);
+    
+        backgroundPanel.add(buttonPanel, BorderLayout.SOUTH);
+    
         mainFrame.setContentPane(backgroundPanel);
         mainFrame.setVisible(true);
     }
+    
     /************************************************************/
     /*********************SECOND SCREEN**************************/
     //Shows after player clicks PLAY
@@ -134,7 +161,6 @@ public class mainframe {
         JButton newUserPuzzleButton = new JButton("CUSTOM PUZZLE");
         JButton loadPuzzleButton = new JButton("LOAD PUZZLE");
         JButton howToPlayButton = new JButton("HOW TO PLAY");
-        JButton guiToCliButton = new JButton("GUI -> CLI");
         JButton exitButton = new JButton("EXIT");
         JButton letterbutton1 = new JButton("H");
         JButton letterbutton2 = new JButton("H");
@@ -150,7 +176,6 @@ public class mainframe {
         newUserPuzzleButton.setBackground(darkYellow);
         loadPuzzleButton.setBackground(darkYellow); 
         howToPlayButton.setBackground(darkYellow); 
-        guiToCliButton.setBackground(darkYellow); 
         exitButton.setBackground(darkYellow);
         letterbutton1.setBackground(darkYellow);
         letterbutton2.setBackground(darkYellow);
@@ -165,7 +190,6 @@ public class mainframe {
         newUserPuzzleButton.setPreferredSize(buttonSize);
         loadPuzzleButton.setPreferredSize(buttonSize);
         howToPlayButton.setPreferredSize(buttonSize);
-        guiToCliButton.setPreferredSize(buttonSize);
         exitButton.setPreferredSize(buttonSize);
 
         Font buttonFont = new Font("SansSerif", Font.BOLD, 24);
@@ -173,7 +197,6 @@ public class mainframe {
         newUserPuzzleButton.setFont(buttonFont);
         loadPuzzleButton.setFont(buttonFont);
         howToPlayButton.setFont(buttonFont);
-        guiToCliButton.setFont(buttonFont);
         exitButton.setFont(buttonFont);
         letterbutton1.setFont(buttonFont);
         letterbutton2.setFont(buttonFont);
@@ -461,25 +484,8 @@ public class mainframe {
     });
 
     /**********************************************************************/
-    /**********************************************************************/
-
-    /**********************************************************************/
-    /*********************GUI->CLI BUTTON LOGIC****************************/
-        guiToCliButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-               secondFrame.dispose();
-                try {
-                master.main(new String[0]);
-                secondFrame.dispose();
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }  
-            }
-        });
-
-    /**********************************************************************/
     /************************EXIT BUTTON LOGIC*****************************/
+    
         exitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -495,7 +501,6 @@ public class mainframe {
         buttonPanel.add(newPuzzleButton);
         buttonPanel.add(loadPuzzleButton);
         buttonPanel.add(howToPlayButton);
-        buttonPanel.add(guiToCliButton);
         buttonPanel.add(exitButton);
         buttonPanel2.add(letterbutton1);
         buttonPanel2.add(letterbutton2);
