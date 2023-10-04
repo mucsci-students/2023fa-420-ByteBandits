@@ -75,4 +75,25 @@ public class playerData {
     public int getMaxPoints() {
         return maxPoints; 
     }
+
+    //Setter Functions
+    public void setBaseWord(String baseWord) {
+        this.baseWord = baseWord;
+    }
+
+    public void setFoundWords(List<String> foundWords) {
+        this.foundWords = foundWords;
+    }
+
+    public void setPlayerPoints(int playerPoints) {
+        this.playerPoints = playerPoints;
+    }
+
+    public void setRequiredLetter(String requiredLetter) {
+        this.requiredLetter = requiredLetter;
+    }
+
+    public void setMaxPoints(int maxPoints) {
+        this.maxPoints = maxPoints;
+    }
 }
