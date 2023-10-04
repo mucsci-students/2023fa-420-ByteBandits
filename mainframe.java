@@ -163,11 +163,10 @@ public class mainframe {
         mainFrame = new JFrame("Welcome to Wordy Wasps");
         mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    
         mainFrame.setSize(screenSize);
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        ImageIcon gifIcon = new ImageIcon("guicontent/matrixGif.gif");
+        ImageIcon gifIcon = new ImageIcon("guicontent/bg1.jpg");
 
         Image gifImage = gifIcon.getImage();
         BackgroundPanel backgroundPanel = new BackgroundPanel(gifImage);
@@ -185,7 +184,7 @@ public class mainframe {
     
         backgroundPanel.add(topPanel, BorderLayout.NORTH);
     
-        // Panel for waspGif
+        // Panel for the waspGif
         JPanel centerPanel = new JPanel(new BorderLayout());
         centerPanel.setOpaque(false);
     
@@ -251,7 +250,7 @@ public class mainframe {
 
     private void showSecondScreen() {
         mainFrame.setVisible(false);
-
+        
         // Create the second frame
         secondFrame = new JFrame("Wordy Wasps - Main Menu");
         secondFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -441,6 +440,8 @@ public class mainframe {
                     } else {
                         e.consume();
                     }
+                }else{
+                    e.consume();
                 }
             }
 
