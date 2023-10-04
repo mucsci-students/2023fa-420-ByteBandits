@@ -12,11 +12,11 @@ import java.util.*;
 /**********************************************************/
 
 public class master extends helpers{
-    static int totalPoints = 0;
+    public static int totalPoints = 0;
 
-    static String playerRank = "";
+    public static String playerRank = "";
 
-    static List<String> foundWords = new ArrayList<>();
+    public static List<String> foundWords = new ArrayList<>();
     
 public static void main(String args[]) throws FileNotFoundException, InterruptedException{
     
@@ -616,7 +616,7 @@ public static void guess(String baseWord, List<String> acceptedWords, String pla
             System.out.println("YOUR CURRENT RANK IS: " + "\u001B[33m" +  playerRank + "\u001B[0m");
             System.out.println("YOUR CURRENT POINTS ARE: " + "\u001B[33m" + totalPoints + "\u001B[0m");
             
-            calculateRankDifference( playerRank, totalPoints, acceptedWords, baseWord);
+            calculateRankDifference(playerRank, totalPoints, acceptedWords, baseWord);
 
         }else{
             System.out.println("\u001B[33m" + "\nNot a valid word, try again!\n" + "\u001B[0m");
@@ -624,6 +624,34 @@ public static void guess(String baseWord, List<String> acceptedWords, String pla
         
     }
 
+}
+
+/*********************************************************/
+/*********************************************************/
+
+/*
+ * guessGUI
+ * param: String guessedWord, String baseWord, List<String> acceptedWords, String playerRank 
+ * returns: N/A
+ * This function is invoked in the GUI after pressing "Enter".
+ * When this happens a guess will be tested if it is valid and then
+ * all the information is then updated for the GUI.
+ */
+
+public static void guessGUI(String guessedWord, String baseWord, List<String> acceptedWords, String playerRank){
+    guessedWord = guessedWord.toLowerCase();
+    if(acceptedWords.contains(guessedWord) && foundWords.contains(guessedWord)){
+            //already guessed
+    }else if(acceptedWords.contains(guessedWord)){
+        
+        foundWords.add(guessedWord);
+        System.out.println(foundWords);
+        
+        totalPoints += pointsPWord(baseWord, guessedWord);
+        playerRank = playerRank(baseWord, totalPoints, acceptedWords);
+
+        calculateRankDifference(playerRank, totalPoints, acceptedWords, baseWord);
+    }
 }
 
 /*********************************************************/
