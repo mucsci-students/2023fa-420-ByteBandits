@@ -564,6 +564,9 @@ public class mainframe {
         newPuzzleButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                outputLabel.setText("");
+                outputLabel2.setText("");
+                outputLabel3.setText("");
                 master.totalPoints = 0;
                 try {
                     baseWord = master.getBaseWord(master.dictionaryFile());
@@ -628,6 +631,8 @@ public class mainframe {
         newUserPuzzleButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                
+
                 String baseSave = baseWord;
                 char reqSave = reqLetter;
 
@@ -643,9 +648,11 @@ public class mainframe {
                         return;
                     }
 
-                    reqLetter = master.getReqLetter(userWord);
 
                     userWord = userWord.toLowerCase();
+                    reqLetter = master.getReqLetter(userWord);
+
+                   
 
                     try {
                         acceptedWordList = master.acceptedWords(userWord, reqLetter);
@@ -668,7 +675,10 @@ public class mainframe {
 
                         return;
                     }
-                    
+                    outputLabel.setText("");
+                    outputLabel2.setText("");
+                    outputLabel3.setText("");
+
                     baseWord = userWord.toUpperCase(); 
                     reqLetter = master.getReqLetter(baseWord);
 
@@ -756,6 +766,9 @@ public class mainframe {
         loadPuzzleButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                outputLabel.setText("");
+                outputLabel2.setText("");
+                outputLabel3.setText("");
 
                 playerGameData.loadGameData(); // Load game data from the JSON file
                 // Load game variables from playerGameData
@@ -765,9 +778,11 @@ public class mainframe {
                 char reqLetter = playerGameData.getRequiredLetter().charAt(0);
                 int maxPoints = playerGameData.getMaxPoints();
 
+                String bwTemp = master.removeChar(baseWord, reqLetter);
+
                 master.foundWords = foundWords;
-                char[] bWLetters = baseWord.toCharArray();
-                if (bWLetters.length != 7) {
+                char[] bWLetters = bwTemp.toCharArray();
+                if (bWLetters.length != 6) {
                     // Handle error - loaded baseWord is not of expected length
                     System.out.println("Error: Loaded baseWord has incorrect length");
                     return;
@@ -779,8 +794,8 @@ public class mainframe {
                 letterbutton3.setText(Character.toString(bWLetters[2]).toUpperCase());
                 letterbutton4.setText(Character.toString(reqLetter).toUpperCase()); // 4th letter is the required one
                 letterbutton5.setText(Character.toString(bWLetters[3]).toUpperCase());
-                letterbutton6.setText(Character.toString(bWLetters[5]).toUpperCase());
-                letterbutton7.setText(Character.toString(bWLetters[6]).toUpperCase());
+                letterbutton6.setText(Character.toString(bWLetters[4]).toUpperCase());
+                letterbutton7.setText(Character.toString(bWLetters[5]).toUpperCase());
             }
         });
     /***********************************************************************/
