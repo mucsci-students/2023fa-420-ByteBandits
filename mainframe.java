@@ -414,7 +414,23 @@ public class mainframe {
     
     textPane.setBounds(xCenter, y, textFieldWidth, textFieldHeight);
     panel.add(textPane);
+    JLabel outputLabel = new JLabel(); // Initialize the outputLabel
+    outputLabel.setBounds(xCenter, y + textFieldHeight + 10, textFieldWidth, 30); // Adjust the position as needed
+    outputLabel.setHorizontalAlignment(SwingConstants.CENTER);
+    JLabel outputLabel2 = new JLabel();
+    outputLabel2.setBounds(xCenter, y + textFieldHeight + 30, textFieldWidth, 30); // Adjust the position as needed
+    outputLabel2.setHorizontalAlignment(SwingConstants.CENTER);
     
+    JLabel outputLabel3 = new JLabel();
+    outputLabel3.setBounds(xCenter, y + textFieldHeight + 50, textFieldWidth, 30); // Adjust the position as needed
+    outputLabel3.setHorizontalAlignment(SwingConstants.CENTER);
+    JLabel outputLabel4 = new JLabel();
+    outputLabel4.setBounds(xCenter, y + textFieldHeight + 70, textFieldWidth, 30); // Adjust the position as needed
+    outputLabel4.setHorizontalAlignment(SwingConstants.CENTER);
+    panel.add(outputLabel);
+    panel.add(outputLabel2);
+    panel.add(outputLabel3);
+    panel.add(outputLabel4);
     textPane.setCaret(new NoCaret());
      DocumentFilter filter = new DocumentFilter() {
             @Override
@@ -451,19 +467,35 @@ public class mainframe {
             
                     charCount = Math.max(0, charCount - 1);
                 } else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    
                     String enteredWord = textPane.getText().trim();
+                    enteredWord.toLowerCase();
+                    
                     e.consume();
                     textPane.setText("");
                     charCount = 0;
-                    
+                    int initialSize = master.foundWords.size();
                     master.guessGUI(enteredWord, baseWord, acceptedWordList, master.playerRank(baseWord, master.totalPoints, acceptedWordList));
                     
-                    
+                    if(master.foundWords.contains(enteredWord) == true)
+                    {
+                        outputLabel.setText("You already guessed this word: " + enteredWord);
+                    }
+                    else if(master.foundWords.size() > initialSize)
+                    {
+
+                        outputLabel.setText("Valid word! " + enteredWord);
+                        outputLabel2.setText("Your current rank is: " + master.playerRank(baseWord, master.totalPoints, acceptedWordList));
+                        outputLabel3.setText("Total points: " + master.totalPoints);
+                    }
+                    else{
+                        outputLabel.setText("Invalid word, try again!");
+                    }
+
                 }
             }
 
         });
-
     textPane.requestFocusInWindow();
     String defaultText = "";
     textPane.setText(defaultText);
@@ -895,23 +927,22 @@ public class mainframe {
                 helpTextArea.setFont(new Font("SansSerif", Font.PLAIN, 16));
                 helpTextArea.setForeground(Color.BLACK);
                 helpTextArea.setText("Instructions:\n"
-                        + "- Your goal is to create words using 7 unique letters with a required letter.\n"
-                        + "- Words must contain at least 4 letters.\n"
-                        + "- Words must include the required letter.\n"
-                        + "- Letters can be used more than once.\n"
-                        + "Buttons:\n"
-                        + "1. NEW PUZZLE: Generates a new puzzle with 7 unique letters and a required letter.\n"
-                        + "2. CUSTOM PUZZLE: Generates a new puzzle with a word of your choice using 7 unique letters and a required letter.\n"
-                        + "3. FOUND WORDS: Generates a list of words that you have found.\n"
-                        + "4. /guess: Allows you to guess your words.\n"
-                        + "5. SHUFFLE PUZZLE: Allows you to shuffle around the letters.\n"
-                        + "6. /savepuzzle: Lets you save a blank puzzle.\n"
-                        + "7. /savecurr: Lets you save a puzzle that may have been partially played.\n"
-                        + "8. /loadpuzzle: The player can load a saved game.\n"
-                        + "9. /showstatus : The player can see their rank and progress on a current puzzle.\n"
-                        + "10. EXIT : Leave the application."
-                );
-    
+                + "- Your goal is to create words using 7 unique letters with a required letter.\n"
+                + "- Words must contain at least 4 letters.\n"
+                + "- Words must include the required letter.\n"
+                + "- Letters can be used more than once.\n"
+                + "Buttons:\n"
+                + "1. NEW PUZZLE: Generates a new puzzle with 7 unique letters and a required letter.\n"
+                + "2. CUSTOM PUZZLE: Generates a new puzzle with a word of your choice using 7 unique letters and a required letter.\n"
+                + "3. FOUND WORDS: Generates a list of words that you have found.\n"
+                + "4. PRESS ENTER: Allows you to guess your words.\n"
+                + "5. SHUFFLE PUZZLE: Allows you to shuffle around the letters.\n"
+                + "6. SAVE PUZZLE: Lets you save a blank puzzle.\n"
+                + "7. LOAD PUZZLE: The player can load a saved game.\n"
+                + "8. PRESS ENTER : The player can see their rank and progress on a current puzzle.\n"
+                + "9. EXIT : Leave the application."
+        );
+
                 // Wrap the text area in a JScrollPane
                 JScrollPane scrollPane = new JScrollPane(helpTextArea);
                 scrollPane.setPreferredSize(new Dimension(380, 250)); // Set the preferred size of the scroll pane
