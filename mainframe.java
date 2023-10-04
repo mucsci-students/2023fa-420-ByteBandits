@@ -22,7 +22,11 @@ import java.util.*;
 /***************************************************************/
 
 public class mainframe {
-
+    JTextPane textPane;
+    
+    private int charCount = 0;
+    
+    
     Color darkYellow = new Color(204, 153, 0);
     class CustomButton extends JButton {
         private Color originalBackgroundColor;
@@ -121,6 +125,39 @@ public class mainframe {
     }
     /**********************************************************/
     /**********************************************************/
+    private void updateFoundWordsDialog() {
+        if (foundwords == null) {
+            foundwords = new JDialog(mainFrame, "FOUND WORD LIST", true);
+            foundwords.setSize(400, 300);
+            foundwords.setLocationRelativeTo(mainFrame);
+            JTextArea foundWordsArea = new JTextArea();
+            Color darkYellow = new Color(204, 153, 0);
+            foundWordsArea.setBackground(darkYellow);
+            foundWordsArea.setEditable(false);
+            foundWordsArea.setWrapStyleWord(true);
+            foundWordsArea.setLineWrap(true);
+            foundWordsArea.setFont(new Font("SansSerif", Font.PLAIN, 16));
+            foundWordsArea.setForeground(Color.BLACK);
+            if (master.foundWords.isEmpty()) {
+                foundWordsArea.append("YOU HAVEN'T FOUND ANY WORDS");
+            }
+    
+            for (String word : master.foundWords) {
+                foundWordsArea.append(word + "\n");
+            }
+            foundwords.add(new JScrollPane(foundWordsArea));
+        } else {
+            JTextArea foundWordsArea = (JTextArea) ((JScrollPane) foundwords.getContentPane().getComponent(0)).getViewport().getView();
+            foundWordsArea.setText("");
+            if (master.foundWords.isEmpty()) {
+                foundWordsArea.append("YOU HAVEN'T FOUND ANY WORDS");
+            }
+    
+            for (String word : master.foundWords) {
+                foundWordsArea.append(word + "\n");
+            }
+        }
+    }
 
     public mainframe() {
         mainFrame = new JFrame("Welcome to Wordy Wasps");
@@ -330,12 +367,11 @@ public class mainframe {
         letterbutton4.setForeground(darkYellow);
 
 
-
-
     /*********************************************************************/
     /**************************GUESSING TEXTBOX***************************/
 
-   
+    
+
     Border goldBorder = BorderFactory.createLineBorder(darkYellow, 4);
 
    
@@ -356,6 +392,7 @@ public class mainframe {
     secondFrame.add(panel);
     
     JTextPane textPane = new JTextPane();
+    
     textPane.setOpaque(false);
     textPane.setBorder(BorderFactory.createEmptyBorder());
     StyledDocument doc = textPane.getStyledDocument();
@@ -373,7 +410,7 @@ public class mainframe {
     textPane.setFont(textFieldFont);
     
     int xCenter = (secondFrame.getWidth() - textFieldWidth) / 2;
-    int y = (secondFrame.getHeight() - textFieldHeight) / 2 - 400;
+    int y = (secondFrame.getHeight() - textFieldHeight) / 9;
     
     textPane.setBounds(xCenter, y, textFieldWidth, textFieldHeight);
     panel.add(textPane);
@@ -391,20 +428,43 @@ public class mainframe {
             }
         };
 
-        // Attach the filter to the Document of the JTextPane
         ((AbstractDocument) textPane.getDocument()).setDocumentFilter(filter);
-    
+        
         textPane.addKeyListener(new KeyAdapter() {
             @Override
             public void keyTyped(KeyEvent e) {
                 char typedChar = e.getKeyChar();
-                StyledDocument doc = textPane.getStyledDocument();
-                if (doc.getLength() >= maxCharacterCount || Character.isSpaceChar(typedChar)) {
-                    e.consume();
+                
+                if (Character.isAlphabetic(typedChar)) {
+                    if (charCount < maxCharacterCount) {
+                        charCount++;
+                    } else {
+                        e.consume();
+                    }
                 }
             }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                textPane.requestFocusInWindow();
+                if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
+            
+                    charCount = Math.max(0, charCount - 1);
+                } else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    String enteredWord = textPane.getText().trim();
+                    e.consume();
+                    textPane.setText("");
+                    charCount = 0;
+                    
+                    master.guessGUI(enteredWord, baseWord, acceptedWordList, master.playerRank(baseWord, master.totalPoints, acceptedWordList));
+                    
+                    
+                }
+            }
+
         });
-    
+
+    textPane.requestFocusInWindow();
     String defaultText = "";
     textPane.setText(defaultText);
     
@@ -430,7 +490,7 @@ public class mainframe {
     
     secondFrame.setVisible(true);
 
-
+    textPane.requestFocusInWindow();
     /**********************************************************************/
     /***********************SHUFFLE BUTTON LOGIC***************************/
 
@@ -459,6 +519,8 @@ public class mainframe {
                 letterbutton5.setText(bW5.toUpperCase());
                 letterbutton6.setText(bW6.toUpperCase());
                 letterbutton7.setText(bW7.toUpperCase());
+
+                textPane.requestFocusInWindow();
             
               }
         });   
@@ -518,6 +580,8 @@ public class mainframe {
 
                 
                 textPane.setEnabled(true);
+
+                textPane.requestFocusInWindow();
             }
         });
 
@@ -626,6 +690,8 @@ public class mainframe {
 
                 
                 textPane.setEnabled(true);
+
+                textPane.requestFocusInWindow();
                 
             }
         });
@@ -666,6 +732,7 @@ public class mainframe {
                 char reqLetter = playerGameData.getRequiredLetter().charAt(0);
                 int maxPoints = playerGameData.getMaxPoints();
 
+
                 char[] bWLetters = baseWord.toCharArray();
                 if (bWLetters.length != 7) {
                     // Handle error - loaded baseWord is not of expected length
@@ -704,10 +771,11 @@ public class mainframe {
             String currentText = textPane.getText();
             String button1Text = letterbutton1.getText();
             if(currentText.length() < maxCharacterCount){
+                charCount++;
                 currentText += button1Text;
                 textPane.setText(currentText);
             }
-            
+            textPane.requestFocusInWindow();
         }
     });
 
@@ -719,9 +787,11 @@ public class mainframe {
             String currentText = textPane.getText();
             String button2Text = letterbutton2.getText();
             if(currentText.length() < maxCharacterCount){
+                charCount++;
                 currentText += button2Text;
                 textPane.setText(currentText);
             }
+            textPane.requestFocusInWindow();
         }
     });
 
@@ -733,9 +803,11 @@ public class mainframe {
             String currentText = textPane.getText();
             String button3Text = letterbutton3.getText();
             if(currentText.length() < maxCharacterCount){
+                charCount++;
                 currentText += button3Text;
                 textPane.setText(currentText);
             }
+            textPane.requestFocusInWindow();
         }
     });
 
@@ -747,9 +819,11 @@ public class mainframe {
             String currentText = textPane.getText();
             String button4Text = letterbutton4.getText();
             if(currentText.length() < maxCharacterCount){
+                charCount++;
                 currentText += button4Text;
                 textPane.setText(currentText);
             }
+            textPane.requestFocusInWindow();
         }
     });
 
@@ -761,9 +835,11 @@ public class mainframe {
             String currentText = textPane.getText();
             String button5Text = letterbutton5.getText();
             if(currentText.length() < maxCharacterCount){
+                charCount++;
                 currentText += button5Text;
                 textPane.setText(currentText);
             }   
+            textPane.requestFocusInWindow();
         }
     });
 
@@ -775,9 +851,11 @@ public class mainframe {
             String currentText = textPane.getText();
             String button6Text = letterbutton6.getText();
             if(currentText.length() < maxCharacterCount){
+                charCount++;
                 currentText += button6Text;
                 textPane.setText(currentText);
             }
+            textPane.requestFocusInWindow();
         }
     });
 
@@ -789,9 +867,11 @@ public class mainframe {
             String currentText = textPane.getText();
             String button7Text = letterbutton7.getText();
             if(currentText.length() < maxCharacterCount){
+                charCount++;
                 currentText += button7Text;
                 textPane.setText(currentText);
             }
+            textPane.requestFocusInWindow();
         }
     });
 
@@ -845,43 +925,30 @@ public class mainframe {
             } else {
                 howToPlayDialog.setVisible(false);
             }
+            textPane.requestFocusInWindow();
         }
     });
     
 
     /***********************************************************************/
     /*********************FOUND WORD LIST LOGIC****************************/
-        foundWordsButton.addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            if (foundwords == null) {
-                foundwords = new JDialog(mainFrame, "FOUND WORD LIST", true);
-                foundwords.setSize(400, 300);
-                foundwords.setLocationRelativeTo(mainFrame);
-                JTextArea foundWordsArea = new JTextArea();
-                Color darkYellow = new Color(204, 153, 0);
-                foundWordsArea.setBackground(darkYellow);
-                foundWordsArea.setEditable(false);
-                foundWordsArea.setWrapStyleWord(true);
-                foundWordsArea.setLineWrap(true);
-                foundWordsArea.setFont(new Font("SansSerif", Font.PLAIN, 16));
-                foundWordsArea.setForeground(Color.BLACK);
-                if(master.foundWords.isEmpty()){
-                    foundWordsArea.append("YOU HAVEN'T FOUND ANY WORDS");
-                }
-                for (String word : master.foundWords)
-                {
-                    foundWordsArea.append(word + "\n");
-                }
-                foundwords.add(new JScrollPane(foundWordsArea));
-            }
-            if (!foundwords.isVisible()) {
-                foundwords.setVisible(true);
-            } else {
-                foundwords.setVisible(false);
-            }
+
+
+    
+       foundWordsButton.addActionListener(new ActionListener() {
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        updateFoundWordsDialog(); // Call the method to update the dialog
+        if (!foundwords.isVisible()) {
+            foundwords.setVisible(true);
+        } else {
+            foundwords.setVisible(false);
         }
+        textPane.requestFocusInWindow();
+    }
     });
+
+    
 
     /**********************************************************************/
     /************************EXIT BUTTON LOGIC*****************************/
@@ -895,6 +962,12 @@ public class mainframe {
 
     /**********************************************************************/
     /**********************************************************************/
+
+
+
+
+    /**********************************************************************/
+    /**********************************************************************/  
 
         // Add buttons to the button panel
         buttonPanel.add(shufflePuzzle);
@@ -918,8 +991,7 @@ public class mainframe {
         secondFrame.add(buttonPanel2, BorderLayout.CENTER);
         secondFrame.setVisible(true);
     }
-    //IF YOU WANT TO ADD EXTRA SCREENS START HERE//
-
+    
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
