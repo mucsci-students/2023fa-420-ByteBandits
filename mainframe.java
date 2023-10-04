@@ -248,6 +248,7 @@ public class mainframe {
         CustomButton shufflePuzzle = new CustomButton("SHUFFLE PUZZLE", false);
         CustomButton newPuzzleButton = new CustomButton("NEW PUZZLE", false);
         CustomButton newUserPuzzleButton = new CustomButton("CUSTOM PUZZLE", false);
+        CustomButton savePuzzleButton = new CustomButton("SAVE PUZZLE", false);
         CustomButton loadPuzzleButton = new CustomButton("LOAD PUZZLE", false);
         CustomButton howToPlayButton = new CustomButton("HOW TO PLAY", false);
         CustomButton exitButton = new CustomButton("EXIT", false);
