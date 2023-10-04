@@ -732,7 +732,7 @@ public class mainframe {
                 char reqLetter = playerGameData.getRequiredLetter().charAt(0);
                 int maxPoints = playerGameData.getMaxPoints();
 
-
+                master.foundWords = foundWords;
                 char[] bWLetters = baseWord.toCharArray();
                 if (bWLetters.length != 7) {
                     // Handle error - loaded baseWord is not of expected length
