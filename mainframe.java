@@ -166,7 +166,7 @@ public class mainframe {
         mainFrame.setSize(screenSize);
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        ImageIcon gifIcon = new ImageIcon("guicontent/bg.jpg");
+        ImageIcon gifIcon = new ImageIcon("guicontent/bg1.jpg");
 
         Image gifImage = gifIcon.getImage();
         BackgroundPanel backgroundPanel = new BackgroundPanel(gifImage);
@@ -184,7 +184,7 @@ public class mainframe {
     
         backgroundPanel.add(topPanel, BorderLayout.NORTH);
     
-        // Panel for waspGif
+        // Panel for the waspGif
         JPanel centerPanel = new JPanel(new BorderLayout());
         centerPanel.setOpaque(false);
     
