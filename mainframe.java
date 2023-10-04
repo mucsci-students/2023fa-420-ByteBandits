@@ -285,6 +285,7 @@ public class mainframe {
         CustomButton shufflePuzzle = new CustomButton("SHUFFLE PUZZLE", false);
         CustomButton newPuzzleButton = new CustomButton("NEW PUZZLE", false);
         CustomButton newUserPuzzleButton = new CustomButton("CUSTOM PUZZLE", false);
+        CustomButton savePuzzleButton = new CustomButton("SAVE PUZZLE", false);
         CustomButton loadPuzzleButton = new CustomButton("LOAD PUZZLE", false);
         CustomButton howToPlayButton = new CustomButton("HOW TO PLAY", false);
         CustomButton exitButton = new CustomButton("EXIT", false);
@@ -304,16 +305,19 @@ public class mainframe {
         letterbutton6.setEnabled(false);
         letterbutton7.setEnabled(false);
 
+
         Color darkYellow = new Color(204, 153, 0);
 
         Color black = new Color(0,0,0);
         shufflePuzzle.setBackground(darkYellow);
         newPuzzleButton.setBackground(darkYellow); 
         newUserPuzzleButton.setBackground(darkYellow);
+        savePuzzleButton.setBackground(darkYellow);
         loadPuzzleButton.setBackground(darkYellow); 
         howToPlayButton.setBackground(darkYellow); 
         foundWordsButton.setBackground(darkYellow);
         exitButton.setBackground(darkYellow);
+
         letterbutton1.setBackground(darkYellow);
         letterbutton2.setBackground(darkYellow);
         letterbutton3.setBackground(darkYellow);
@@ -335,6 +339,7 @@ public class mainframe {
         shufflePuzzle.setPreferredSize(buttonSize);
         newPuzzleButton.setPreferredSize(buttonSize);
         newUserPuzzleButton.setPreferredSize(buttonSize);
+        savePuzzleButton.setPreferredSize(buttonSize);
         loadPuzzleButton.setPreferredSize(buttonSize);
         howToPlayButton.setPreferredSize(buttonSize);
         foundWordsButton.setPreferredSize(buttonSize);
@@ -345,10 +350,12 @@ public class mainframe {
         shufflePuzzle.setFont(buttonFont);
         newPuzzleButton.setFont(buttonFont);
         newUserPuzzleButton.setFont(buttonFont);
+        savePuzzleButton.setFont(buttonFont);
         loadPuzzleButton.setFont(buttonFont);
         howToPlayButton.setFont(buttonFont);
         foundWordsButton.setFont(buttonFont);
         exitButton.setFont(buttonFont);
+
         letterbutton1.setFont(buttonFont);
         letterbutton2.setFont(buttonFont);
         letterbutton3.setFont(buttonFont);
@@ -688,6 +695,25 @@ public class mainframe {
                 
             }
         });
+    /**********************************************************************/
+    /**********************************************************************/
+
+    /**********************************************************************/
+    /*********************SAVE PUZZLE LOGIC********************************/
+        savePuzzleButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e)  {
+                try{
+                List<String> possibleWords = master.acceptedWords(baseWord, reqLetter);
+                int maxPoints = helpers.possiblePoints(baseWord, possibleWords);
+                // Call the saveGameData method with the appropriate parameters
+                playerGameData.saveGameData(baseWord, master.foundWords, master.totalPoints, "" + reqLetter, maxPoints);
+                }
+                catch (FileNotFoundException e1){
+                    System.err.println("File not found " + e1.getMessage());
+                }
+            }
+        });
 
     /**********************************************************************/
     /**********************************************************************/
@@ -697,45 +723,31 @@ public class mainframe {
         loadPuzzleButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                playerGameData.loadGameData(); // Load game data from the JSON file
 
-                String baseWord = playerGameData.getBaseWord();
+                playerGameData.loadGameData(); // Load game data from the JSON file
+                // Load game variables from playerGameData
+                baseWord = playerGameData.getBaseWord();
                 List<String> foundWords = playerGameData.getFoundWords();
                 int playerPoints = playerGameData.getPlayerPoints();
-                String requiredLetter = playerGameData.getRequiredLetter();
+                char reqLetter = playerGameData.getRequiredLetter().charAt(0);
                 int maxPoints = playerGameData.getMaxPoints();
 
-                // Create JLabel components to display the variables
-                JLabel baseWordLabel = new JLabel("Base Word: " + baseWord);
-                JLabel foundWordsLabel = new JLabel("Found Words: " + foundWords);
-                JLabel playerPointsLabel = new JLabel("Player Points: " + playerPoints);
-                JLabel requiredLetterLabel = new JLabel("Required Letter: " + requiredLetter);
-                JLabel maxPointsLabel = new JLabel("Max Points: " + maxPoints);
 
-                // Create a JPanel to hold the labels
-                JPanel labelsPanel = new JPanel();
-                labelsPanel.setLayout(new GridLayout(5, 1));
-                labelsPanel.add(baseWordLabel);
-                labelsPanel.add(foundWordsLabel);
-                labelsPanel.add(playerPointsLabel);
-                labelsPanel.add(requiredLetterLabel);
-                labelsPanel.add(maxPointsLabel);
+                char[] bWLetters = baseWord.toCharArray();
+                if (bWLetters.length != 7) {
+                    // Handle error - loaded baseWord is not of expected length
+                    System.out.println("Error: Loaded baseWord has incorrect length");
+                    return;
+                }
 
-                // Set the background color for the labels panel
-                labelsPanel.setBackground(new Color(204, 153, 0));
-
-                // Remove all components from the mainFrame's content pane
-                mainFrame.getContentPane().removeAll();
-
-                // Add the labels panel to the mainFrame's content pane
-                mainFrame.getContentPane().add(labelsPanel, BorderLayout.CENTER);
-
-                // Repaint the mainFrame to update the display
-                mainFrame.revalidate();
-                mainFrame.repaint();
-
-                // Makes sure textbox is ready to be typed in
-                textPane.requestFocusInWindow();
+                // Update letters on the buttons
+                letterbutton1.setText(Character.toString(bWLetters[0]).toUpperCase());
+                letterbutton2.setText(Character.toString(bWLetters[1]).toUpperCase());
+                letterbutton3.setText(Character.toString(bWLetters[2]).toUpperCase());
+                letterbutton4.setText(Character.toString(reqLetter).toUpperCase()); // 4th letter is the required one
+                letterbutton5.setText(Character.toString(bWLetters[3]).toUpperCase());
+                letterbutton6.setText(Character.toString(bWLetters[5]).toUpperCase());
+                letterbutton7.setText(Character.toString(bWLetters[6]).toUpperCase());
             }
         });
     /***********************************************************************/
@@ -962,10 +974,12 @@ public class mainframe {
         buttonPanel.add(shufflePuzzle);
         buttonPanel.add(newUserPuzzleButton);
         buttonPanel.add(newPuzzleButton);
+        buttonPanel.add(savePuzzleButton);
         buttonPanel.add(loadPuzzleButton);
         buttonPanel.add(howToPlayButton);
         buttonPanel.add(foundWordsButton);
         buttonPanel.add(exitButton);
+
         buttonPanel2.add(letterbutton1);
         buttonPanel2.add(letterbutton2);
         buttonPanel2.add(letterbutton3);
