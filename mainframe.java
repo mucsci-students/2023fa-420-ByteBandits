@@ -408,7 +408,7 @@ public class mainframe {
     int textFieldHeight = 65;
     int maxCharacterCount = 15;
     
-    Font textFieldFont = new Font("SansSerif", Font.BOLD, 30);
+    Font textFieldFont = new Font("SansSerif", Font.BOLD, 39);
     textPane.setFont(textFieldFont);
     
     int xCenter = (secondFrame.getWidth() - textFieldWidth) / 2;
