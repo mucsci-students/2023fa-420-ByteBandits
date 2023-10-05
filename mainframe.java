@@ -581,7 +581,7 @@ panel.add(outputLabel5);
         shufflePuzzle.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                shuffleWord = master.shuffle(baseWord, reqLetter);
+                shuffleWord = master.shuffle(shuffleWord, reqLetter);
                 System.out.println(reqLetter);
                 baseWord = shuffleWord;
                 String noReqLetter = master.removeChar(baseWord, reqLetter);
@@ -821,6 +821,7 @@ panel.add(outputLabel5);
                 playerGameData.loadGameData(); // Load game data from the JSON file
                 // Load game variables from playerGameData
                 baseWord = playerGameData.getBaseWord();
+                shuffleWord = playerGameData.getBaseWord();
                 List<String> foundWords = playerGameData.getFoundWords();
                 master.totalPoints = playerGameData.getPlayerPoints();
                 reqLetter = playerGameData.getRequiredLetter().charAt(0);
