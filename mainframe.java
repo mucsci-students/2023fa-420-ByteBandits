@@ -144,7 +144,8 @@ public class mainframe {
             }
     
             for (String word : master.foundWords) {
-                foundWordsArea.append(word + "\n");
+                word = word.toUpperCase();
+                foundWordsArea.append("- " + word + "\n");
             }
             foundwords.add(new JScrollPane(foundWordsArea));
         } else {
@@ -155,7 +156,8 @@ public class mainframe {
             }
     
             for (String word : master.foundWords) {
-                foundWordsArea.append(word + "\n");
+                word = word.toUpperCase();
+                foundWordsArea.append("- " + word + "\n");
             }
         }
     }
@@ -450,15 +452,23 @@ public class mainframe {
             @Override
             public void keyTyped(KeyEvent e) {
                 char typedChar = e.getKeyChar();
-                
-                if (Character.isAlphabetic(typedChar)) {
-                    if (charCount < maxCharacterCount) {
-                        charCount++;
-                    } else {
-                        e.consume();
+                char[] tester = baseWord.toCharArray();
+        
+                boolean contained = false;
+        
+                for (char c : tester) {
+                    if (Character.toUpperCase(c) == Character.toUpperCase(typedChar)) {
+                        contained = true;
+                        break;
                     }
-                }else{
-                    e.consume();
+                }
+        
+                if (!Character.isAlphabetic(typedChar) || !contained) {
+                    e.consume(); 
+                } else if (charCount >= maxCharacterCount) {
+                    e.consume(); 
+                } else {
+                    charCount++;
                 }
             }
 
@@ -471,30 +481,38 @@ public class mainframe {
                 } else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     
                     String enteredWord = textPane.getText().trim();
-                    enteredWord.toLowerCase();
+                    enteredWord = enteredWord.toLowerCase();
                     
                     e.consume();
                     textPane.setText("");
                     charCount = 0;
                     int initialSize = master.foundWords.size();
-                    master.guessGUI(enteredWord, baseWord, acceptedWordList, master.playerRank(baseWord, master.totalPoints, acceptedWordList));
-                    
-                    if(master.foundWords.contains(enteredWord) == true)
-                    {
-                        outputLabel.setText("You already guessed this word: " + enteredWord);
-                    }
-                    else if(master.foundWords.size() > initialSize)
-                    {
 
-                        outputLabel.setText("Valid word! " + enteredWord);
-                        outputLabel2.setText("Your current rank is: " + master.playerRank(baseWord, master.totalPoints, acceptedWordList));
-                        outputLabel3.setText("Total points: " + master.totalPoints);
-                    }
-                    else{
-                        outputLabel.setText("Invalid word, try again!");
-                    }
+                    baseWord = baseWord.toLowerCase();
+        
+                    if (master.foundWords.contains(enteredWord)) {
+                        outputLabel.setText("You already guessed this word correctly. Try again!");
+                        
+                    } else {
+                        enteredWord = enteredWord.toUpperCase();
+                        master.guessGUI(enteredWord, baseWord, acceptedWordList, master.playerRank(baseWord, master.totalPoints, acceptedWordList));
+                        if (master.foundWords.size() > initialSize) {
+                            if(master.isPangram(baseWord, enteredWord)){
+                                outputLabel.setText(enteredWord + " is a valid word, and a PANGRAM... Well Done!");
+                            }else{
+                                outputLabel.setText(enteredWord + " is a valid word!");
+                            }
+                            outputLabel2.setText("Your current rank is: " + master.playerRank(baseWord, master.totalPoints, acceptedWordList));
+                            outputLabel3.setText("Total points: " + master.totalPoints); 
 
+                        } else {
+                            outputLabel.setText("Invalid word, try again!");
+
+                        }
+                        enteredWord = enteredWord.toLowerCase();
+                    }
                 }
+                baseWord = baseWord.toUpperCase();
             }
 
         });
@@ -525,6 +543,7 @@ public class mainframe {
     secondFrame.setVisible(true);
 
     textPane.requestFocusInWindow();
+
     /**********************************************************************/
     /***********************SHUFFLE BUTTON LOGIC***************************/
 
@@ -532,10 +551,9 @@ public class mainframe {
             @Override
             public void actionPerformed(ActionEvent e) {
                 shuffleWord = master.shuffle(baseWord, reqLetter);
-
+                System.out.println(reqLetter);
                 baseWord = shuffleWord;
                 String noReqLetter = master.removeChar(baseWord, reqLetter);
-
                 char[] bWLetters = noReqLetter.toCharArray();
 
                 String bW1 = Character.toString(bWLetters[0]);
@@ -565,9 +583,11 @@ public class mainframe {
         newPuzzleButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
                 outputLabel.setText("");
                 outputLabel2.setText("");
                 outputLabel3.setText("");
+
                 master.totalPoints = 0;
                 try {
                     baseWord = master.getBaseWord(master.dictionaryFile());
@@ -633,8 +653,9 @@ public class mainframe {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                String userWord = JOptionPane.showInputDialog(secondFrame, "Enter a base word for the puzzle:");
 
+                String userWord = JOptionPane.showInputDialog(secondFrame, "Enter a base word for the puzzle:");
+                userWord = userWord.toLowerCase();
                 if(userWord.contains(" ")){
                     JOptionPane.showMessageDialog(secondFrame, "Bzzt. Make sure there are no spaces in your word! Bzz.");
                     return;
@@ -648,31 +669,29 @@ public class mainframe {
                         return;
                     }
 
+                    baseWord = userWord;
+                    reqLetter = master.getReqLetter(baseWord);
 
-                    userWord = userWord.toLowerCase();
-                    reqLetter = master.getReqLetter(userWord);
-
-                   
+                    
 
                     try {
-                        acceptedWordList = master.acceptedWords(userWord, reqLetter);
+                        acceptedWordList = master.acceptedWords(baseWord, reqLetter);
                     } catch (FileNotFoundException e1) {
                         e1.printStackTrace();
                     }
 
                     
-                    if (!acceptedWordList.contains(userWord)){
+                    if (!acceptedWordList.contains(baseWord)){
                         
                         JOptionPane.showMessageDialog(secondFrame, "Buzz. Are you making stuff up now!  Make sure you type a valid word! Buzz.");
                         return;
         
                     }
+                    
                     outputLabel.setText("");
                     outputLabel2.setText("");
                     outputLabel3.setText("");
-
-                    baseWord = userWord.toUpperCase(); 
-                    reqLetter = master.getReqLetter(baseWord);
+                    
 
                 }else{
                     if(userWord.length() == 0){
@@ -758,6 +777,7 @@ public class mainframe {
         loadPuzzleButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
                 outputLabel.setText("");
                 outputLabel2.setText("");
                 outputLabel3.setText("");
@@ -767,19 +787,22 @@ public class mainframe {
                 baseWord = playerGameData.getBaseWord();
                 List<String> foundWords = playerGameData.getFoundWords();
                 master.totalPoints = playerGameData.getPlayerPoints();
-                char reqLetter = playerGameData.getRequiredLetter().charAt(0);
+                reqLetter = playerGameData.getRequiredLetter().charAt(0);
                 int possiblePoints = playerGameData.getMaxPoints();
+
+                baseWord = baseWord.toLowerCase();
+                
                 try {
                     acceptedWordList = master.acceptedWords(baseWord, reqLetter);
                 } catch (FileNotFoundException e1) {
-                    
                     e1.printStackTrace();
                 }
 
-                String bwTemp = master.removeChar(baseWord, reqLetter);
-
                 master.foundWords = foundWords;
-                char[] bWLetters = bwTemp.toCharArray();
+
+                String noReqLetter = master.removeChar(baseWord, reqLetter);
+
+                char[] bWLetters = noReqLetter.toCharArray();
                 if (bWLetters.length != 6) {
                     // Handle error - loaded baseWord is not of expected length
                     System.out.println("Error: Loaded baseWord has incorrect length");
@@ -792,9 +815,8 @@ public class mainframe {
                 letterbutton3.setText(Character.toString(bWLetters[2]).toUpperCase());
                 letterbutton4.setText(Character.toString(reqLetter).toUpperCase()); // 4th button is the required one
                 letterbutton5.setText(Character.toString(bWLetters[3]).toUpperCase());
-
-                letterbutton6.setText(Character.toString(bWLetters[5]).toUpperCase());
-                letterbutton7.setText(Character.toString(bWLetters[6]).toUpperCase());
+                letterbutton6.setText(Character.toString(bWLetters[4]).toUpperCase());
+                letterbutton7.setText(Character.toString(bWLetters[5]).toUpperCase());
                 
                 
 
