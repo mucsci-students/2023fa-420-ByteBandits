@@ -59,6 +59,38 @@ public static boolean isUnique(String s)
 /*********************************************************/
 
 /*
+ * isPangram
+ * param: String baseWord, String userGuess
+ * returns: Boolean 
+ * This function takes the base word and a string from the user's
+ * guess and tests if it is a pangram or not using baseword as the 
+ * letters to check it against. Hashsets are used to split the
+ * characters up and compare them.
+ */
+
+public static boolean isPangram(String baseWord, String userGuess) {
+    Set<Character> baseWordChars = new HashSet<>();
+    for (char c : baseWord.toCharArray()) {
+        if (Character.isAlphabetic(c)) {
+            baseWordChars.add(Character.toLowerCase(c)); // Convert to lowercase for case-insensitive comparison
+        }
+    }
+
+    for (char c : userGuess.toCharArray()) {
+        if (Character.isAlphabetic(c)) {
+            if (!baseWordChars.contains(Character.toLowerCase(c))) {
+                return false; 
+            }
+        }
+    }
+
+    return true;
+}
+
+/*********************************************************/
+/*********************************************************/
+
+/*
  * sameChars
  * param: String baseWord, String dicString
  * returns: Boolean 

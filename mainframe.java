@@ -452,15 +452,23 @@ public class mainframe {
             @Override
             public void keyTyped(KeyEvent e) {
                 char typedChar = e.getKeyChar();
-                
-                if (Character.isAlphabetic(typedChar)) {
-                    if (charCount < maxCharacterCount) {
-                        charCount++;
-                    } else {
-                        e.consume();
+                char[] tester = baseWord.toCharArray();
+        
+                boolean contained = false;
+        
+                for (char c : tester) {
+                    if (Character.toUpperCase(c) == Character.toUpperCase(typedChar)) {
+                        contained = true;
+                        break;
                     }
-                }else{
-                    e.consume();
+                }
+        
+                if (!Character.isAlphabetic(typedChar) || !contained) {
+                    e.consume(); 
+                } else if (charCount >= maxCharacterCount) {
+                    e.consume(); 
+                } else {
+                    charCount++;
                 }
             }
 
@@ -473,7 +481,7 @@ public class mainframe {
                 } else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     
                     String enteredWord = textPane.getText().trim();
-                    enteredWord.toLowerCase();
+                    enteredWord = enteredWord.toLowerCase();
                     
                     e.consume();
                     textPane.setText("");
@@ -481,23 +489,28 @@ public class mainframe {
                     int initialSize = master.foundWords.size();
 
                     baseWord = baseWord.toLowerCase();
-                    master.guessGUI(enteredWord, baseWord, acceptedWordList, master.playerRank(baseWord, master.totalPoints, acceptedWordList));
-                    
-                    if(master.foundWords.contains(enteredWord) == true)
-                    {
-                        outputLabel.setText("You already guessed this word: " + enteredWord);
-                    }
-                    else if(master.foundWords.size() > initialSize)
-                    {
+        
+                    if (master.foundWords.contains(enteredWord)) {
+                        outputLabel.setText("You already guessed this word correctly. Try again!");
+                        
+                    } else {
+                        enteredWord = enteredWord.toUpperCase();
+                        master.guessGUI(enteredWord, baseWord, acceptedWordList, master.playerRank(baseWord, master.totalPoints, acceptedWordList));
+                        if (master.foundWords.size() > initialSize) {
+                            if(master.isPangram(baseWord, enteredWord)){
+                                outputLabel.setText(enteredWord + " is a valid word, and a PANGRAM... Well Done!");
+                            }else{
+                                outputLabel.setText(enteredWord + " is a valid word!");
+                            }
+                            outputLabel2.setText("Your current rank is: " + master.playerRank(baseWord, master.totalPoints, acceptedWordList));
+                            outputLabel3.setText("Total points: " + master.totalPoints); 
 
-                        outputLabel.setText("Valid word! " + enteredWord);
-                        outputLabel2.setText("Your current rank is: " + master.playerRank(baseWord, master.totalPoints, acceptedWordList));
-                        outputLabel3.setText("Total points: " + master.totalPoints);
-                    }
-                    else{
-                        outputLabel.setText("Invalid word, try again!");
-                    }
+                        } else {
+                            outputLabel.setText("Invalid word, try again!");
 
+                        }
+                        enteredWord = enteredWord.toLowerCase();
+                    }
                 }
                 baseWord = baseWord.toUpperCase();
             }
@@ -570,6 +583,11 @@ public class mainframe {
         newPuzzleButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
+                outputLabel.setText("");
+                outputLabel2.setText("");
+                outputLabel3.setText("");
+
                 master.totalPoints = 0;
                 try {
                     baseWord = master.getBaseWord(master.dictionaryFile());
@@ -635,6 +653,7 @@ public class mainframe {
             @Override
             public void actionPerformed(ActionEvent e) {
 
+
                 String userWord = JOptionPane.showInputDialog(secondFrame, "Enter a base word for the puzzle:");
                 userWord = userWord.toLowerCase();
                 if(userWord.contains(" ")){
@@ -669,7 +688,9 @@ public class mainframe {
         
                     }
                     
-                    
+                    outputLabel.setText("");
+                    outputLabel2.setText("");
+                    outputLabel3.setText("");
                     
 
                 }else{
@@ -757,6 +778,10 @@ public class mainframe {
             @Override
             public void actionPerformed(ActionEvent e) {
 
+                outputLabel.setText("");
+                outputLabel2.setText("");
+                outputLabel3.setText("");
+
                 playerGameData.loadGameData(); // Load game data from the JSON file
                 // Load game variables from playerGameData
                 baseWord = playerGameData.getBaseWord();
@@ -766,8 +791,7 @@ public class mainframe {
                 int possiblePoints = playerGameData.getMaxPoints();
 
                 baseWord = baseWord.toLowerCase();
-                System.out.println(baseWord);
-                System.out.println(reqLetter);
+                
                 try {
                     acceptedWordList = master.acceptedWords(baseWord, reqLetter);
                 } catch (FileNotFoundException e1) {

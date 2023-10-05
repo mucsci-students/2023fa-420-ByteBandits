@@ -343,7 +343,7 @@ public static int pointsPWord(String baseWord, String userGuess){
         }
         else{
             
-            if (sameChars(baseWord, userGuess)){
+            if (isPangram(baseWord, userGuess)){
                 points += 7;
 
                 System.out.println();
@@ -645,7 +645,7 @@ public static void guessGUI(String guessedWord, String baseWord, List<String> ac
     }else if(acceptedWords.contains(guessedWord)){
         
         foundWords.add(guessedWord);
-        System.out.println(acceptedWords);
+        
         
         totalPoints += pointsPWord(baseWord, guessedWord);
         playerRank = playerRank(baseWord, totalPoints, acceptedWords);
