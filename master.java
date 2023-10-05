@@ -201,7 +201,7 @@ public static void main(String args[]) throws FileNotFoundException, Interrupted
                 
                 baseWord = saveFile.getBaseWord();
                 foundWords = saveFile.getFoundWords();
-                totalPoints = saveFile.getMaxPoints();
+                totalPoints = saveFile.getPlayerPoints();
                 reqLetter = saveFile.getRequiredLetter().charAt(0);
                 possiblePoints = saveFile.getMaxPoints();
 

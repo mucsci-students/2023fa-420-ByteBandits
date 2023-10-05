@@ -96,6 +96,7 @@ public class mainframe {
     char reqLetter = master.getReqLetter(baseWord);
     String shuffleWord = baseWord;
     List<String> acceptedWordList;
+    
     char[] bWLetters = baseWord.toCharArray();
     
     private JFrame mainFrame;
@@ -628,18 +629,19 @@ public class mainframe {
         newUserPuzzleButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String baseSave = baseWord;
-                char reqSave = reqLetter;
 
                 String userWord = JOptionPane.showInputDialog(secondFrame, "Enter a base word for the puzzle:");
+
+                if(userWord.contains(" ")){
+                    JOptionPane.showMessageDialog(secondFrame, "Bzzt. Make sure there are no spaces in your word! Bzz.");
+                    return;
+                }
 
                 if (userWord != null && !userWord.isEmpty() && userWord.length() == 7) {
 
                     if (!master.isUnique(userWord)){
 
                         JOptionPane.showMessageDialog(secondFrame, "Bzzt. Oops, all letters have to be unique! Bzz.");
-                        baseWord = baseSave;
-                        reqLetter = reqSave;
                         return;
                     }
 
@@ -657,16 +659,8 @@ public class mainframe {
                     if (!acceptedWordList.contains(userWord)){
                         
                         JOptionPane.showMessageDialog(secondFrame, "Buzz. Are you making stuff up now!  Make sure you type a valid word! Buzz.");
-                        baseWord = baseSave;
-                        reqLetter = reqSave;
-                        
-                        try {
-                            acceptedWordList = master.acceptedWords(baseWord, reqLetter);
-                        } catch (FileNotFoundException e1) {
-                            e1.printStackTrace();
-                        }
-
                         return;
+        
                     }
                     
                     baseWord = userWord.toUpperCase(); 
@@ -761,9 +755,15 @@ public class mainframe {
                 // Load game variables from playerGameData
                 baseWord = playerGameData.getBaseWord();
                 List<String> foundWords = playerGameData.getFoundWords();
-                int playerPoints = playerGameData.getPlayerPoints();
+                master.totalPoints = playerGameData.getPlayerPoints();
                 char reqLetter = playerGameData.getRequiredLetter().charAt(0);
-                int maxPoints = playerGameData.getMaxPoints();
+                int possiblePoints = playerGameData.getMaxPoints();
+                try {
+                    acceptedWordList = master.acceptedWords(baseWord, reqLetter);
+                } catch (FileNotFoundException e1) {
+                    
+                    e1.printStackTrace();
+                }
 
                 master.foundWords = foundWords;
                 char[] bWLetters = baseWord.toCharArray();
@@ -777,11 +777,27 @@ public class mainframe {
                 letterbutton1.setText(Character.toString(bWLetters[0]).toUpperCase());
                 letterbutton2.setText(Character.toString(bWLetters[1]).toUpperCase());
                 letterbutton3.setText(Character.toString(bWLetters[2]).toUpperCase());
-                letterbutton4.setText(Character.toString(reqLetter).toUpperCase()); // 4th letter is the required one
+                letterbutton4.setText(Character.toString(reqLetter).toUpperCase()); // 4th button is the required one
                 letterbutton5.setText(Character.toString(bWLetters[3]).toUpperCase());
                 letterbutton6.setText(Character.toString(bWLetters[5]).toUpperCase());
                 letterbutton7.setText(Character.toString(bWLetters[6]).toUpperCase());
+                
+                
+
+                letterbutton1.setEnabled(true);
+                letterbutton2.setEnabled(true);
+                letterbutton3.setEnabled(true);
+                letterbutton4.setEnabled(true);
+                letterbutton5.setEnabled(true);
+                letterbutton6.setEnabled(true);
+                letterbutton7.setEnabled(true);
+
+                
+                textPane.setEnabled(true);
+                
+                textPane.requestFocusInWindow();
             }
+            
         });
     /***********************************************************************/
     /**********************************************************************/
