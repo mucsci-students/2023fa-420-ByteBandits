@@ -11,8 +11,11 @@ import java.util.Set;
 /*********************************************************/
 /*********************************************************/
 
-public class helpers {
 
+public class helpers {
+    public static String nextRank = "";
+    public static int pointsRequired = 0;
+    public static int difference = 0;
  
 /*
 * isBetween
@@ -184,8 +187,8 @@ public static boolean sameChars(String baseWord, String dicString) {
  */
  
  public static void calculateRankDifference(String currentRank, int playerPoints, List<String> possibleWords, String baseWord) {
-    String nextRank = "";
-    int pointsRequired = 0;
+    nextRank = "";
+   pointsRequired = 0;
 
     int currentRankIndex = Arrays.asList("Beginner", "Good Start", "Moving Up", "Good", "Solid", "Nice", "Great", "Amazing", "Genius", "Queen Bee").indexOf(currentRank);
 
@@ -232,7 +235,7 @@ public static boolean sameChars(String baseWord, String dicString) {
                 return;
         }
 
-        int difference = pointsRequired - playerPoints;
+        difference = pointsRequired - playerPoints;
 
         System.out.println("TOTAL POINTS NEEDED FOR NEXT RANK " + "\u001B[33m" + nextRank + "\u001B[0m" + ": " + "\u001B[33m" + pointsRequired + "\u001B[0m");
         System.out.println("POINTS NEEDED TO REACH NEXT RANK: " + "\u001B[33m" + difference + "\u001B[0m\n");

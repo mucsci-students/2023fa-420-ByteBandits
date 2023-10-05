@@ -408,7 +408,7 @@ public class mainframe {
     int textFieldHeight = 65;
     int maxCharacterCount = 15;
     
-    Font textFieldFont = new Font("SansSerif", Font.BOLD, 39);
+    Font textFieldFont = new Font("SansSerif", Font.BOLD, 30);
     textPane.setFont(textFieldFont);
     
     int xCenter = (secondFrame.getWidth() - textFieldWidth) / 2;
@@ -416,23 +416,42 @@ public class mainframe {
     
     textPane.setBounds(xCenter, y, textFieldWidth, textFieldHeight);
     panel.add(textPane);
-    JLabel outputLabel = new JLabel(); // Initialize the outputLabel
-    outputLabel.setBounds(xCenter, y + textFieldHeight + 10, textFieldWidth, 30); // Adjust the position as needed
-    outputLabel.setHorizontalAlignment(SwingConstants.CENTER);
-    JLabel outputLabel2 = new JLabel();
-    outputLabel2.setBounds(xCenter, y + textFieldHeight + 30, textFieldWidth, 30); // Adjust the position as needed
-    outputLabel2.setHorizontalAlignment(SwingConstants.CENTER);
-    
-    JLabel outputLabel3 = new JLabel();
-    outputLabel3.setBounds(xCenter, y + textFieldHeight + 50, textFieldWidth, 30); // Adjust the position as needed
-    outputLabel3.setHorizontalAlignment(SwingConstants.CENTER);
-    JLabel outputLabel4 = new JLabel();
-    outputLabel4.setBounds(xCenter, y + textFieldHeight + 70, textFieldWidth, 30); // Adjust the position as needed
-    outputLabel4.setHorizontalAlignment(SwingConstants.CENTER);
-    panel.add(outputLabel);
-    panel.add(outputLabel2);
-    panel.add(outputLabel3);
-    panel.add(outputLabel4);
+
+
+    // Create JLabels
+JLabel outputLabel = new JLabel();
+JLabel outputLabel2 = new JLabel();
+JLabel outputLabel3 = new JLabel();
+JLabel outputLabel4 = new JLabel();
+JLabel outputLabel5 = new JLabel();
+Font labelFont = new Font("Sans Serif", Font.BOLD, 21);
+// Set the font for all labels with a larger font size
+outputLabel.setFont(labelFont);
+outputLabel2.setFont(labelFont);
+outputLabel3.setFont(labelFont);
+outputLabel4.setFont(labelFont);
+outputLabel5.setFont(labelFont);
+
+// Set other properties and positions for your labels (as you've already done)
+outputLabel.setBounds(xCenter, y + textFieldHeight + 20, textFieldWidth, 30);
+outputLabel.setHorizontalAlignment(SwingConstants.CENTER);
+
+outputLabel2.setBounds(xCenter, y + textFieldHeight + 40, textFieldWidth, 30);
+outputLabel2.setHorizontalAlignment(SwingConstants.CENTER);
+
+outputLabel3.setBounds(xCenter, y + textFieldHeight + 60, textFieldWidth, 30);
+outputLabel3.setHorizontalAlignment(SwingConstants.CENTER);
+
+outputLabel4.setBounds(xCenter, y + textFieldHeight + 80, textFieldWidth, 30);
+outputLabel4.setHorizontalAlignment(SwingConstants.CENTER);
+
+outputLabel5.setBounds(xCenter, y + textFieldHeight + 100, textFieldWidth, 30);
+outputLabel5.setHorizontalAlignment(SwingConstants.CENTER);
+panel.add(outputLabel);
+panel.add(outputLabel2);
+panel.add(outputLabel3);
+panel.add(outputLabel4);
+panel.add(outputLabel5);
     textPane.setCaret(new NoCaret());
      DocumentFilter filter = new DocumentFilter() {
             @Override
@@ -497,13 +516,25 @@ public class mainframe {
                         enteredWord = enteredWord.toUpperCase();
                         master.guessGUI(enteredWord, baseWord, acceptedWordList, master.playerRank(baseWord, master.totalPoints, acceptedWordList));
                         if (master.foundWords.size() > initialSize) {
-                            if(master.isPangram(baseWord, enteredWord)){
-                                outputLabel.setText(enteredWord + " is a valid word, and a PANGRAM... Well Done!");
+                            if(master.isPangram(enteredWord, baseWord)){
+                                String enteredWordText = "<font color='#CC9900'>" + enteredWord + "</font> is a valid word, and a <font color='#CC9900'>PANGRAM</font>... Well Done!";
+                                outputLabel.setText("<html>" + enteredWordText + "</html>");
                             }else{
-                                outputLabel.setText(enteredWord + " is a valid word!");
+                                String enteredWordText = "<font color='#CC9900'>" + enteredWord + "</font> is a valid word!";
+                                outputLabel.setText("<html>" + enteredWordText + "</html>");
                             }
-                            outputLabel2.setText("Your current rank is: " + master.playerRank(baseWord, master.totalPoints, acceptedWordList));
-                            outputLabel3.setText("Total points: " + master.totalPoints); 
+                            String playerRank = master.playerRank(baseWord, master.totalPoints, acceptedWordList);
+                            String playerrank = playerRank; 
+                            String labelText = "Your current rank is: <font color=#CC9900>" + playerrank + "</font>";
+                            outputLabel2.setText("<html>" + labelText + "</html>"); 
+                            String labelText1 = "Total points:   <font color='#CC9900'>" + master.totalPoints + "</font>";
+                            outputLabel3.setText("<html>" + labelText1 + "</html>");
+                            helpers.calculateRankDifference(playerRank, master.totalPoints, acceptedWordList, baseWord);
+                            String nextRankText = "Total points needed for next rank   <font color='#CC9900'>" + helpers.nextRank + "</font>: ";
+                            String pointsRequiredText = "<font color='#CC9900'>" + helpers.pointsRequired + "</font>";
+                            outputLabel4.setText("<html>" + nextRankText + pointsRequiredText + "</html>");
+                            String differenceText = "Points needed to reach next rank: <font color='#CC9900'>" + helpers.difference + "</font>";
+                            outputLabel5.setText("<html>" + differenceText + "</html>");
 
                         } else {
                             outputLabel.setText("Invalid word, try again!");
@@ -587,7 +618,8 @@ public class mainframe {
                 outputLabel.setText("");
                 outputLabel2.setText("");
                 outputLabel3.setText("");
-
+                outputLabel4.setText("");
+                outputLabel5.setText("");
                 master.totalPoints = 0;
                 try {
                     baseWord = master.getBaseWord(master.dictionaryFile());
@@ -691,6 +723,8 @@ public class mainframe {
                     outputLabel.setText("");
                     outputLabel2.setText("");
                     outputLabel3.setText("");
+                    outputLabel4.setText("");
+                    outputLabel5.setText("");
                     
 
                 }else{
@@ -781,6 +815,8 @@ public class mainframe {
                 outputLabel.setText("");
                 outputLabel2.setText("");
                 outputLabel3.setText("");
+                outputLabel4.setText("");
+                outputLabel5.setText("");
 
                 playerGameData.loadGameData(); // Load game data from the JSON file
                 // Load game variables from playerGameData

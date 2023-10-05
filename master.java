@@ -17,6 +17,8 @@ public class master extends helpers{
     public static String playerRank = "";
 
     public static List<String> foundWords = new ArrayList<>();
+
+    
     
 public static void main(String args[]) throws FileNotFoundException, InterruptedException{
     
