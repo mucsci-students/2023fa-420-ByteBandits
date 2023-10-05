@@ -477,6 +477,8 @@ public class mainframe {
                     textPane.setText("");
                     charCount = 0;
                     int initialSize = master.foundWords.size();
+
+                    baseWord = baseWord.toLowerCase();
                     master.guessGUI(enteredWord, baseWord, acceptedWordList, master.playerRank(baseWord, master.totalPoints, acceptedWordList));
                     
                     if(master.foundWords.contains(enteredWord) == true)
@@ -495,6 +497,7 @@ public class mainframe {
                     }
 
                 }
+                baseWord = baseWord.toUpperCase();
             }
 
         });
@@ -565,9 +568,6 @@ public class mainframe {
         newPuzzleButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                outputLabel.setText("");
-                outputLabel2.setText("");
-                outputLabel3.setText("");
                 master.totalPoints = 0;
                 try {
                     baseWord = master.getBaseWord(master.dictionaryFile());
@@ -634,7 +634,7 @@ public class mainframe {
             public void actionPerformed(ActionEvent e) {
 
                 String userWord = JOptionPane.showInputDialog(secondFrame, "Enter a base word for the puzzle:");
-
+                userWord = userWord.toLowerCase();
                 if(userWord.contains(" ")){
                     JOptionPane.showMessageDialog(secondFrame, "Bzzt. Make sure there are no spaces in your word! Bzz.");
                     return;
@@ -648,31 +648,27 @@ public class mainframe {
                         return;
                     }
 
+                    baseWord = userWord;
+                    reqLetter = master.getReqLetter(baseWord);
 
-                    userWord = userWord.toLowerCase();
-                    reqLetter = master.getReqLetter(userWord);
-
-                   
+                    
 
                     try {
-                        acceptedWordList = master.acceptedWords(userWord, reqLetter);
+                        acceptedWordList = master.acceptedWords(baseWord, reqLetter);
                     } catch (FileNotFoundException e1) {
                         e1.printStackTrace();
                     }
 
                     
-                    if (!acceptedWordList.contains(userWord)){
+                    if (!acceptedWordList.contains(baseWord)){
                         
                         JOptionPane.showMessageDialog(secondFrame, "Buzz. Are you making stuff up now!  Make sure you type a valid word! Buzz.");
                         return;
         
                     }
-                    outputLabel.setText("");
-                    outputLabel2.setText("");
-                    outputLabel3.setText("");
-
-                    baseWord = userWord.toUpperCase(); 
-                    reqLetter = master.getReqLetter(baseWord);
+                    
+                    
+                    
 
                 }else{
                     if(userWord.length() == 0){
@@ -758,9 +754,6 @@ public class mainframe {
         loadPuzzleButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                outputLabel.setText("");
-                outputLabel2.setText("");
-                outputLabel3.setText("");
 
                 playerGameData.loadGameData(); // Load game data from the JSON file
                 // Load game variables from playerGameData
@@ -772,14 +765,14 @@ public class mainframe {
                 try {
                     acceptedWordList = master.acceptedWords(baseWord, reqLetter);
                 } catch (FileNotFoundException e1) {
-                    
                     e1.printStackTrace();
                 }
 
-                String bwTemp = master.removeChar(baseWord, reqLetter);
-
                 master.foundWords = foundWords;
-                char[] bWLetters = bwTemp.toCharArray();
+
+                String noReqLetter = master.removeChar(baseWord, reqLetter);
+
+                char[] bWLetters = noReqLetter.toCharArray();
                 if (bWLetters.length != 6) {
                     // Handle error - loaded baseWord is not of expected length
                     System.out.println("Error: Loaded baseWord has incorrect length");
@@ -792,9 +785,8 @@ public class mainframe {
                 letterbutton3.setText(Character.toString(bWLetters[2]).toUpperCase());
                 letterbutton4.setText(Character.toString(reqLetter).toUpperCase()); // 4th button is the required one
                 letterbutton5.setText(Character.toString(bWLetters[3]).toUpperCase());
-
-                letterbutton6.setText(Character.toString(bWLetters[5]).toUpperCase());
-                letterbutton7.setText(Character.toString(bWLetters[6]).toUpperCase());
+                letterbutton6.setText(Character.toString(bWLetters[4]).toUpperCase());
+                letterbutton7.setText(Character.toString(bWLetters[5]).toUpperCase());
                 
                 
 
