@@ -144,7 +144,8 @@ public class mainframe {
             }
     
             for (String word : master.foundWords) {
-                foundWordsArea.append(word + "\n");
+                word = word.toUpperCase();
+                foundWordsArea.append("- " + word + "\n");
             }
             foundwords.add(new JScrollPane(foundWordsArea));
         } else {
@@ -155,7 +156,8 @@ public class mainframe {
             }
     
             for (String word : master.foundWords) {
-                foundWordsArea.append(word + "\n");
+                word = word.toUpperCase();
+                foundWordsArea.append("- " + word + "\n");
             }
         }
     }
@@ -528,6 +530,7 @@ public class mainframe {
     secondFrame.setVisible(true);
 
     textPane.requestFocusInWindow();
+
     /**********************************************************************/
     /***********************SHUFFLE BUTTON LOGIC***************************/
 
@@ -535,10 +538,9 @@ public class mainframe {
             @Override
             public void actionPerformed(ActionEvent e) {
                 shuffleWord = master.shuffle(baseWord, reqLetter);
-
+                System.out.println(reqLetter);
                 baseWord = shuffleWord;
                 String noReqLetter = master.removeChar(baseWord, reqLetter);
-
                 char[] bWLetters = noReqLetter.toCharArray();
 
                 String bW1 = Character.toString(bWLetters[0]);
@@ -760,8 +762,12 @@ public class mainframe {
                 baseWord = playerGameData.getBaseWord();
                 List<String> foundWords = playerGameData.getFoundWords();
                 master.totalPoints = playerGameData.getPlayerPoints();
-                char reqLetter = playerGameData.getRequiredLetter().charAt(0);
+                reqLetter = playerGameData.getRequiredLetter().charAt(0);
                 int possiblePoints = playerGameData.getMaxPoints();
+
+                baseWord = baseWord.toLowerCase();
+                System.out.println(baseWord);
+                System.out.println(reqLetter);
                 try {
                     acceptedWordList = master.acceptedWords(baseWord, reqLetter);
                 } catch (FileNotFoundException e1) {
