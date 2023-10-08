@@ -1,3 +1,4 @@
+package app.src.main.java;
 // Authors: Logan Wasmer, Jose De La Cruz, Ilynd Rapant, Joshua Dawson
 
 /**********************************************************/
@@ -20,7 +21,7 @@ public class master extends helpers{
 
     
     
-public static void main(String args[]) throws FileNotFoundException, InterruptedException{
+public static void cliMode() throws FileNotFoundException, InterruptedException{
     
     playerData saveFile = new playerData();
     String baseWord = "       ";
@@ -258,7 +259,7 @@ public static void main(String args[]) throws FileNotFoundException, Interrupted
  */
 
 public static List<String> dictionaryFile() throws FileNotFoundException{
-    Scanner scanner = new Scanner(new File("7-letter-words.txt"));
+    Scanner scanner = new Scanner(new File("./src/main/resources/7-letter-words.txt"));
     List<String> sevenLetterWords = new ArrayList<>();
 
     while(scanner.hasNextLine()){
@@ -494,8 +495,8 @@ public static String display(String baseword, char required)
 
     System.out.println("   -----");
     System.out.print(" / ");
-
-    for (int i = 0; i < 3; i++) {
+    int maxIndex = Math.min(charArray.length, 3);
+    for (int i = 0; i < maxIndex; i++) {
         System.out.print(charArray[i] + " ");
     }
 
@@ -503,8 +504,8 @@ public static String display(String baseword, char required)
     System.out.println();
     System.out.println("||   " + "\u001B[33m" + required + "\u001B[0m" + "   ||");
     System.out.print(" \\ ");
-
-    for (int i = 3; i < 6; i++) {
+    maxIndex = Math.min(charArray.length, 6);
+    for (int i = 3; i < maxIndex; i++) {
         System.out.print(charArray[i] + " ");
     }
 
@@ -561,7 +562,7 @@ public static String shuffle (String curr, char required)
  */
 
 public static List<String> acceptedWords(String baseWord, char reqLetter) throws FileNotFoundException{
-    Scanner scanner = new Scanner(new File("4-15_Dictionary.txt"));
+    Scanner scanner = new Scanner(new File("./src/main/resources/4-15_Dictionary.txt"));
     List<String> acceptedWordList = new ArrayList<>();
     String reqLetter2 = Character.toString(reqLetter);
     

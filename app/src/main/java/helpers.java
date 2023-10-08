@@ -1,3 +1,4 @@
+package app.src.main.java;
 //Author: Jose De La Cruz, Logan Wasmer, Ilynd Rapant
 
 /*********************************************************/

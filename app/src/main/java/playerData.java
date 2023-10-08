@@ -1,3 +1,4 @@
+package app.src.main.java;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +16,7 @@ public class playerData {
 
     public void saveGameData(String baseWord, List<String> foundWords, int playerPoints, String requiredLetter, int maxPoints) {
         try (FileWriter fileWriter = new FileWriter("game_data.json")) {
-            // Create a JSON object to hold the game data
+            
             JSONObject gameData = new JSONObject();
             gameData.put("baseWord", baseWord);
             gameData.put("foundWords", foundWords);
@@ -23,7 +24,7 @@ public class playerData {
             gameData.put("requiredLetter", requiredLetter);
             gameData.put("maxPoints", maxPoints);
 
-            // Write the JSON object to the file
+            
             fileWriter.write(gameData.toString());
         } catch (IOException e) {
             e.printStackTrace();

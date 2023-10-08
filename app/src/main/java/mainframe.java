@@ -1,3 +1,4 @@
+package app.src.main.java;
 // Authors: Joshua Dawson, Logan Wasmer, Jose De La Cruz, Ilynd Rapant
 /***************************************************************/
 /***************************************************************/
@@ -220,26 +221,26 @@ public class mainframe {
     });
     
         // "GUI -> CLI" button
-        CustomButton guiToCliButton = new CustomButton("GUI -> CLI", false);
-        guiToCliButton.setBackground(new Color(204, 153, 0));
-        guiToCliButton.setOpaque(true); // Make the button opaque
-        guiToCliButton.setFont(new Font("SansSerif", Font.BOLD, 24));
-        guiToCliButton.setPreferredSize(new Dimension(200, 60)); // Increase the width
-        guiToCliButton.addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            mainFrame.dispose();
-            try {
-                master.main(new String[0]);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        }
-    });
+    //     CustomButton guiToCliButton = new CustomButton("GUI -> CLI", false);
+    //     guiToCliButton.setBackground(new Color(204, 153, 0));
+    //     guiToCliButton.setOpaque(true); // Make the button opaque
+    //     guiToCliButton.setFont(new Font("SansSerif", Font.BOLD, 24));
+    //     guiToCliButton.setPreferredSize(new Dimension(200, 60)); // Increase the width
+    //     guiToCliButton.addActionListener(new ActionListener() {
+    //     @Override
+    //     public void actionPerformed(ActionEvent e) {
+    //         mainFrame.dispose();
+    //         try {
+    //             master.main(new String[0]);
+    //         } catch (Exception ex) {
+    //             ex.printStackTrace();
+    //         }
+    //     }
+    // });
     
         // Add both buttons to the button panel
         buttonPanel.add(playButton);
-        buttonPanel.add(guiToCliButton);
+        //buttonPanel.add(guiToCliButton);
     
         backgroundPanel.add(buttonPanel, BorderLayout.SOUTH);
     
@@ -642,13 +643,32 @@ panel.add(outputLabel5);
 
                 char[] bWLetters = noReqLetter.toCharArray();
 
-                String bW1 = Character.toString(bWLetters[0]);
-                String bW2 = Character.toString(bWLetters[1]);
-                String bW3 = Character.toString(bWLetters[2]);
-                String bW4 = Character.toString(reqLetter);
-                String bW5 = Character.toString(bWLetters[3]);
-                String bW6 = Character.toString(bWLetters[4]);
-                String bW7 = Character.toString(bWLetters[5]);
+                String bW1 = "";
+                String bW2 = "";
+                String bW3 = "";
+                String bW4 = "";
+                String bW5 = "";
+                String bW6 = "";
+                String bW7 = "";
+
+                if (bWLetters.length >= 6) {
+                bW1 = Character.toString(bWLetters[0]);
+                bW2 = Character.toString(bWLetters[1]);
+                bW3 = Character.toString(bWLetters[2]);
+                bW4 = Character.toString(reqLetter);
+                bW5 = Character.toString(bWLetters[3]);
+                bW6 = Character.toString(bWLetters[4]);
+                bW7 = Character.toString(bWLetters[5]);
+                }
+
+
+                // String bW1 = Character.toString(bWLetters[0]);
+                // String bW2 = Character.toString(bWLetters[1]);
+                // String bW3 = Character.toString(bWLetters[2]);
+                // String bW4 = Character.toString(reqLetter);
+                // String bW5 = Character.toString(bWLetters[3]);
+                // String bW6 = Character.toString(bWLetters[4]);
+                // String bW7 = Character.toString(bWLetters[5]);
 
                 // Letter change code goes here after letters are created
                 letterbutton1.setText(bW1.toUpperCase());
@@ -1114,13 +1134,20 @@ panel.add(outputLabel5);
     }
     
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                
-                new mainframe();
-                
+        if (args.length > 0 && args[0].equals("--cli")) {
+            try {
+                master.cliMode();
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
-        });
+        } else {
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    new mainframe();
+                }
+            });
+        }
     }
+    
 }
