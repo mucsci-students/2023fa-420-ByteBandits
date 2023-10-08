@@ -235,14 +235,17 @@ public static void cliMode() throws FileNotFoundException, InterruptedException{
 
                 break;
             default:
-                System.out.println("\u001B[33m" + "Invalid command! Type /help for a list of commands." + "\u001B[0m");
+                if (input.equals("/exit")){
+                    System.out.println("\u001B[33m" + "\nThanks for playing! :)" + "\u001B[0m");
+                }
+                else{
+                   System.out.println("\u001B[33m" + "Invalid command! Type /help for a list of commands." + "\u001B[0m"); 
+                }
                 break;
         }
     }while (!input.equalsIgnoreCase("/exit"));
 
     inputScanner.close();
-
-    System.out.println("\u001B[33m" + "\nThanks for playing! :)" + "\u001B[0m");
 
 }
 
