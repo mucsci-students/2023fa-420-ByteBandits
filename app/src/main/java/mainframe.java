@@ -170,7 +170,7 @@ public class mainframe {
         mainFrame.setSize(screenSize);
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        ImageIcon gifIcon = new ImageIcon("guicontent/bg1.jpg");
+        ImageIcon gifIcon = new ImageIcon("./src/main/resources/guicontent/bg1.jpg");
 
         Image gifImage = gifIcon.getImage();
         BackgroundPanel backgroundPanel = new BackgroundPanel(gifImage);
@@ -188,12 +188,12 @@ public class mainframe {
     
         backgroundPanel.add(topPanel, BorderLayout.NORTH);
     
-        // Panel for the waspGif
+        
         JPanel centerPanel = new JPanel(new BorderLayout());
         centerPanel.setOpaque(false);
     
-        // Load the waspGif
-        ImageIcon gifIcon1 = new ImageIcon("guicontent/finalWaspGif.gif");
+        
+        ImageIcon gifIcon1 = new ImageIcon("./src/main/resources/guicontent/finalWaspGif.gif");
         Image originalImage = gifIcon1.getImage();
         Image resizedImage = originalImage.getScaledInstance(650, 500, Image.SCALE_DEFAULT);
         ImageIcon resizedGifIcon = new ImageIcon(resizedImage);
