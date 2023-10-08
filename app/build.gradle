@@ -1,0 +1,53 @@
+plugins {
+    id 'java'
+    id 'application'
+
+}
+
+group = 'app.src.main.java'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+application
+        {
+            mainModule = 'java'
+            mainClass = 'app.src.main.java.mainframe'
+
+        }
+
+        sourceSets {
+    main {
+        resources {
+            srcDirs 'src/main/resources'
+        }
+    }
+}
+
+run{
+    standardInput = System.in;
+    
+}
+
+processResources {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+}
+
+
+dependencies {
+    testImplementation platform('org.junit:junit-bom:5.9.1')
+
+
+    // This dependency is used by the application.
+    implementation 'com.google.guava:guava:30.1.1-jre'
+    implementation files('org.example.helpers')
+    implementation files('org.example.master')
+    implementation files('org.example.playerData')
+    implementation 'org.json:json:20230618'
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+test {
+    useJUnitPlatform()
+}
