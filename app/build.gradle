@@ -23,6 +23,9 @@ application
             srcDirs 'src/main/resources'
         }
     }
+    test { // Add this block for test sources
+        java.srcDirs 'src/test/java'
+    }
 }
 
 run{
@@ -36,16 +39,14 @@ processResources {
 
 
 dependencies {
-    testImplementation platform('org.junit:junit-bom:5.9.1')
+    testImplementation platform('org.junit.jupiter:junit-jupiter:5.9.1')
 
 
     // This dependency is used by the application.
     implementation 'com.google.guava:guava:30.1.1-jre'
-    implementation files('org.example.helpers')
-    implementation files('org.example.master')
-    implementation files('org.example.playerData')
     implementation 'org.json:json:20230618'
-    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.1'
 }
 
 test {
