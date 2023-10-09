@@ -1,104 +1,107 @@
 # 2023fa-420-ByteBandits
 
-WORDY WASPS - A Word Puzzle Game
--
-Table of Contents
------------------
-- Introduction
-- Building and Running the Game
-- Game Commands
-- Getting Started
-- Gameplay
-- Saving and Loading
-- Help
-- Exiting the Game
-- Authors
- 
-Introduction
------------------
+# **Wordy Wasps** - A Word Puzzle Game by ByteBandits
 
-Welcome to WordyWasps, an exciting word puzzle game! Challenge your vocabulary and word-building skills in this unique word game.
+## Table of Contents
 
-In WordyWasps, you'll be presented with seven unique letters and one required letter. Your goal is to create words using these letters, with a few simple rules:
+1. [Introduction](#introduction)
+2. [Building and Running the Game](#building-and-running-the-game)
+3. [Game Commands](#game-commands)
+4. [Getting Started](#getting-started)
+5. [Gameplay](#gameplay)
+6. [Saving and Loading](#saving-and-loading)
+7. [Help](#help)
+8. [Exiting the Game](#exiting-the-game)
+9. [Authors](#authors)
+10. [Contact](#contact)
 
-Words must contain at least 4 letters.
-Words must include the required letter.
-Letters can be used more than once.
-Are you up for the challenge? Dive into the world of WordyWasps and start buzzing!
+## Introduction
 
-Building and Running the Game
------------------
-**Prerequisites:**
-- Make sure you have Java installed on your system.
+Welcome to Wordy Wasps, an exciting word puzzle game! Challenge your vocabulary and word-building skills with our unique game. Form words using a given set of letters, following these rules:
 
-**To Build and Run:**
-1. Clone this repository to your local machine using `git clone` or download the ZIP file and extract it.
-   
-2. Navigate to the project directory:
-   ```shell
-   cd 2023fa-420-ByteBandits
-   
-3. Compile java source files:
-   javac *.java
+- Words must contain at least 4 letters.
+- Words must include the required letter.
+- Letters can be used more than once.
 
-4. Run the game!
-   java master
-   
-Game Commands
------------------
+Dive into the world of Wordy Wasps and start buzzing!
 
-To navigate and play WordyWasps, you'll need to use specific commands. Here are the available commands:
+## Building and Running the Game
 
-/newpuzzle: Start a new puzzle.
-/basepuzzle: Restart the current puzzle with the same set of letters.
-/showpuzzle: Display the current set of 7 letters.
-/foundwords: Show the words you've already found.
-/guess: Enter a word you think is valid.
-/shuffle: Shuffle the 7 letters to get a new arrangement.
-/savepuzzle: Save the current puzzle for later without game status.
-/savecurr: Save your progress in the current game.
-/loadpuzzle: Load a previously saved puzzle.
-/showstatus: Display your current game status.
-/help: Display help information.
-/exit: Quit the game.
-Getting Started
+### Prerequisites
+- Ensure Java is installed on your system.
 
-Download and run WordyWasps on your preferred platform.
-Follow the on-screen instructions to start a new game or load a saved one.
-Use the commands above to interact with the game.
+### Instructions
 
-Gameplay
------------------
+### Linux and macOS:
+- Ensure that homebrew is installed.
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+- Install gradle.
+```bash
+brew install gradle
+```
+- Build and run the program through gradle.
+```bash
+gradle clean build
+gradle run                                  # For GUI mode
+gradle --console plain run --args='--cli'   # For CLI mode
+```
+### Windows:
 
-Start a new puzzle using /newpuzzle and get seven unique letters.
-Use your vocabulary skills to create words containing the required letter.
-Enter your guessed words using /guess.
-The longer the word, the more points you'll earn.
-Check your progress with /showstatus and /foundwords.
-Saving and Loading
+```bash
+./gradlew clean build
+./gradlew run                               # For GUI mode
+./gradlew --console plain run --args='--cli' # For CLI mode
+```
 
-WordyWasps allows you to save your game progress and load it later. Use the following commands:
+Alternatively:
 
-/savepuzzle: Save the current puzzle for later without game status (Only saves puzzle and the word associated!)
-/savecurr: Save your progress in the current game (includes points and found words)!
-/loadpuzzle: Load a previously saved puzzle.
+1. Clone or download this repository.
+2. Navigate to the project directory: cd 2023fa-420-ByteBandits
+3. Compile Java source files: javac *.java
+4. Run the game: java master
 
-Help
------------------
+## Game Commands
+Here are the available commands to navigate and play Wordy Wasps:
 
-If you need assistance or have questions about the game, use the /help command to display helpful information.
+- /newpuzzle: Start a new puzzle.
+- /basepuzzle: Restart the current puzzle with the same set of letters.
+- /showpuzzle: Display the current set of 7 letters.
+- /foundwords: Show the words you've already found.
+- /guess: Enter a word you think is valid.
+- /shuffle: Shuffle the 7 letters to get a new arrangement.
+- /savepuzzle: Save the current puzzle for later (only puzzle and associated word).
+- /savecurr: Save your game progress (includes points and found words).
+- /loadpuzzle: Load a previously saved puzzle.
+- /showstatus: Display your current game status.
+- /help: Display help information.
+- /exit: Quit the game.
 
-Exiting the Game
------------------
+## Getting Started
+Download and run Wordy Wasps on your preferred platform. Follow the on-screen instructions to start a new game or load a saved one. Use the commands above to interact with the game.
 
-When you're ready to exit the game, simply use the /exit command, and WordyWasps will close.
+## Gameplay
+Initiate a new puzzle with /newpuzzle to receive seven unique letters. Harness your vocabulary to craft words containing the required letter. Use /guess to input your word guesses. Longer words grant more points! Monitor your progress via /showstatus and /foundwords.
 
-Authors
------------------
+## Saving and Loading
+Wordy Wasps offers features to save and load games:
+/savepuzzle: Preserve the current puzzle without game status.
+/savecurr: Save your current game progress.
+/loadpuzzle: Restore a previously saved puzzle.
 
+## Help
+For assistance or inquiries about the game, invoke the /help command.
+
+## Exiting the Game
+To conclude your game session, simply utilize the /exit command.
+
+## Authors
 - Logan Wasmer
 - Ilynd Rapant
 - Jose De La Cruz
 - Joshua Dawson
-  
-Thank you for playing WordyWasps! Enjoy the game and have fun buzzing with words! If you encounter any issues or have suggestions, feel free to reach out to th authors!
+
+## Contact
+Thank you for playing Wordy Wasps! We hope you relish the wordy challenge. Should you stumble upon any issues or have suggestions, kindly get in touch with our team.
+
