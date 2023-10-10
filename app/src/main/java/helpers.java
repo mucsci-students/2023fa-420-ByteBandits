@@ -1,3 +1,4 @@
+package app.src.main.java;
 //Author: Jose De La Cruz, Logan Wasmer, Ilynd Rapant
 
 /*********************************************************/
@@ -11,8 +12,11 @@ import java.util.Set;
 /*********************************************************/
 /*********************************************************/
 
-public class helpers {
 
+public class helpers {
+    public static String nextRank = "";
+    public static int pointsRequired = 0;
+    public static int difference = 0;
  
 /*
 * isBetween
@@ -52,6 +56,38 @@ public static boolean isUnique(String s)
             }
         }
     }
+    return true;
+}
+
+/*********************************************************/
+/*********************************************************/
+
+/*
+ * isPangram
+ * param: String baseWord, String userGuess
+ * returns: Boolean 
+ * This function takes the base word and a string from the user's
+ * guess and tests if it is a pangram or not using baseword as the 
+ * letters to check it against. Hashsets are used to split the
+ * characters up and compare them.
+ */
+
+public static boolean isPangram(String baseWord, String userGuess) {
+    Set<Character> baseWordChars = new HashSet<>();
+    for (char c : baseWord.toCharArray()) {
+        if (Character.isAlphabetic(c)) {
+            baseWordChars.add(Character.toLowerCase(c)); // Convert to lowercase for case-insensitive comparison
+        }
+    }
+
+    for (char c : userGuess.toCharArray()) {
+        if (Character.isAlphabetic(c)) {
+            if (!baseWordChars.contains(Character.toLowerCase(c))) {
+                return false; 
+            }
+        }
+    }
+
     return true;
 }
 
@@ -152,8 +188,8 @@ public static boolean sameChars(String baseWord, String dicString) {
  */
  
  public static void calculateRankDifference(String currentRank, int playerPoints, List<String> possibleWords, String baseWord) {
-    String nextRank = "";
-    int pointsRequired = 0;
+    nextRank = "";
+   pointsRequired = 0;
 
     int currentRankIndex = Arrays.asList("Beginner", "Good Start", "Moving Up", "Good", "Solid", "Nice", "Great", "Amazing", "Genius", "Queen Bee").indexOf(currentRank);
 
@@ -200,7 +236,7 @@ public static boolean sameChars(String baseWord, String dicString) {
                 return;
         }
 
-        int difference = pointsRequired - playerPoints;
+        difference = pointsRequired - playerPoints;
 
         System.out.println("TOTAL POINTS NEEDED FOR NEXT RANK " + "\u001B[33m" + nextRank + "\u001B[0m" + ": " + "\u001B[33m" + pointsRequired + "\u001B[0m");
         System.out.println("POINTS NEEDED TO REACH NEXT RANK: " + "\u001B[33m" + difference + "\u001B[0m\n");

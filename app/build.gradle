@@ -1,0 +1,54 @@
+plugins {
+    id 'java'
+    id 'application'
+
+}
+
+group = 'app.src.main.java'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+application
+        {
+            mainModule = 'java'
+            mainClass = 'app.src.main.java.mainframe'
+
+        }
+
+        sourceSets {
+    main {
+        resources {
+            srcDirs 'src/main/resources'
+        }
+    }
+    test { // Add this block for test sources
+        java.srcDirs 'src/test/java'
+    }
+}
+
+run{
+    standardInput = System.in;
+    
+}
+
+processResources {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+}
+
+
+dependencies {
+    testImplementation platform('org.junit.jupiter:junit-jupiter:5.9.1')
+
+
+    // This dependency is used by the application.
+    implementation 'com.google.guava:guava:30.1.1-jre'
+    implementation 'org.json:json:20230618'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.1'
+}
+
+test {
+    useJUnitPlatform()
+}
