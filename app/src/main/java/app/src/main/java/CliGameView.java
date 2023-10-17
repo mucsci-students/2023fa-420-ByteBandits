@@ -78,10 +78,22 @@ public class CliGameView{
         System.out.println();
     }
 
+    /*
+    * getUserInput
+    * param: N/A
+    * returns: N/A
+    * This function is used to get a word from user for guessing.
+    */
     public static void getUserInput() {
         System.out.print("Enter a word: ");
     }
 
+    /*
+    * newPuzzlePrint
+    * param: N/A
+    * returns: N/A
+    * This is what is shown when a player starts a puzzle.
+    */
     public static void newPuzzlePrint() throws InterruptedException
     {
         System.out.println("\u001B[33m" + "\nBuzzing for a new word..." + "\u001B[0m");
@@ -94,40 +106,87 @@ public class CliGameView{
 
     }
 
-
+    /*
+    * printPuzzleError
+    * param: N/A
+    * returns: N/A
+    * This function makes the player create a puzzle before doing any other commands.
+    */
     public static void printPuzzleError()
     {
         System.out.println("\u001B[33m" + "\nYou haven't created a new puzzle! Do /loadpuzzle, /newpuzzle, or /basepuzzle to get one up! BUZZ!\n" + "\u001B[0m"); 
+
     }
 
+    /*
+    * displayGuessIntro
+    * param: N/A
+    * returns: N/A
+    * This function is showing user how to exit out of guess.
+    */
     public static void displayGuessIntro() {
         System.out.println("\u001B[33m" + "\nBzz. Do /q when you're done guessing! Bzz." + "\u001B[0m");
         System.out.println();
     }
     
+    /*
+    * displayDuplicate
+    * param: N/A
+    * returns: N/A
+    * This function tells the user if they already guessed a word.
+    */
     public static void displayDuplicate()
     {
         System.out.println("\u001B[33m" + "\nYou already guessed that word correctly, try another one!\n" + "\u001B[0m");
     }
 
+    /*
+    * displayGuessInstructions
+    * param: N/A
+    * returns: N/A
+    * This function is used to prompt user for word.
+    */
     public static void displayGuessInstructions() {
         System.out.print("Guess a word: ");
     }
     
+    /*
+    * displayGuessExit
+    * param: N/A
+    * returns: N/A
+    * This function is used to let player know they are done guessing.
+    */
     public static void displayGuessExit() {
         System.out.println("\u001B[33m" + "\nExited guessing phase. Enter a new command, or do /guess to guess again!\n" + "\u001B[0m");
     }
     
+    /*
+    * displayGuessResult
+    * param: N/A
+    * returns: N/A
+    * This function shows the player their status while they are playing.
+    */
     public static void displayGuessResult(String playerRank, int totalPoints) {
         System.out.println("YOUR CURRENT RANK IS: " + "\u001B[33m" + playerRank + "\u001B[0m");
         System.out.println("YOUR CURRENT POINTS ARE: " + "\u001B[33m" + totalPoints + "\u001B[0m");
     }
     
+    /*
+    * displayInvalidWord
+    * param: N/A
+    * returns: N/A
+    * This function tells the player that their word was invalid.
+    */
     public static void displayInvalidWord() {
         System.out.println("\u001B[33m" + "\nNot a valid word, try again!\n" + "\u001B[0m");
     }
     
-    
+    /*
+    * display
+    * param: char[] charArray, char required
+    * returns: N/A
+    * This function displays the look of the puzzle.
+    */
     public static void display(char[] charArray, char required)
     {
         System.out.println("   -----");
@@ -150,8 +209,6 @@ public class CliGameView{
         System.out.println("   -----");
 
         }
-        /*********************************************************/
-        /*********************************************************/
 
         /*
         * foundWordList
@@ -185,9 +242,12 @@ public class CliGameView{
             System.out.println();
             System.out.println();
         }
-        /**
-         * @throws InterruptedException
-         *  
+        /*
+        * displayMessagShuffle
+        * param: N/A
+        * returns: N/A
+        * This function shows the user that the puzzle is being shuffled.
+        * @throws InterruptedException  
         */ 
         public static void displaMessageShuffle() throws InterruptedException
         {
@@ -196,32 +256,48 @@ public class CliGameView{
             System.out.println("\u001B[33m" + "Bzzzzzzzzzzz!\n" + "\u001B[0m");
             Thread.sleep(500);
         }
+
         /*
-         * 
-         */
+        * createPuzzleMessage
+        * param: N/A
+        * returns: N/A
+        * This function lets player know that they need to use /savecurr.
+        */
         public static void createPuzzleMessage()
         {
             System.out.println("\u001B[33m" + "\nBuzz. There's already progress on this puzzle! Please use /savecurr to save instead!\n" + "\u001B[0m");
             return;
         }
+
         /*
-         * 
-         */
+        * successfulSaveMessage
+        * param: N/A
+        * returns: N/A
+        * This function lets the player know their puzzle was saved.
+        */
         public static void successfulSaveMessage()
         {
             System.out.println("Game Status Saved!\n");
         }
+
         /*
-         * 
-         */
+        * duplicateLoadMessage
+        * param: N/A
+        * returns: N/A
+        * This function lets player know that their puzzle has already been loaded.
+        */
         public static void duplicateLoadMessage()
         {
             System.out.println("\u001B[33m" + "\nThis puzzle is already loaded!\n" + "\u001B[0m");
             return;
         }
+
         /*
-         * 
-         */
+        * succesfulLoadMessage
+        * param: int totalPoints, String playerRank
+        * returns: N/A
+        * This function is used to show loaded puzzles progress.
+        */
         public static void succesfulLoadMessage(int totalPoints, String playerRank)
         {
             System.out.println("\nTotal Points: " + "\u001B[33m" + totalPoints + "\u001B[0m");
@@ -229,6 +305,7 @@ public class CliGameView{
             System.out.println("Game Status Loaded!\n");
 
         }
+
         /*
         * puzzleStatus
         * param: String playerRank
@@ -249,6 +326,7 @@ public class CliGameView{
             System.out.println();
         
         }
+
         /*
         * help
         * param: N/A
@@ -257,7 +335,6 @@ public class CliGameView{
         * a table of all the command lines the player can use and what 
         * each command line does. 
         */
-  
         public static void help()
         {
             String yellowColor = "\u001B[33m";
@@ -301,53 +378,74 @@ public class CliGameView{
                     System.out.printf("%-15s |   %s%n", commandLines[i], explanations[i]);
                  }
         }
+
         /*
-         * 
-         */
+        * exitMessage
+        * param: N/A
+        * returns: N/A
+        * This function lets the player know they have exited the game.
+        */
         public static void exitMessage()
         {
-            System.out.println("\u001B[33m" + "\nThanks for playing! :)" + "\u001B[0m");
-                
+            System.out.println("\u001B[33m" + "\nThanks for playing! :)" + "\u001B[0m");      
         }
+
         /*
-         * 
-         */
+        * invalidCommandMessage
+        * param: N/A
+        * returns: N/A
+        * This function lets the player know they did an invalid command.
+        */
         public static void invalidCommandMessage()
         {
             System.out.println("\u001B[33m" + "Invalid command! Type /help for a list of commands." + "\u001B[0m"); 
 
         }
+
         /*
-         * 
-         */
+        * basePuzzleChooseMessage
+        * param: N/A
+        * returns: N/A
+        * This function shows the prompt for choosing a baseword.
+        */
         public static void basePuzzleChooseMessage()
         {
-            String yellowColor = "\u001B[33m";
             System.out.println("Please choose a baseword: ");
         }
+
         /*
-         * 
-         */
+        * sevenMessage
+        * param: N/A
+        * returns: N/A
+        * This function lets the player know they need to make a word with 7 letters.
+        */
         public static void sevenMessage()
         {
             String yellowColor = "\u001B[33m";
             System.out.println(yellowColor + "Bzzuh Bzzoh, word has to have 7 letters! Buzz.");
         }
+
         /*
-         * 
-         */
+        * makeUpMessage
+        * param: N/A
+        * returns: N/A
+        * This function lets the player know they need a valid word for basepuzzle.
+        */
         public static void makeUpMessage()
         {
             String yellowColor = "\u001B[33m";
             System.out.println(yellowColor + "Buzz. Are you making stuff up now!  Make sure you type a valid word! Buzz.");
         }
+
         /*
-         * 
-         */
+        * uniqueMessage
+        * param: N/A
+        * returns: N/A
+        * This function lets the player know they need 7 unique letters for basepuzzle.
+        */
         public static void uniqueMessage()
         {
             String yellowColor = "\u001B[33m";
             System.out.println(yellowColor + "Bzzt. Oops, all letters have to be unique! Bzz.");
         }
-    
 }
