@@ -1,0 +1,353 @@
+package app.src.main.java;
+
+import java.util.List;
+import java.util.Scanner;
+import app.src.main.java.CliGameModel;
+import java.io.FileNotFoundException;
+import java.io.IOException; // For handling IOException if needed
+
+
+
+public class CliGameView{
+
+    private static CliGameModel model;
+    private static Scanner scanner;
+
+
+    public CliGameView( CliGameModel model) {
+        this.model = model;
+        scanner = new Scanner(System.in);
+    }
+
+    /*
+    * intro
+    * param: N/A
+    * returns: N/A
+    * This function is used to display the intro to the player.
+    */
+    public static void displayIntro()
+    {
+        String yellowColor = "\u001B[33m";
+    
+        String resetColor = "\u001B[0m";
+
+        System.out.println("\nWelcome to " + yellowColor + "WordyWasps - A Word Puzzle Game!" + resetColor);
+        System.out.println("In WordyWasps, you'll be given a set of 7 letters and 1 required letter. Your goal is to create words from them.");
+        System.out.println("Here are the " + yellowColor + "basic commands" + resetColor + " you can use to play the game:");
+
+        System.out.println();
+        System.out.println("     \" ,  ,");
+        System.out.println("\u001B[33m        \", ,\u001B[0m");
+        System.out.println("           \"\"     _---.    ..;%%%;, .");
+        System.out.println("\u001B[33m             \"\" .\",  ,  .==% %%%%%%% ' .\u001B[0m");
+        System.out.println("               \"\", %%%   =%% %%%%%%;  ; ;-_");
+        System.out.println("\u001B[33m               %; %%%%%  .;%;%%%\"%p ---; _  '-_\u001B[0m");
+        System.out.println("               %; %%%%% __;%%;p/; O        --_ \"-,");
+        System.out.println("\u001B[33m                q; %%% /v \\;%p ;%%%%%;--__    \"'-__'-._\u001B[0m");
+        System.out.println("                //\\\\\" // \\  % ;%%%%%%%;',/%\\_  __  \"'-_\\_");
+        System.out.println("\u001B[33m                \\  / //   \\/   ;%% %; %;/\\%%%%;;;;\\    \"- _\\\u001B[0m");
+        System.out.println("                   ,\"             %;  %%;  %%;;'  ';%       -\\-_");
+        System.out.println("\u001B[33m              -=\\=\"             __%    %%;_ |;;    %%%\\          \\\u001B[0m");
+        System.out.println("                              _/ _=      \\==_;,  %%%; % -_      /");
+        System.out.println("\u001B[33m                             / /-          =%- ;%%%%; %%;  \"--__/\u001B[0m");
+        System.out.println("                            //=             ==%-%%;  %; %");
+        System.out.println("\u001B[33m                            /             _=_-  d  ;%; ;%;  :F_P:\u001B[0m");
+        System.out.println("                            \\            =,-\"    d%%; ;%%;");
+        System.out.println("                                        //        %  ;%%;");
+        System.out.println("\u001B[33m                                       //          d%%%\"\u001B[0m");
+        System.out.println("                                        \\           %%");
+        System.out.println("                                                    V");
+        System.out.println();
+
+
+        System.out.println(yellowColor + "/newpuzzle" + resetColor + ":   Start a new puzzle.");
+        System.out.println(yellowColor + "/basepuzzle" + resetColor + ":  Restart the current puzzle with the same set of letters.");
+        System.out.println(yellowColor + "/showpuzzle" + resetColor + ":  Display the current set of 7 letters.");
+        System.out.println(yellowColor + "/foundwords" + resetColor + ":  Show the words you've already found.");
+        System.out.println(yellowColor + "/guess" + resetColor + ":       Enter a word you think is valid.");
+        System.out.println(yellowColor + "/shuffle" + resetColor + ":     Shuffle the 7 letters to get a new arrangement.");
+        System.out.println(yellowColor + "/savepuzzle" + resetColor + ":  Save the current puzzle for later without game status.");
+        System.out.println(yellowColor + "/savecurr" + resetColor + ":    Save your progress in the current game.");
+        System.out.println(yellowColor + "/loadpuzzle" + resetColor + ":  Load a previously saved puzzle.");
+        System.out.println(yellowColor + "/showstatus" + resetColor + ":  Display your current game status.");
+        System.out.println(yellowColor + "/help" + resetColor + ":        Display help information.");
+        System.out.println(yellowColor + "/exit" + resetColor + ":        Quit the game.");
+        System.out.println();
+
+        System.out.println("Now that you know the commands, let's start playing! Have fun and find as many words as you can!");
+        System.out.println();
+    }
+
+    public static void getUserInput() {
+        System.out.print("Enter a word: ");
+    }
+
+    public static void newPuzzlePrint() throws InterruptedException
+    {
+        System.out.println("\u001B[33m" + "\nBuzzing for a new word..." + "\u001B[0m");
+        Thread.sleep(500);
+        System.out.println("\u001B[33m" + "Buzz..." + "\u001B[0m");
+        Thread.sleep(500);
+        System.out.println("\u001B[33m" + "Buzz...\n" + "\u001B[0m");
+        
+        Thread.sleep(500);
+
+    }
+
+
+    public static void printPuzzleError()
+    {
+        System.out.println("\u001B[33m" + "\nYou haven't created a new puzzle! Do /loadpuzzle, /newpuzzle, or /basepuzzle to get one up! BUZZ!\n" + "\u001B[0m"); 
+    }
+
+    public static void displayGuessIntro() {
+        System.out.println("\u001B[33m" + "\nBzz. Do /q when you're done guessing! Bzz." + "\u001B[0m");
+        System.out.println();
+    }
+    
+    public static void displayDuplicate()
+    {
+        System.out.println("\u001B[33m" + "\nYou already guessed that word correctly, try another one!\n" + "\u001B[0m");
+    }
+
+    public static void displayGuessInstructions() {
+        System.out.print("Guess a word: ");
+    }
+    
+    public static void displayGuessExit() {
+        System.out.println("\u001B[33m" + "\nExited guessing phase. Enter a new command, or do /guess to guess again!\n" + "\u001B[0m");
+    }
+    
+    public static void displayGuessResult(String playerRank, int totalPoints) {
+        System.out.println("YOUR CURRENT RANK IS: " + "\u001B[33m" + playerRank + "\u001B[0m");
+        System.out.println("YOUR CURRENT POINTS ARE: " + "\u001B[33m" + totalPoints + "\u001B[0m");
+    }
+    
+    public static void displayInvalidWord() {
+        System.out.println("\u001B[33m" + "\nNot a valid word, try again!\n" + "\u001B[0m");
+    }
+    
+    
+    public static void display(char[] charArray, char required)
+    {
+        System.out.println("   -----");
+        System.out.print(" / ");
+        int maxIndex = Math.min(charArray.length, 3);
+        for (int i = 0; i < maxIndex; i++) {
+            System.out.print(charArray[i] + " ");
+        }
+
+        System.out.print( "\\");
+        System.out.println();
+        System.out.println("||   " + "\u001B[33m" + required + "\u001B[0m" + "   ||");
+        System.out.print(" \\ ");
+        maxIndex = Math.min(charArray.length, 6);
+        for (int i = 3; i < maxIndex; i++) {
+            System.out.print(charArray[i] + " ");
+        }
+
+        System.out.println("/");
+        System.out.println("   -----");
+
+        }
+        /*********************************************************/
+        /*********************************************************/
+
+        /*
+        * foundWordList
+        * param: N/A
+        * returns: N/A
+        * This function is used to display the rank and player points
+        * of the pllayer during the current session.
+        */
+        public static void foundWordList (List<String> foundWords){
+    
+            String yellowColor = "\u001B[33m";
+            String resetColor = "\u001B[0m";
+        
+            System.out.println();
+            System.out.printf("%-2sFOUND WORD LIST%n", ""); 
+            
+            for (int i = 0; i <= 18; i++){
+                System.out.print(yellowColor + "*" + resetColor);
+            }
+        
+            System.out.println();
+        
+            for(int j = 0; j < foundWords.size(); j++){
+                System.out.printf(yellowColor + "* " + resetColor + "%-16s" + yellowColor + "*%n", foundWords.get(j));
+            }
+        
+            for (int k = 0; k <= 18; k++){
+                System.out.print(yellowColor + "*" + resetColor);
+            }
+            
+            System.out.println();
+            System.out.println();
+        }
+        /**
+         * @throws InterruptedException
+         *  
+        */ 
+        public static void displaMessageShuffle() throws InterruptedException
+        {
+            System.out.println("\u001B[33m" + "\nShaking up the hive!" + "\u001B[0m");
+            Thread.sleep(1000);
+            System.out.println("\u001B[33m" + "Bzzzzzzzzzzz!\n" + "\u001B[0m");
+            Thread.sleep(500);
+        }
+        /*
+         * 
+         */
+        public static void createPuzzleMessage()
+        {
+            System.out.println("\u001B[33m" + "\nBuzz. There's already progress on this puzzle! Please use /savecurr to save instead!\n" + "\u001B[0m");
+            return;
+        }
+        /*
+         * 
+         */
+        public static void successfulSaveMessage()
+        {
+            System.out.println("Game Status Saved!\n");
+        }
+        /*
+         * 
+         */
+        public static void duplicateLoadMessage()
+        {
+            System.out.println("\u001B[33m" + "\nThis puzzle is already loaded!\n" + "\u001B[0m");
+            return;
+        }
+        /*
+         * 
+         */
+        public static void succesfulLoadMessage(int totalPoints, String playerRank)
+        {
+            System.out.println("\nTotal Points: " + "\u001B[33m" + totalPoints + "\u001B[0m");
+            System.out.println("Rank: " + "\u001B[33m" + playerRank + "\u001B[0m" + "\n");
+            System.out.println("Game Status Loaded!\n");
+
+        }
+        /*
+        * puzzleStatus
+        * param: String playerRank
+        * returns: N/A
+        * This function is used to display the rank and player points
+        * of the pllayer during the current session.
+        */
+        public static void puzzleStatus (String playerRank, int totalPoints){
+
+            String yellowColor = "\u001B[33m";
+            String resetColor = "\u001B[0m";
+        
+            System.out.println();
+        
+            System.out.println("YOUR CURRENT RANK IS: " + yellowColor + playerRank + resetColor);
+            System.out.println("YOUR CURRENT POINTS ARE: " + yellowColor + totalPoints + resetColor);
+        
+            System.out.println();
+        
+        }
+        /*
+        * help
+        * param: N/A
+        * returns: String
+        * This function tells the player the rules of the game and shows
+        * a table of all the command lines the player can use and what 
+        * each command line does. 
+        */
+  
+        public static void help()
+        {
+            String yellowColor = "\u001B[33m";
+            String [] commandLines = {
+            "/newpuzzle",
+            "/basepuzzle",
+            "/showpuzzle",
+            "/foundwords",
+            "/guess",
+            "/shuffle",
+            "/savepuzzle",
+            "/savecurr",
+            "/loadpuzzle",
+            "/showstatus",
+            "/help",
+            "/exit"
+            };
+            String [] explanations = {
+            "Generates a new puzzle with 7 unique letters and a required letter",
+            "Generates a new puzzle with a word of the player's choice with 7 unique letters and a required letter",
+            "Shows the current puzzle the player is working on",
+            "Generates a list of words that the player has found ",
+            "Allows the player to guess their words",
+            "Allows the player to shuffle around the words",
+            "Lets the player save a blank puzzle",
+            "Lets the players save a puzzle that may have been partially played",
+            "The player can load a saved game",
+            "The player can see their rank and progress on a current puzzle",
+            "Displays help information",
+            "Leave the application"
+            };
+            System.out.println();
+            System.out.println(yellowColor + "The WordyWasps game allows players to create words using 7 unique letters with a required letter. ");
+            System.out.println("- Words must contain at least 4 letters");
+            System.out.println("- Words must include the required letter");
+            System.out.println("- Letters can be used more than once");
+            System.out.println("");
+            System.out.println(yellowColor + "Command Line    |   Explanation");
+                System.out.println(yellowColor + "---------------------------------------");
+                for (int i = 0; i < commandLines.length; i++) {
+                    System.out.printf("%-15s |   %s%n", commandLines[i], explanations[i]);
+                 }
+        }
+        /*
+         * 
+         */
+        public static void exitMessage()
+        {
+            System.out.println("\u001B[33m" + "\nThanks for playing! :)" + "\u001B[0m");
+                
+        }
+        /*
+         * 
+         */
+        public static void invalidCommandMessage()
+        {
+            System.out.println("\u001B[33m" + "Invalid command! Type /help for a list of commands." + "\u001B[0m"); 
+
+        }
+        /*
+         * 
+         */
+        public static void basePuzzleChooseMessage()
+        {
+            String yellowColor = "\u001B[33m";
+            System.out.println("Please choose a baseword: ");
+        }
+        /*
+         * 
+         */
+        public static void sevenMessage()
+        {
+            String yellowColor = "\u001B[33m";
+            System.out.println(yellowColor + "Bzzuh Bzzoh, word has to have 7 letters! Buzz.");
+        }
+        /*
+         * 
+         */
+        public static void makeUpMessage()
+        {
+            String yellowColor = "\u001B[33m";
+            System.out.println(yellowColor + "Buzz. Are you making stuff up now!  Make sure you type a valid word! Buzz.");
+        }
+        /*
+         * 
+         */
+        public static void uniqueMessage()
+        {
+            String yellowColor = "\u001B[33m";
+            System.out.println(yellowColor + "Bzzt. Oops, all letters have to be unique! Bzz.");
+        }
+    
+}

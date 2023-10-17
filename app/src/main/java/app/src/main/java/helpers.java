@@ -1,12 +1,17 @@
 package app.src.main.java;
 //Author: Jose De La Cruz, Logan Wasmer, Ilynd Rapant
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+
 /*********************************************************/
 /*********************************************************/
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Scanner;
 import java.util.Set;
 
 /*********************************************************/
@@ -243,6 +248,35 @@ public static boolean sameChars(String baseWord, String dicString) {
     } else {
         System.out.println("Invalid current rank");
     }
+}
+/*********************************************************/
+/*********************************************************/
+
+/*
+ * acceptedWords
+ * param: String baseWord, char reqLetter
+ * returns: List<String>
+ * This function scans through each string in the dictionary
+ * and makes sure each char in that string is also included 
+ * in baseWord as well as making sure it inlcudes the reqLetter.
+ * It then adds any string that passes the test into the List<String>
+ * and then finally returns it. 
+ */
+public static List<String> acceptedWords(String baseWord, char reqLetter) throws FileNotFoundException{
+    Scanner scanner = new Scanner(new File("./src/main/resources/4-15_Dictionary.txt"));
+    List<String> acceptedWordList = new ArrayList<>();
+    String reqLetter2 = Character.toString(reqLetter);
+    
+    String sNL = scanner.nextLine();
+    while(scanner.hasNextLine()){
+        if(sameChars(baseWord, sNL) && sNL.contains(reqLetter2)){
+            acceptedWordList.add(sNL);
+        }
+
+        sNL = scanner.nextLine();  
+    }
+
+    return acceptedWordList;
 }
 
 }
