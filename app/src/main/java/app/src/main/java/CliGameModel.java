@@ -6,118 +6,70 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
-import java.io.IOException; // For handling IOException if needed
-
-
+import java.io.IOException; 
 import app.src.main.java.CliGameController;
 
-
-
 public class CliGameModel extends helpers {
-    /**
-     * This is possible points a current puzzle can have.
-     */
     private static int possiblePoints;
-    /**
-     * This is the current puzzle word.
-     */
+    
     private static String baseWord;
-    /**
-     * This is the shuffled puzzle word.
-     */
+    
     private static String shuffleWord;
-    /**
-     * This is the total points a player has.
-     */
+    
     private static int totalPoints;
-    /**
-     * This is the rank of a player.
-     */
+    
     private static String playerRank;
-    /**
-     * This is the found words list.
-     */
+    
     private static List<String> foundWords;
-    /**
-     * This is the required letter for the puzzle.
-     */
+    
     private static char reqLetter;
-    /**
-     * This is the saved data for a game.
-     */
+    
     private static playerData saveFile;
-    /**
-     * This is the accepted word list.
-     */
+    
     private static List<String> acceptedWordList;
+    
     /**
-     * Initialized variables
      * @throws FileNotFoundException
      */
     public CliGameModel() throws FileNotFoundException
     {
-        
     }
-
-    /**
-     * Gets the current base word.
-     */
+    
     public String getBaseWord()
     {
         return baseWord;
     }
 
-    /**
-     * Gets the current shuffled word.
-     */
     public String getShuffleWord()
     {
         return shuffleWord;
     }
 
-    /**
-     * Gets the current required letter.
-     */
     public char getReqLetter()
     {
         return reqLetter;
     }
 
-    /**
-     *Gets the current found words list. 
-     */
     public List<String> getFoundWords()
     {
         return foundWords;
     }
 
-    /**
-     *Gets the current accepted words list.
-     */
     public List<String> getAcceptedWordList()
     {
         return acceptedWordList;
     }
 
-    /**
-     * Gets the current total points.
-     */
     public int getTotaPoints()
     {
         return totalPoints;
     }
 
-    /**
-     * Gets the current player rank.
-     */
     public String getPlayerRank()
     {
         return playerRank;
     }
 
-    /**
-     * Gets the current saved puzzle.
-     */
     public playerData getSaveFile()
     {
         return saveFile;
@@ -288,7 +240,6 @@ public class CliGameModel extends helpers {
             display(shuffled, required);
             shuffleWord = shuffled;
             return shuffled;
-       
     }
 
     /**
@@ -346,7 +297,6 @@ public class CliGameModel extends helpers {
         shuffleWord = display(baseWord, reqLetter);
 
         CliGameView.succesfulLoadMessage(totalPoints, playerRank(baseWord, totalPoints, acceptedWordList));
-
     }
 
     /**
