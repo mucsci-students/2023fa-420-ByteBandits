@@ -14,6 +14,7 @@ import javax.swing.text.DocumentFilter;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.List;
@@ -1133,10 +1134,14 @@ panel.add(outputLabel5);
         secondFrame.setVisible(true);
     }
     
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
         if (args.length > 0 && args[0].equals("--cli")) {
+            CliGameModel model = new CliGameModel();
+            CliGameView view = new CliGameView(model);
+            CliGameController controller = new CliGameController(model, view);
+
             try {
-                master.cliMode();
+                controller.startGame();
             } catch (Exception ex) {
                 ex.printStackTrace();
             }

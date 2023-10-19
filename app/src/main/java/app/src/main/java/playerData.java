@@ -13,7 +13,6 @@ public class playerData {
     private int playerPoints;
     private String requiredLetter;
     private int maxPoints; 
-
     public void saveGameData(String baseWord, List<String> foundWords, int playerPoints, String requiredLetter, int maxPoints) {
         try (FileWriter fileWriter = new FileWriter("game_data.json")) {
             
