@@ -2,25 +2,24 @@ package app.src.main.java;
 
 import java.io.FileNotFoundException;
 import java.util.Scanner;
-import java.io.IOException; // For handling IOException if needed
-
+import java.io.IOException; 
 
 public class CliGameController {
     private CliGameModel model;
     private CliGameView view;
 
 
-    public CliGameController(CliGameModel model, CliGameView view )
+    public CliGameController(CliGameModel model, CliGameView view)
     {
         this.model = model;
         this.view = view;
     }
+    
     public void startGame() throws FileNotFoundException, InterruptedException
     {
         model.initGame();
         view.displayIntro();
         
-
         Scanner inputScanner = new Scanner(System.in);
         String input;
 
@@ -96,7 +95,6 @@ public class CliGameController {
                     }
                     view.puzzleStatus(model.playerRank(model.getBaseWord(), model.getTotaPoints(), model.getAcceptedWordList()), model.getTotaPoints());
                     break;
-                
                 case "/help":
                     view.help();
                     System.out.println();
@@ -111,7 +109,7 @@ public class CliGameController {
                     }
                     break;
             }
-        }while (!input.equalsIgnoreCase("/exit"));
+        } while (!input.equalsIgnoreCase("/exit"));
         inputScanner.close();
     }
 }
