@@ -4,15 +4,12 @@ import java.util.List;
 import java.util.Scanner;
 import app.src.main.java.CliGameModel;
 import java.io.FileNotFoundException;
-import java.io.IOException; // For handling IOException if needed
-
-
+import java.io.IOException;
 
 public class CliGameView{
 
     private static CliGameModel model;
     private static Scanner scanner;
-
 
     public CliGameView( CliGameModel model) {
         this.model = model;
@@ -59,7 +56,6 @@ public class CliGameView{
         System.out.println("                                                    V");
         System.out.println();
 
-
         System.out.println(yellowColor + "/newpuzzle" + resetColor + ":   Start a new puzzle.");
         System.out.println(yellowColor + "/basepuzzle" + resetColor + ":  Restart the current puzzle with the same set of letters.");
         System.out.println(yellowColor + "/showpuzzle" + resetColor + ":  Display the current set of 7 letters.");
@@ -101,9 +97,7 @@ public class CliGameView{
         System.out.println("\u001B[33m" + "Buzz..." + "\u001B[0m");
         Thread.sleep(500);
         System.out.println("\u001B[33m" + "Buzz...\n" + "\u001B[0m");
-        
         Thread.sleep(500);
-
     }
 
     /*
@@ -115,7 +109,6 @@ public class CliGameView{
     public static void printPuzzleError()
     {
         System.out.println("\u001B[33m" + "\nYou haven't created a new puzzle! Do /loadpuzzle, /newpuzzle, or /basepuzzle to get one up! BUZZ!\n" + "\u001B[0m"); 
-
     }
 
     /*
@@ -303,7 +296,6 @@ public class CliGameView{
             System.out.println("\nTotal Points: " + "\u001B[33m" + totalPoints + "\u001B[0m");
             System.out.println("Rank: " + "\u001B[33m" + playerRank + "\u001B[0m" + "\n");
             System.out.println("Game Status Loaded!\n");
-
         }
 
         /*
@@ -324,7 +316,6 @@ public class CliGameView{
             System.out.println("YOUR CURRENT POINTS ARE: " + yellowColor + totalPoints + resetColor);
         
             System.out.println();
-        
         }
 
         /*
@@ -399,7 +390,6 @@ public class CliGameView{
         public static void invalidCommandMessage()
         {
             System.out.println("\u001B[33m" + "Invalid command! Type /help for a list of commands." + "\u001B[0m"); 
-
         }
 
         /*
