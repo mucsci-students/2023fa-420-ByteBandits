@@ -3,5 +3,5 @@
         "lib/**/*.jar",
         "jsonlib/json-20230618.jar"
     ],
-    "java.configuration.updateBuildConfiguration": "interactive"
+    "java.configuration.updateBuildConfiguration": "automatic"
 }
