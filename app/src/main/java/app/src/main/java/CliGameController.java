@@ -3,10 +3,10 @@ package app.src.main.java;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.io.IOException;
+
 import org.jline.reader.*;
 import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
-
 
 public class CliGameController {
     private CliGameModel model;
@@ -25,8 +25,6 @@ public class CliGameController {
         model.initGame();
         view.displayIntro();
    
-        
-
         try {
             Terminal terminal = TerminalBuilder.builder().dumb(true).system(true).build();
             lineReader = LineReaderBuilder.builder()
@@ -35,10 +33,8 @@ public class CliGameController {
                     .build();
 
             while (true) {
-                
                 System.out.print("\u001B[33m" + ">" + "\u001B[0m");
                 String input = lineReader.readLine();
-                
                 
                 input = input.trim();
                 processInput(input);
