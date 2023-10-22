@@ -56,21 +56,23 @@ public class CliGameView{
         System.out.println("                                                    V");
         System.out.println();
 
-        System.out.println(yellowColor + "/newpuzzle" + resetColor + ":   Start a new puzzle.");
-        System.out.println(yellowColor + "/basepuzzle" + resetColor + ":  Restart the current puzzle with the same set of letters.");
-        System.out.println(yellowColor + "/showpuzzle" + resetColor + ":  Display the current set of 7 letters.");
-        System.out.println(yellowColor + "/foundwords" + resetColor + ":  Show the words you've already found.");
-        System.out.println(yellowColor + "/guess" + resetColor + ":       Enter a word you think is valid.");
-        System.out.println(yellowColor + "/shuffle" + resetColor + ":     Shuffle the 7 letters to get a new arrangement.");
-        System.out.println(yellowColor + "/savepuzzle" + resetColor + ":  Save the current puzzle for later without game status.");
-        System.out.println(yellowColor + "/savecurr" + resetColor + ":    Save your progress in the current game.");
-        System.out.println(yellowColor + "/loadpuzzle" + resetColor + ":  Load a previously saved puzzle.");
-        System.out.println(yellowColor + "/showstatus" + resetColor + ":  Display your current game status.");
-        System.out.println(yellowColor + "/help" + resetColor + ":        Display help information.");
-        System.out.println(yellowColor + "/exit" + resetColor + ":        Quit the game.");
+        System.out.println(yellowColor + "/newpuzzle" + resetColor + ":      Start a new puzzle.");
+        System.out.println(yellowColor + "/basepuzzle" + resetColor + ":     Restart the current puzzle with the same set of letters.");
+        System.out.println(yellowColor + "/viewpuzzle" + resetColor + ":     Display the current set of 7 letters.");
+        System.out.println(yellowColor + "/foundwords" + resetColor + ":     Show the words you've already found.");
+        System.out.println(yellowColor + "/guess" + resetColor + ":          Enter a word you think is valid.");
+        System.out.println(yellowColor + "/shuffle" + resetColor + ":        Shuffle the 7 letters to get a new arrangement.");
+        System.out.println(yellowColor + "/cleansave" + resetColor + ":      Save the current puzzle for later without game status.");
+        System.out.println(yellowColor + "/advancedsave" + resetColor + ":   Save your progress in the current game.");
+        System.out.println(yellowColor + "/loadpuzzle" + resetColor + ":     Load a previously saved puzzle.");
+        System.out.println(yellowColor + "/observestatus" + resetColor + ":  Display your current game status.");
+        System.out.println(yellowColor + "/help" + resetColor + ":           Display help information.");
+        System.out.println(yellowColor + "/exit" + resetColor + ":           Quit the game.");
         System.out.println();
-
-        System.out.println("Now that you know the commands, let's start playing! Have fun and find as many words as you can!");
+        System.out.println(yellowColor + "You can also use tab completion!" + resetColor + "\nSimply press the " + yellowColor + "'TAB'" + resetColor + " key after typing in the start of a command\nthen press "
+            + yellowColor + "'ENTER'" + resetColor + " and it will know what command you want to use!\nKeep in mind you can always use" + yellowColor + " /help " + resetColor + "at anytime to view all the commands.");
+        System.out.println();
+        System.out.println(yellowColor + "Now that you know the commands, let's start playing! Have fun and find as many words as you can!" + resetColor);
         System.out.println();
     }
 
@@ -332,14 +334,14 @@ public class CliGameView{
             String [] commandLines = {
             "/newpuzzle",
             "/basepuzzle",
-            "/showpuzzle",
+            "/viewpuzzle",
             "/foundwords",
             "/guess",
             "/shuffle",
-            "/savepuzzle",
-            "/savecurr",
+            "/cleansave",
+            "/advancedsave",
             "/loadpuzzle",
-            "/showstatus",
+            "/observestatus",
             "/help",
             "/exit"
             };
@@ -358,16 +360,17 @@ public class CliGameView{
             "Leave the application"
             };
             System.out.println();
-            System.out.println(yellowColor + "The WordyWasps game allows players to create words using 7 unique letters with a required letter. ");
+            System.out.println(yellowColor + "The WordyWasps game allows players to create words using 7 unique letters with a required letter. " +"\u001B[0m");
             System.out.println("- Words must contain at least 4 letters");
             System.out.println("- Words must include the required letter");
             System.out.println("- Letters can be used more than once");
             System.out.println("");
-            System.out.println(yellowColor + "Command Line    |   Explanation");
+            System.out.println(yellowColor + "Command Line    |   Explanation" + "\\u001B[0m");
                 System.out.println(yellowColor + "---------------------------------------");
                 for (int i = 0; i < commandLines.length; i++) {
                     System.out.printf("%-15s |   %s%n", commandLines[i], explanations[i]);
-                 }
+                }
+                System.out.println("\u001B[0m");
         }
 
         /*
