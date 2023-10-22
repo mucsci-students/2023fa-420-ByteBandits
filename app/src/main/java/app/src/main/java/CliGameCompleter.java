@@ -1,6 +1,5 @@
 package app.src.main.java;
 
-
 import org.jline.reader.Candidate;
 import org.jline.reader.Completer;
 import org.jline.reader.ParsedLine;
@@ -18,7 +17,6 @@ public class CliGameCompleter implements Completer {
 
         List<String> matchingCommands = new ArrayList<>();
 
-        // Iterate over your commands and find partial matches.
         for (String command : new String[]{
             "/newpuzzle", "/basepuzzle", "/guess", "/viewpuzzle", "/foundwords",
             "/shuffle", "/cleansave", "/advancedsave", "/loadpuzzle", "/observestatus", "/help", "/exit"
@@ -28,9 +26,6 @@ public class CliGameCompleter implements Completer {
             }
         }
 
-        
-
-        // Add matching candidates.
         for (String matchingCommand : matchingCommands) {
             candidates.add(new Candidate(AttributedString.stripAnsi(matchingCommand), matchingCommand, null, null, null, null, true));
         }
