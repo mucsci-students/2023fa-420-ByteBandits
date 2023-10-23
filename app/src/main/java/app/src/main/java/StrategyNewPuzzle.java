@@ -31,7 +31,6 @@ public class StrategyNewPuzzle{
                 
         mainframe.shuffleWord = master.shuffle(mainframe.baseWord, mainframe.reqLetter);
                 
-        // Letter change code goes here after letters are created
         mainframe.baseWord = mainframe.shuffleWord;
 
         String noReqLetter = master.removeChar(mainframe.baseWord, mainframe.reqLetter);
@@ -54,7 +53,6 @@ public class StrategyNewPuzzle{
         bW6 = Character.toString(bWLetters[4]);
         bW7 = Character.toString(bWLetters[5]);
 
-        // Letter change code goes here after letters are created
         letterbutton1.setText(bW1.toUpperCase());
         letterbutton2.setText(bW2.toUpperCase());
         letterbutton3.setText(bW3.toUpperCase());
@@ -63,7 +61,6 @@ public class StrategyNewPuzzle{
         letterbutton6.setText(bW6.toUpperCase());
         letterbutton7.setText(bW7.toUpperCase());
 
-        
         letterbutton1.setEnabled(true);
         letterbutton2.setEnabled(true);
         letterbutton3.setEnabled(true);

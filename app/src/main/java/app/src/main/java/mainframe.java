@@ -368,8 +368,7 @@ public class mainframe {
 
         letterbutton4.setForeground(darkYellow);
 
-        StrategyNewPuzzle strategyNewPuzzle = new  StrategyNewPuzzle(letterbutton1, letterbutton2, letterbutton3, letterbutton4, letterbutton5, letterbutton6, letterbutton7);
-
+        StrategyNewPuzzle strategyNewPuzzle = new StrategyNewPuzzle(letterbutton1, letterbutton2, letterbutton3, letterbutton4, letterbutton5, letterbutton6, letterbutton7);
 
     /*********************************************************************/
     /**************************GUESSING TEXTBOX***************************/
