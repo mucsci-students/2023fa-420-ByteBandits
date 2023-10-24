@@ -17,9 +17,9 @@ import javax.swing.text.StyledDocument;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.util.List;
 import java.io.*;
-import java.util.*;
+import java.util.List;
+import java.util.ArrayList;
 /***************************************************************/
 /***************************************************************/
 
@@ -33,7 +33,7 @@ public class mainframe {
     public class CustomButton extends JButton {
         private Color originalBackgroundColor;
         private boolean isLetterButton4;
-        //view  new custom button give it text and see if button is required letter
+      
         public CustomButton(String text, boolean isLetterButton4) {
             super(text);
             this.isLetterButton4 = isLetterButton4;
@@ -741,29 +741,46 @@ panel.add(outputLabel5);
 
     /**********************************************************************/
     /*********************SAVE PUZZLE LOGIC********************************/
-        savePuzzleButton.addActionListener(new ActionListener() {
+        savePuzzleButton.addActionListener(new ActionListener() 
+        {
             @Override
-            public void actionPerformed(ActionEvent e)  {
-                try{
-                List<String> possibleWords = master.acceptedWords(baseWord, reqLetter);
-                int maxPoints = helpers.possiblePoints(baseWord, possibleWords);
-                // Call the saveGameData method with the appropriate parameters
-                playerGameData.saveGameData(baseWord, master.foundWords, master.totalPoints, "" + reqLetter, maxPoints);
+            public void actionPerformed(ActionEvent e)
+            {
+                String saveFileName = JOptionPane.showInputDialog("Enter a name for your saved game:");
+                CliGameModel.setSaveFileName(saveFileName);
+                if (saveFileName != null && !saveFileName.trim().isEmpty())
+                {
+                    try
+                    {
+                        List<String> possibleWords = master.acceptedWords(baseWord, reqLetter);
+                        int maxPoints = helpers.possiblePoints(baseWord, possibleWords);
+                        // Call the saveGameData method with the appropriate parameters
+                        playerGameData.saveGameData(saveFileName, baseWord, master.foundWords, master.totalPoints, "" + reqLetter, maxPoints);
+                    }
+                    catch (FileNotFoundException e1)
+                    {
+                        System.err.println("File not found " + e1.getMessage());
+                    }
                 }
-                catch (FileNotFoundException e1){
-                    System.err.println("File not found " + e1.getMessage());
+
+                else 
+                {
+                    JOptionPane.showMessageDialog(null, "You did not provide a valid save name. Game was not saved.");
                 }
             }
-        });
+        }
+        );
 
     /**********************************************************************/
     /**********************************************************************/
 
     /**********************************************************************/
     /*********************LOAD PUZZLE LOGIC********************************/
-        loadPuzzleButton.addActionListener(new ActionListener() {
+        loadPuzzleButton.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent e) 
+            {
 
                 outputLabel.setText("");
                 outputLabel2.setText("");
@@ -771,15 +788,41 @@ panel.add(outputLabel5);
                 outputLabel4.setText("");
                 outputLabel5.setText("");
 
-                playerGameData.loadGameData(); // Load game data from the JSON file
+                //fetch list of all saved game names
+                List<String> saveNames = playerGameData.getAllSaveNames();
+
+                //remove some irrelevant keys that are not save game names
+                saveNames.remove("maxPoints");
+                saveNames.remove("playerPoints");
+                saveNames.remove("requiredLetter");
+                saveNames.remove("baseWord");
+                saveNames.remove("foundWords");
+
+                // Show the names in a JOptionPane
+                String chosenSave = (String) JOptionPane.showInputDialog(
+                null, 
+                "Select a saved game:", 
+                "Load Game",
+                JOptionPane.QUESTION_MESSAGE, 
+                null, 
+                saveNames.toArray(), 
+                saveNames.isEmpty() ? null : saveNames.get(0));
+
+                if (chosenSave == null) 
+                {
+                    // User canceled or closed the dialog
+                    return;
+                }
+
+                playerGameData.loadGameData(chosenSave); // Load selected game data 
                 // Load game variables from playerGameData
                 baseWord = playerGameData.getBaseWord();
                 shuffleWord = playerGameData.getBaseWord();
                 List<String> foundWords = playerGameData.getFoundWords();
-                master.totalPoints = playerGameData.getPlayerPoints();
+                CliGameModel.setTotalPoints(playerGameData.getPlayerPoints());
                 reqLetter = playerGameData.getRequiredLetter().charAt(0);
                 int possiblePoints = playerGameData.getMaxPoints();
-
+                CliGameModel.setSaveFileName(chosenSave);
                 baseWord = baseWord.toLowerCase();
                 
                 try {
