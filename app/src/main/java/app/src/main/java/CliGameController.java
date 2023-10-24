@@ -61,7 +61,7 @@ public class CliGameController {
                 if (error) {
                     break;
                 }
-                model.guess(model.getBaseWord(), model.getAcceptedWordList(), model.playerRank(model.getBaseWord(), model.getTotaPoints(), model.getAcceptedWordList()));
+                model.guess(model.getBaseWord(), model.getAcceptedWordList(), model.playerRank(model.getBaseWord(), model.getTotalPoints(), model.getAcceptedWordList()));
                 break;
             case "/viewpuzzle":
                 error = model.errorFirst();
@@ -107,7 +107,7 @@ public class CliGameController {
                 if (error) {
                     break;
                 }
-                view.puzzleStatus(model.playerRank(model.getBaseWord(), model.getTotaPoints(), model.getAcceptedWordList()), model.getTotaPoints());
+                view.puzzleStatus(model.playerRank(model.getBaseWord(), model.getTotalPoints(), model.getAcceptedWordList()), model.getTotalPoints());
                 break;
             case "/help":
                 view.help();

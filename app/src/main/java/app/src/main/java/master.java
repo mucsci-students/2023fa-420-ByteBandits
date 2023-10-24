@@ -175,7 +175,7 @@ public static void cliMode() throws FileNotFoundException, InterruptedException{
                     break;
                 }
 
-                saveFile.saveGameData(shuffleWord, foundWords, totalPoints, String.valueOf(reqLetter), possiblePoints);
+                saveFile.saveGameData(CliGameModel.getSaveFileName(), shuffleWord, foundWords, totalPoints, String.valueOf(reqLetter), possiblePoints);
 
                 System.out.println("Game Status Saved!\n");
 
@@ -189,7 +189,7 @@ public static void cliMode() throws FileNotFoundException, InterruptedException{
                     break;
                 }
             
-                saveFile.saveGameData(shuffleWord, foundWords, totalPoints, String.valueOf(reqLetter), possiblePoints(baseWord, acceptedWordList));
+                saveFile.saveGameData(CliGameModel.getSaveFileName(),shuffleWord, foundWords, totalPoints, String.valueOf(reqLetter), possiblePoints(baseWord, acceptedWordList));
                 System.out.println("\nGame Status Saved!\n");
 
                 break;
@@ -200,7 +200,7 @@ public static void cliMode() throws FileNotFoundException, InterruptedException{
                     break;
                 }    
 
-                saveFile.loadGameData();
+                saveFile.loadGameData(CliGameModel.getSaveFileName());
                 
                 baseWord = saveFile.getBaseWord();
                 foundWords = saveFile.getFoundWords();
