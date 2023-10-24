@@ -1,21 +1,29 @@
 package app.src.main.java;
-import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.json.JSONObject;
 import org.json.JSONArray;
 import org.json.JSONException;
+
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class playerData {
     private String baseWord;
     private List<String> foundWords = new ArrayList<>();
     private int playerPoints;
     private String requiredLetter;
-    private int maxPoints; 
-    public void saveGameData(String baseWord, List<String> foundWords, int playerPoints, String requiredLetter, int maxPoints) {
-        try (FileWriter fileWriter = new FileWriter("game_data.json")) {
-            
+    private int maxPoints;
+
+    private static final String GAME_DATA_FILENAME = "game_data.json";
+
+    public void saveGameData(String saveName, String baseWord, List<String> foundWords, int playerPoints, String requiredLetter, int maxPoints) {
+        try {
+            JSONObject allData = new JSONObject();
+            try (BufferedReader reader = new BufferedReader(new FileReader(GAME_DATA_FILENAME))) {
+                allData = new JSONObject(reader.readLine());
+            } catch (IOException | JSONException ignored) { }
+
             JSONObject gameData = new JSONObject();
             gameData.put("baseWord", baseWord);
             gameData.put("foundWords", foundWords);
@@ -23,37 +31,56 @@ public class playerData {
             gameData.put("requiredLetter", requiredLetter);
             gameData.put("maxPoints", maxPoints);
 
+            allData.put(saveName, gameData);
             
-            fileWriter.write(gameData.toString());
-        } catch (IOException e) {
+            try (FileWriter fileWriter = new FileWriter(GAME_DATA_FILENAME)) {
+                fileWriter.write(allData.toString());
+            }
+        } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
     }
 
-    public void loadGameData() {
-        try (BufferedReader reader = new BufferedReader(new FileReader("game_data.json"))) {
-            StringBuilder jsonData = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                jsonData.append(line);
+    public void loadGameData(String saveName) {
+        try {
+            JSONObject allData = new JSONObject();
+            try (BufferedReader reader = new BufferedReader(new FileReader(GAME_DATA_FILENAME))) {
+                allData = new JSONObject(reader.readLine());
             }
-            JSONObject gameData = new JSONObject(jsonData.toString());
 
-            // Populate the variables from the JSON object
+            if (!allData.has(saveName)) {
+                throw new JSONException("Save not found: " + saveName);
+            }
+
+            JSONObject gameData = allData.getJSONObject(saveName);
+            
             baseWord = gameData.getString("baseWord");
-
             foundWords = new ArrayList<>();
             JSONArray foundWordsArray = gameData.getJSONArray("foundWords");
             for (int i = 0; i < foundWordsArray.length(); ++i) {
                 foundWords.add(foundWordsArray.getString(i));
             }
-
             playerPoints = gameData.getInt("playerPoints");
             requiredLetter = gameData.getString("requiredLetter");
-            maxPoints = gameData.getInt("maxPoints"); // Retrieve max points
+            maxPoints = gameData.getInt("maxPoints");
+
         } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public List<String> getAllSaveNames() {
+        List<String> saveNames = new ArrayList<>();
+        try {
+            JSONObject allData = new JSONObject();
+            try (BufferedReader reader = new BufferedReader(new FileReader(GAME_DATA_FILENAME))) {
+                allData = new JSONObject(reader.readLine());
+            }
+            saveNames.addAll(allData.keySet());
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+        }
+        return saveNames;
     }
 
     public String getBaseWord() {
