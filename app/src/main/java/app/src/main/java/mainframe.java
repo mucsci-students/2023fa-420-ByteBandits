@@ -30,7 +30,7 @@ public class mainframe {
     
     
     Color darkYellow = new Color(204, 153, 0);
-    class CustomButton extends JButton {
+    public class CustomButton extends JButton {
         private Color originalBackgroundColor;
         private boolean isLetterButton4;
     
@@ -220,25 +220,6 @@ public class mainframe {
             showSecondScreen();
         }
     });
-    
-        // "GUI -> CLI" button
-    //     CustomButton guiToCliButton = new CustomButton("GUI -> CLI", false);
-    //     guiToCliButton.setBackground(new Color(204, 153, 0));
-    //     guiToCliButton.setOpaque(true); // Make the button opaque
-    //     guiToCliButton.setFont(new Font("SansSerif", Font.BOLD, 24));
-    //     guiToCliButton.setPreferredSize(new Dimension(200, 60)); // Increase the width
-    //     guiToCliButton.addActionListener(new ActionListener() {
-    //     @Override
-    //     public void actionPerformed(ActionEvent e) {
-    //         mainFrame.dispose();
-    //         try {
-    //             master.main(new String[0]);
-    //         } catch (Exception ex) {
-    //             ex.printStackTrace();
-    //         }
-    //     }
-    // });
-    
         // Add both buttons to the button panel
         buttonPanel.add(playButton);
         //buttonPanel.add(guiToCliButton);
@@ -285,92 +266,128 @@ public class mainframe {
         String bW6 = Character.toString(bWLetters[5]);
         String bW7 = Character.toString(bWLetters[6]);
 
-        CustomButton foundWordsButton = new CustomButton("FOUND WORDS", false);
-        CustomButton shufflePuzzle = new CustomButton("SHUFFLE PUZZLE", false);
-        CustomButton newPuzzleButton = new CustomButton("NEW PUZZLE", false);
-        CustomButton newUserPuzzleButton = new CustomButton("CUSTOM PUZZLE", false);
-        CustomButton savePuzzleButton = new CustomButton("SAVE PUZZLE", false);
-        CustomButton loadPuzzleButton = new CustomButton("LOAD PUZZLE", false);
-        CustomButton howToPlayButton = new CustomButton("HOW TO PLAY", false);
-        CustomButton exitButton = new CustomButton("EXIT", false);
-        CustomButton letterbutton1 = new CustomButton(bW1, false);
-        CustomButton letterbutton2 = new CustomButton(bW2, false);
-        CustomButton letterbutton3 = new CustomButton(bW3, false);
-        CustomButton letterbutton4 = new CustomButton(bW4, true);
-        CustomButton letterbutton5 = new CustomButton(bW5, false);
-        CustomButton letterbutton6 = new CustomButton(bW6, false);
-        CustomButton letterbutton7 = new CustomButton(bW7, false);
+        CustomButton foundWordsButton = new CustomButtonBuilder("FOUND WORDS")
+            .setEnabled(false)
+            .setBackground(darkYellow)
+            .setForeground(Color.BLACK)
+            .setSize(new Dimension(180, 50))
+            .setFont(new Font("SansSerif", Font.BOLD, 15))
+            .build();
 
-        letterbutton1.setEnabled(false);
-        letterbutton2.setEnabled(false);
-        letterbutton3.setEnabled(false);
-        letterbutton4.setEnabled(false);
-        letterbutton5.setEnabled(false);
-        letterbutton6.setEnabled(false);
-        letterbutton7.setEnabled(false);
+         
+       CustomButton savePuzzleButton = new CustomButtonBuilder("FOUND WORDS")
+            .setEnabled(false)
+            .setBackground(darkYellow)
+            .setForeground(Color.BLACK)
+            .setSize(new Dimension(180, 50))
+            .setFont(new Font("SansSerif", Font.BOLD, 15))
+            .build(); 
 
+    CustomButton shufflePuzzle = new CustomButtonBuilder("SHUFFLE PUZZLE")
+            .setEnabled(false)
+            .setBackground(darkYellow)
+            .setForeground(Color.BLACK)
+            .setSize(new Dimension(180, 50))
+            .setFont(new Font("SansSerif", Font.BOLD, 15))
+            .build();
+     CustomButton loadPuzzleButton = new CustomButtonBuilder("FOUND WORDS")
+            .setEnabled(false)
+            .setBackground(darkYellow)
+            .setForeground(Color.BLACK)
+            .setSize(new Dimension(180, 50))
+            .setFont(new Font("SansSerif", Font.BOLD, 15))
+            .build();
 
-        Color darkYellow = new Color(204, 153, 0);
+    CustomButton newPuzzleButton = new CustomButtonBuilder("NEW PUZZLE")
+            .setEnabled(false)
+            .setBackground(darkYellow)
+            .setForeground(Color.BLACK)
+            .setSize(new Dimension(180, 50))
+            .setFont(new Font("SansSerif", Font.BOLD, 15))
+            .build();
 
-        Color black = new Color(0,0,0);
-        shufflePuzzle.setBackground(darkYellow);
-        newPuzzleButton.setBackground(darkYellow); 
-        newUserPuzzleButton.setBackground(darkYellow);
-        savePuzzleButton.setBackground(darkYellow);
-        loadPuzzleButton.setBackground(darkYellow); 
-        howToPlayButton.setBackground(darkYellow); 
-        foundWordsButton.setBackground(darkYellow);
-        exitButton.setBackground(darkYellow);
+    // Continue to create other buttons in a similar manner
 
-        letterbutton1.setBackground(darkYellow);
-        letterbutton2.setBackground(darkYellow);
-        letterbutton3.setBackground(darkYellow);
-        letterbutton4.setBackground(black);
-        letterbutton5.setBackground(darkYellow);
-        letterbutton6.setBackground(darkYellow);
-        letterbutton7.setBackground(darkYellow);
+    CustomButton exitButton = new CustomButtonBuilder("EXIT")
+            .setEnabled(false)
+            .setBackground(darkYellow)
+            .setForeground(Color.BLACK)
+            .setSize(new Dimension(180, 50))
+            .setFont(new Font("SansSerif", Font.BOLD, 15))
+            .setActionListener(e -> System.exit(0))
+            .build();
 
-        letterbutton1.setForeground(Color.BLACK);
-        letterbutton2.setForeground(Color.BLACK);
-        letterbutton3.setForeground(Color.BLACK);
-        letterbutton4.setForeground(darkYellow);
-        letterbutton5.setForeground(Color.BLACK);
-        letterbutton6.setForeground(Color.BLACK);
-        letterbutton7.setForeground(Color.BLACK);
+    CustomButton newUserPuzzleButton = new CustomButtonBuilder("NEW PUZZLE")
+            .setEnabled(false)
+            .setBackground(darkYellow)
+            .setForeground(Color.BLACK)
+            .setSize(new Dimension(180, 50))
+            .setFont(new Font("SansSerif", Font.BOLD, 15))
+            .build();
 
-        Dimension buttonSize = new Dimension(180, 50); 
+     CustomButton howToPlayButton = new CustomButtonBuilder("FOUND WORDS")
+            .setEnabled(false)
+            .setBackground(darkYellow)
+            .setForeground(Color.BLACK)
+            .setSize(new Dimension(180, 50))
+            .setFont(new Font("SansSerif", Font.BOLD, 15))
+            .build();
 
-        shufflePuzzle.setPreferredSize(buttonSize);
-        newPuzzleButton.setPreferredSize(buttonSize);
-        newUserPuzzleButton.setPreferredSize(buttonSize);
-        savePuzzleButton.setPreferredSize(buttonSize);
-        loadPuzzleButton.setPreferredSize(buttonSize);
-        howToPlayButton.setPreferredSize(buttonSize);
-        foundWordsButton.setPreferredSize(buttonSize);
-        exitButton.setPreferredSize(buttonSize);
+    CustomButton letterbutton1 = new CustomButtonBuilder(bW1)
+            .setEnabled(false)
+            .setBackground(darkYellow)
+            .setForeground(Color.BLACK)
+            .setSize(new Dimension(180, 50))
+            .setFont(new Font("SansSerif", Font.BOLD, 15))
+            .build();
 
-        Font buttonFont = new Font("SansSerif", Font.BOLD, 15);
+    CustomButton letterbutton2 = new CustomButtonBuilder(bW2)
+            .setEnabled(false)
+            .setBackground(darkYellow)
+            .setForeground(Color.BLACK)
+            .setSize(new Dimension(180, 50))
+            .setFont(new Font("SansSerif", Font.BOLD, 15))
+            .build();
 
-        shufflePuzzle.setFont(buttonFont);
-        newPuzzleButton.setFont(buttonFont);
-        newUserPuzzleButton.setFont(buttonFont);
-        savePuzzleButton.setFont(buttonFont);
-        loadPuzzleButton.setFont(buttonFont);
-        howToPlayButton.setFont(buttonFont);
-        foundWordsButton.setFont(buttonFont);
-        exitButton.setFont(buttonFont);
+    CustomButton letterbutton3 = new CustomButtonBuilder(bW3)
+            .setEnabled(false)
+            .setBackground(darkYellow)
+            .setForeground(Color.BLACK)
+            .setSize(new Dimension(180, 50))
+            .setFont(new Font("SansSerif", Font.BOLD, 15))
+            .build();
 
-        letterbutton1.setFont(buttonFont);
-        letterbutton2.setFont(buttonFont);
-        letterbutton3.setFont(buttonFont);
-        letterbutton4.setFont(buttonFont);
-        letterbutton5.setFont(buttonFont);
-        letterbutton6.setFont(buttonFont);
-        letterbutton7.setFont(buttonFont);
+    CustomButton letterbutton4 = new CustomButtonBuilder(bW4)
+            .setEnabled(true)
+            .setBackground(Color.BLACK)
+            .setForeground(darkYellow)
+            .setSize(new Dimension(180, 50))
+            .setFont(new Font("SansSerif", Font.BOLD, 15))
+            .build();
 
-        letterbutton4.setForeground(darkYellow);
+    CustomButton letterbutton5 = new CustomButtonBuilder(bW5)
+            .setEnabled(false)
+            .setBackground(darkYellow)
+            .setForeground(Color.BLACK)
+            .setSize(new Dimension(180, 50))
+            .setFont(new Font("SansSerif", Font.BOLD, 15))
+            .build();
+    
+    CustomButton letterbutton6 = new CustomButtonBuilder(bW6)
+            .setEnabled(false)
+            .setBackground(darkYellow)
+            .setForeground(Color.BLACK)
+            .setSize(new Dimension(180, 50))
+            .setFont(new Font("SansSerif", Font.BOLD, 15))
+            .build(); 
 
-
+        CustomButton letterbutton7 = new CustomButtonBuilder(bW7)
+            .setEnabled(false)
+            .setBackground(darkYellow)
+            .setForeground(Color.BLACK)
+            .setSize(new Dimension(180, 50))
+            .setFont(new Font("SansSerif", Font.BOLD, 15))
+            .build();
     /*********************************************************************/
     /**************************GUESSING TEXTBOX***************************/
 
