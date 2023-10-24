@@ -27,6 +27,8 @@ public class CliGameModel extends helpers {
     private static playerData saveFile;
     
     private static List<String> acceptedWordList;
+
+    private static String saveFileName;
     
     /**
      * @throws FileNotFoundException
@@ -35,6 +37,7 @@ public class CliGameModel extends helpers {
     {
     }
     
+    //GETTERS
     public String getBaseWord()
     {
         return baseWord;
@@ -60,7 +63,7 @@ public class CliGameModel extends helpers {
         return acceptedWordList;
     }
 
-    public int getTotaPoints()
+    public int getTotalPoints()
     {
         return totalPoints;
     }
@@ -74,6 +77,48 @@ public class CliGameModel extends helpers {
     {
         return saveFile;
     }
+
+    public static String getSaveFileName() {
+        return saveFileName;
+    }
+
+    //SETTERS
+    public static void setPossiblePoints(int possiblePoints) {
+        CliGameModel.possiblePoints = possiblePoints;
+    }
+
+    public static void setBaseWord(String baseWord) {
+        CliGameModel.baseWord = baseWord;
+    }
+
+    public static void setShuffleWord(String shuffleWord) {
+        CliGameModel.shuffleWord = shuffleWord;
+    }
+
+    public static void setTotalPoints(int totalPoints) {
+        CliGameModel.totalPoints = totalPoints;
+    }
+
+    public static void setPlayerRank(String playerRank) {
+        CliGameModel.playerRank = playerRank;
+    }
+
+    public static void setFoundWords(List<String> foundWords) {
+        CliGameModel.foundWords = foundWords;
+    }
+
+    public static void setReqLetter(char reqLetter) {
+        CliGameModel.reqLetter = reqLetter;
+    }
+
+    public static void setSaveFile(playerData saveFile) {
+        CliGameModel.saveFile = saveFile;
+    }
+
+    public static void setAcceptedWordList(List<String> acceptedWordList) {
+        CliGameModel.acceptedWordList = acceptedWordList;
+    }
+
 
     /*
     * initGame
@@ -243,6 +288,16 @@ public class CliGameModel extends helpers {
     }
 
     /**
+    * setSaveFileName
+    * param: String name
+    * returns: N/A
+    * This function sets the filename for saving a puzzle.
+    */
+    public static void setSaveFileName(String name) {
+        saveFileName = name;
+    }
+
+    /**
     * savePuzzle
     * param: N/A
     * returns: N/A
@@ -256,10 +311,10 @@ public class CliGameModel extends helpers {
             CliGameView.createPuzzleMessage();
             return;
         }
-        saveFile.saveGameData(shuffleWord, foundWords, totalPoints, String.valueOf(reqLetter), possiblePoints);
+        saveFile.saveGameData(getSaveFileName(), shuffleWord, foundWords, totalPoints, String.valueOf(reqLetter), possiblePoints);
         CliGameView.successfulSaveMessage();
     }
-    
+
     /**
     * saveCurr
     * param: N/A
@@ -268,7 +323,7 @@ public class CliGameModel extends helpers {
     */
     public static void saveCurr()
     {
-        saveFile.saveGameData(shuffleWord, foundWords, totalPoints, String.valueOf(reqLetter), possiblePoints(baseWord, acceptedWordList));
+        saveFile.saveGameData(getSaveFileName(), shuffleWord, foundWords, totalPoints, String.valueOf(reqLetter), possiblePoints(baseWord, acceptedWordList));
         CliGameView.successfulSaveMessage();
     }
 
@@ -283,7 +338,7 @@ public class CliGameModel extends helpers {
         if(baseWord == saveFile.getBaseWord() && totalPoints == saveFile.getPlayerPoints()){
             CliGameView.duplicateLoadMessage();
         }
-        saveFile.loadGameData();
+        saveFile.loadGameData(saveFileName);
                 
         baseWord = saveFile.getBaseWord();
         foundWords = saveFile.getFoundWords();
