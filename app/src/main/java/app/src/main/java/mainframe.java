@@ -275,7 +275,7 @@ public class mainframe {
             .build();
 
          
-       CustomButton savePuzzleButton = new CustomButtonBuilder("FOUND WORDS")
+       CustomButton savePuzzleButton = new CustomButtonBuilder("SAVE PUZZLE")
             .setEnabled(false)
             .setBackground(darkYellow)
             .setForeground(Color.BLACK)
@@ -290,7 +290,7 @@ public class mainframe {
             .setSize(new Dimension(180, 50))
             .setFont(new Font("SansSerif", Font.BOLD, 15))
             .build();
-     CustomButton loadPuzzleButton = new CustomButtonBuilder("FOUND WORDS")
+     CustomButton loadPuzzleButton = new CustomButtonBuilder("LOAD PUZZLE")
             .setEnabled(false)
             .setBackground(darkYellow)
             .setForeground(Color.BLACK)
@@ -317,7 +317,7 @@ public class mainframe {
             .setActionListener(e -> System.exit(0))
             .build();
 
-    CustomButton newUserPuzzleButton = new CustomButtonBuilder("NEW PUZZLE")
+    CustomButton newUserPuzzleButton = new CustomButtonBuilder("CUSTOM PUZZLE")
             .setEnabled(false)
             .setBackground(darkYellow)
             .setForeground(Color.BLACK)
@@ -325,7 +325,7 @@ public class mainframe {
             .setFont(new Font("SansSerif", Font.BOLD, 15))
             .build();
 
-     CustomButton howToPlayButton = new CustomButtonBuilder("FOUND WORDS")
+     CustomButton howToPlayButton = new CustomButtonBuilder("HOW TO PLAY")
             .setEnabled(false)
             .setBackground(darkYellow)
             .setForeground(Color.BLACK)
