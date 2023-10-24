@@ -9,10 +9,13 @@ import java.util.ArrayList;
 /*********************************************************/
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.Map;
+import java.util.TreeMap;
 
 /*********************************************************/
 /*********************************************************/
@@ -68,6 +71,324 @@ public static boolean isUnique(String s)
 /*********************************************************/
 
 /*
+ * getLongestWordLength
+ * param: String baseWord, char reqLetter
+ * returns: int
+ * This function receives the baseword and reqLetter and
+ * check is the word is an accepted word then keeps a count of the
+ * longest accepted word. This int is then returned.
+ */
+
+ public static String dynamicHints(String baseWord, char reqLetter) throws FileNotFoundException {
+    List<String> acceptedWordList = acceptedWords(baseWord, reqLetter);
+    int longestWordLength = getLongestWordLength(acceptedWordList);
+    String[][] hintsMatrix = getDynamicMatrix(acceptedWordList, longestWordLength, baseWord, reqLetter);
+
+    baseWord = baseWord.toUpperCase();
+    char[] baseWordChars = baseWord.toCharArray();
+    baseWord = baseWord.toLowerCase();
+
+    int totalWords = getTotalWords(baseWord, acceptedWordList);
+    int possiblePoints = possiblePoints(baseWord, acceptedWordList);
+    int[] totalPangrams = getTotalPangrams(baseWord, acceptedWordList);
+
+    boolean isBingoPuzzle = isBingoPuzzle(hintsMatrix);
+    String bingo = "";
+    if(isBingoPuzzle){
+       bingo = ", BINGO";
+    }
+
+    StringBuilder matrixStr = new StringBuilder();
+    StringBuilder wordWithBold = new StringBuilder();
+
+    char upperReq = Character.toUpperCase(reqLetter);
+    for (char letter : baseWordChars) {
+        if (letter == upperReq) {
+            wordWithBold.append("<b>").append(letter).append("&nbsp;</b> ");
+        } else {
+            wordWithBold.append(letter).append("&nbsp;&nbsp;");
+        }
+    }
+
+    matrixStr.append("<b style=\" font-family: 'Trebuchet MS', sans-serif; font-size: 20px;\">Wordy Wasps Grid</b><br><br><br>");
+    matrixStr.append("<span style=\" font-family: Garamond, serif; font-size: 16px;\">Center letter is in <b>bold</b>.</span><br><br>");
+    matrixStr.append("<span style=\" font-family: Garamond, serif; font-size: 18px;\">" + wordWithBold + "</span><br><br>");
+
+    matrixStr.append("<span style=\" font-family: Garamond, serif; font-size: 16px;\">WORDS: " + totalWords + ", POINTS: " + possiblePoints + ", PANGRAMS: " + totalPangrams[0] + " (" + totalPangrams[1] + " Perfect)" + bingo + "</span><br><br><br><br>");
+
+    matrixStr.append("<table style=\"border-collapse: collapse;\">"); // Start the table with collapsed borders
+
+
+    matrixStr.append("<tr>");
+    matrixStr.append("<td style=\"font-family: Garamond, serif; font-size: 19px; border: none; padding: 10px;\"></td>"); // Empty first element
+    for (int j = 4; j <= longestWordLength; j++) {
+        matrixStr.append("<td style=\"font-family: Garamond, serif; font-size: 19px; border: none; padding: 10px;\">");
+        matrixStr.append("<b>").append(j).append("</b>");
+        matrixStr.append("</td>");
+    }
+
+    matrixStr.append("&nbsp;&nbsp;&nbsp;<b style=\" font-size: 14px;\">&#8721</b>");
+
+    int index = 0;
+    for (int i = 0; i < hintsMatrix.length; i++) {
+        matrixStr.append("<tr>");
+        
+        if (index < 7) {
+            matrixStr.append("<b style=\" font-family: Garamond, serif; font-size: 16px;\">");
+            matrixStr.append(baseWordChars[index]).append(": ");
+            matrixStr.append("</b>&nbsp;&nbsp;");
+            index++;
+        } else {
+            matrixStr.append("<b style=\" font-size: 12px;\">&#8721 : &nbsp;&nbsp;</b>");
+        }
+        
+        for (int j = 0; j < hintsMatrix[i].length; j++) {
+            String cellData = hintsMatrix[i][j];
+            if (i == hintsMatrix.length - 1 || j == hintsMatrix[i].length - 1) { 
+                matrixStr.append("<td style=\"font-family: Garamond, serif; font-size: 19px; border: none; padding: 10px;\"><b>").append(cellData).append("</b></td>"); // Make the last row and column bold
+            } else if (cellData.startsWith("<b>")) {
+                matrixStr.append("<td style=\"font-family: Garamond, serif; font-size: 19px; border: none; padding: 10px;\">").append(cellData).append("</td>"); // Keep the existing bold cells
+            } else {
+                matrixStr.append("<td style=\"font-family: Garamond, serif; font-size: 19px; border: none; padding: 10px;\">").append(cellData).append("</td>"); // For other cells
+            }
+        }
+        matrixStr.append("</tr>"); 
+    }
+
+    matrixStr.append("</table><br>" + getDynamicTwoLetterList(acceptedWordList, baseWord));
+
+
+    return matrixStr.toString();
+}
+
+
+
+/*********************************************************/
+/*********************************************************/
+
+/*
+ * getDynamicMatrix
+ * param: String baseWord, char reqLetter
+ * returns: String[][]
+ * This function creates the matrix of numbers representing
+ * the amount of words in the accepted word list based on the
+ * letter it starts with as well as the count of how
+ * many letters in that word including the sums total.
+ */
+
+public static String[][] getDynamicMatrix(List<String> acceptedWordList, int longestWordLength, String baseWord, char reqLetter) {
+    int numRows = baseWord.length();
+    int numCols = longestWordLength - 3;
+
+    String[][] matrix = new String[numRows + 1][numCols + 1];
+    char[] baseWordLetters = baseWord.toCharArray();
+
+    matrix[0][0] = "<b>4</b>";
+    for (int j = 1; j <= numCols; j++) {
+        matrix[0][j] = "<b>" + (j + 3) + "</b>";
+    }
+
+    int[] rowSums = new int[numRows];
+    int[] colSums = new int[numCols];
+
+    for (int i = 0; i < numRows; i++) {
+        for (int j = 0; j < numCols; j++) {
+            int count = 0;
+            for (String word : acceptedWordList) {
+                if (word.startsWith(String.valueOf(baseWordLetters[i])) && word.length() == j + 4) {
+                    count++;
+                }
+            }
+            matrix[i][j] = (count == 0) ? "-" : String.valueOf(count);
+
+            rowSums[i] += count;
+            colSums[j] += count;
+        }
+    }
+
+    for (int i = 0; i < numRows; i++) {
+        matrix[i][numCols] = String.valueOf(rowSums[i]);
+    }
+
+    for (int j = 0; j < numCols; j++) {
+        matrix[numRows][j] = String.valueOf(colSums[j]);
+    }
+
+    int totalSum = 0;
+    for (int i = 0; i < numRows; i++) {
+        totalSum += rowSums[i];
+    }
+    matrix[numRows][numCols] = "<b><i>" + String.valueOf(totalSum) + "</i></b>";
+
+    return matrix;
+}
+
+
+
+/*********************************************************/
+/*********************************************************/
+
+/*
+ * getDynamicTwoLetterList
+ * param: String baseWord, char reqLetter
+ * returns: String
+ * This function looks at every possible accepted word 
+ * and gets the first two letters of each. It categorizes them 
+ * and counts their appearences in the acceptedWords List.
+ */
+
+public static String getDynamicTwoLetterList(List<String> acceptedWords, String baseWord) {
+    Map<String, Integer> pairCountMap = new HashMap<>();
+
+    for (String str : acceptedWords) {
+        if (str.length() >= 2) {
+            String pair = str.substring(0, 2);
+            pairCountMap.put(pair, pairCountMap.getOrDefault(pair, 0) + 1);
+        }
+    }
+
+    StringBuilder html = new StringBuilder();
+    html.append("<b style=\" font-family: Garamond, serif; font-size: 20px;\">Two letter list:<br></b>");
+    char prevBaseChar = 0; 
+    for (int i = 0; i < baseWord.length(); i++) {
+        char baseChar = baseWord.charAt(i);
+        if (prevBaseChar != baseChar) {
+            html.append("<br>");
+        }
+
+        for (Map.Entry<String, Integer> entry : pairCountMap.entrySet()) {
+            if (entry.getKey().charAt(0) == baseChar) {
+                html.append("<span style=\" font-family: Garamond, serif; font-size: 18px;\">" + entry.getKey().toUpperCase()).append("-").append(entry.getValue()).append("&nbsp;&nbsp;</span>");
+            }
+        }
+        prevBaseChar = baseChar;
+    }
+
+    return html.toString();
+}
+
+
+/*********************************************************/
+/*********************************************************/
+
+/*
+ * findReqLetter
+ * param: String baseWord, char reqLetter
+ * returns: int
+ * This function finds and returns the position of the reqLetter
+ * in the baseword. Returns -1 if the letter given is not in 
+ * baseword.
+ */
+
+public static int findReqLetter(String baseWord, char reqLetter){
+    char[] baseWordChars = baseWord.toCharArray();
+    for(int i = 0; i < 7; i++){
+        if (baseWordChars[i] == reqLetter){
+            return i;
+        }
+    }
+    return -1;
+}
+
+/*********************************************************/
+/*********************************************************/
+
+/*
+ * getTotalWords
+ * param: String baseWord, List<String> acceptedWords
+ * returns: int
+ * This function simply looks at the acceptedWordList of all
+ * possible correct words in a puzzle and counts how many words
+ * there are.
+ */
+
+public static int getTotalWords(String baseWord, List<String> acceptedWords){
+    int count = 0;
+    for(String s : acceptedWords){
+        count++;
+    }
+    return count;
+}
+
+/*********************************************************/
+/*********************************************************/
+
+/*
+ * getTotalPangrams
+ * param: String baseWord, List<String> acceptedWords
+ * returns: int[] containing int[0]: totalPangrams and int[1]: totalPerfect pangrams.
+ * This function simply looks at the acceptedWordList of all
+ * possible correct words in a puzzle and counts how many pangrams
+ * there are.
+ */
+
+public static int[] getTotalPangrams(String baseWord, List<String> acceptedWords){
+    int[] count = {0, 0};
+    
+    for(String s : acceptedWords){
+        if(isPangram(s, baseWord)){
+            count[0] = count[0] + 1;
+        }
+        if(isPerfectPangram(s, baseWord)){
+            count[1] = count[1] + 1;
+        }
+    }
+    return count;
+}
+
+/*********************************************************/
+/*********************************************************/
+
+/*
+ * getLongestWordLength
+ * param: String baseWord, char reqLetter
+ * returns: int
+ * This function receives the baseword and reqLetter and
+ * check is the word is an accepted word then keeps a count of the
+ * longest accepted word. This int is then returned.
+ */
+
+public static int getLongestWordLength(List<String> acceptedWordList){
+    String lastString = acceptedWordList.get(acceptedWordList.size() - 1);
+
+    return lastString.length();
+}
+
+/*********************************************************/
+/*********************************************************/
+
+/*
+ * isBingoPuzzle
+ * param: String[][] matrix
+ * returns: boolean
+ * This function receives the matrix of word counts. It then will check every row 
+ * of the last column exept for the first and last row (as they are headings and sums).
+ * It checks those numbers and if any of them is <1 then it is not a BINGO puzzle and returns false,
+ * otherwise it is and returns true.
+ */
+
+ public static boolean isBingoPuzzle(String[][] matrix) {
+    int lastColumnIndex = matrix[0].length - 1;
+
+    for (int i = 1; i < matrix.length - 1; i++) {
+        String value = matrix[i][lastColumnIndex];
+        try {
+            int numericValue = Integer.parseInt(value);
+            if (numericValue < 1) {
+                return false; 
+            }
+        } catch (NumberFormatException e) {
+            return false; 
+        }
+    }
+
+    return true; 
+}
+
+/*********************************************************/
+/*********************************************************/
+
+/*
  * isPangram
  * param: String baseWord, String userGuess
  * returns: Boolean 
@@ -77,17 +398,53 @@ public static boolean isUnique(String s)
  * characters up and compare them.
  */
 
-public static boolean isPangram(String baseWord, String userGuess) {
-    Set<Character> baseWordChars = new HashSet<>();
-    for (char c : baseWord.toCharArray()) {
+public static boolean isPangram(String userGuess, String baseWord) {
+    Set<Character> userGuessChars = new HashSet<>();
+    for (char c : userGuess.toCharArray()) {
         if (Character.isAlphabetic(c)) {
-            baseWordChars.add(Character.toLowerCase(c)); // Convert to lowercase for case-insensitive comparison
+            userGuessChars.add(Character.toLowerCase(c)); 
         }
     }
 
+    for (char c : baseWord.toCharArray()) {
+        if (Character.isAlphabetic(c)) {
+            if (!userGuessChars.contains(Character.toLowerCase(c))) {
+                return false; 
+            }
+        }
+    }
+
+    return true;
+}
+
+/*********************************************************/
+/*********************************************************/
+
+/*
+ * isPerfectPangram
+ * param: String userGuess, String baseWord
+ * returns: Boolean 
+ * This function takes the base word and a string from the user's
+ * guess and tests if it is a perfect pangram or not using baseword as the 
+ * letters to check it against. Hashsets are used to split the
+ * characters up and compare them.
+ */
+
+public static boolean isPerfectPangram(String userGuess, String baseWord) {
+    if(userGuess.length() != baseWord.length()){
+        return false;
+    }
+
+    Set<Character> userGuessChars = new HashSet<>();
     for (char c : userGuess.toCharArray()) {
         if (Character.isAlphabetic(c)) {
-            if (!baseWordChars.contains(Character.toLowerCase(c))) {
+            userGuessChars.add(Character.toLowerCase(c)); 
+        }
+    }
+
+    for (char c : baseWord.toCharArray()) {
+        if (Character.isAlphabetic(c)) {
+            if (!userGuessChars.contains(Character.toLowerCase(c))) {
                 return false; 
             }
         }

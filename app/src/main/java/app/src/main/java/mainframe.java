@@ -94,7 +94,7 @@ public class mainframe {
     private playerData playerGameData = new playerData();
     
     playerData saveFile = new playerData();
-    String baseWord = "       ";
+    static String baseWord = "       ";
     char reqLetter = master.getReqLetter(baseWord);
     String shuffleWord = baseWord;
     List<String> acceptedWordList;
@@ -105,6 +105,7 @@ public class mainframe {
     private JFrame secondFrame;
     private JDialog howToPlayDialog;
     private JDialog foundwords;
+    private JDialog hints;
     final private Font mainFont = new Font("SansSerif", Font.BOLD, 18);
     final private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
@@ -131,6 +132,10 @@ public class mainframe {
     private void updateFoundWordsDialog() {
         if (foundwords == null) {
             foundwords = new JDialog(mainFrame, "FOUND WORD LIST", true);
+            foundwords.setModalityType(Dialog.ModalityType.MODELESS);
+            foundwords.setAlwaysOnTop(true);
+            foundwords.setFocusableWindowState(false);
+
             foundwords.setSize(400, 300);
             foundwords.setLocationRelativeTo(mainFrame);
             JTextArea foundWordsArea = new JTextArea();
@@ -163,6 +168,51 @@ public class mainframe {
             }
         }
     }
+
+    /**********************************************************/
+    /**********************************************************/
+    private void updateHintsDialog(String baseWord, char reqLetter) {
+        if (hints != null){
+            hints.dispose();
+            hints = null;
+        }
+        
+        hints = new JDialog(mainFrame, "Hints", true);
+        hints.setModalityType(Dialog.ModalityType.MODELESS);
+        hints.setAlwaysOnTop(true);
+        hints.setFocusableWindowState(false);
+        
+        hints.setSize(1000, 800);
+        hints.setLocationRelativeTo(mainFrame);
+
+        JTextPane hintsTextArea = new JTextPane();
+        hintsTextArea.setContentType("text/html");
+        hintsTextArea.setEditable(false);
+        Color darkYellow = new Color(204, 153, 0);
+        hintsTextArea.setBackground(darkYellow);
+
+        hintsTextArea.setFont(new Font("SansSerif", Font.PLAIN, 16));
+                
+        hintsTextArea.setForeground(Color.BLACK);
+
+        try {
+            String formattedHintsText = helpers.dynamicHints(baseWord, reqLetter);
+                
+            hintsTextArea.setText(formattedHintsText);
+        } catch (FileNotFoundException e1) {
+            e1.printStackTrace();
+        }
+
+        JScrollPane scrollPane = new JScrollPane(hintsTextArea);
+        scrollPane.setPreferredSize(new Dimension(380, 250)); 
+    
+            
+        hints.setContentPane(scrollPane);
+        
+    }
+
+    /**********************************************************/
+    /**********************************************************/
 
     public mainframe() {
         mainFrame = new JFrame("Welcome to Wordy Wasps");
@@ -293,6 +343,7 @@ public class mainframe {
         CustomButton loadPuzzleButton = new CustomButton("LOAD PUZZLE", false);
         CustomButton howToPlayButton = new CustomButton("HOW TO PLAY", false);
         CustomButton exitButton = new CustomButton("EXIT", false);
+        CustomButton hintsButton = new CustomButton("HINTS", false);
         CustomButton letterbutton1 = new CustomButton(bW1, false);
         CustomButton letterbutton2 = new CustomButton(bW2, false);
         CustomButton letterbutton3 = new CustomButton(bW3, false);
@@ -308,6 +359,10 @@ public class mainframe {
         letterbutton5.setEnabled(false);
         letterbutton6.setEnabled(false);
         letterbutton7.setEnabled(false);
+        hintsButton.setEnabled(false);
+        shufflePuzzle.setEnabled(false);
+        foundWordsButton.setEnabled(false);
+        savePuzzleButton.setEnabled(false);
 
 
         Color darkYellow = new Color(204, 153, 0);
@@ -320,6 +375,7 @@ public class mainframe {
         loadPuzzleButton.setBackground(darkYellow); 
         howToPlayButton.setBackground(darkYellow); 
         foundWordsButton.setBackground(darkYellow);
+        hintsButton.setBackground(darkYellow);
         exitButton.setBackground(darkYellow);
 
         letterbutton1.setBackground(darkYellow);
@@ -347,6 +403,7 @@ public class mainframe {
         loadPuzzleButton.setPreferredSize(buttonSize);
         howToPlayButton.setPreferredSize(buttonSize);
         foundWordsButton.setPreferredSize(buttonSize);
+        hintsButton.setPreferredSize(buttonSize);
         exitButton.setPreferredSize(buttonSize);
 
         Font buttonFont = new Font("SansSerif", Font.BOLD, 15);
@@ -358,6 +415,7 @@ public class mainframe {
         loadPuzzleButton.setFont(buttonFont);
         howToPlayButton.setFont(buttonFont);
         foundWordsButton.setFont(buttonFont);
+        hintsButton.setFont(buttonFont);
         exitButton.setFont(buttonFont);
 
         letterbutton1.setFont(buttonFont);
@@ -517,6 +575,8 @@ panel.add(outputLabel5);
                     } else {
                         enteredWord = enteredWord.toUpperCase();
                         master.guessGUI(enteredWord, baseWord, acceptedWordList, master.playerRank(baseWord, master.totalPoints, acceptedWordList));
+                        updateFoundWordsDialog();
+                        
                         if (master.foundWords.size() > initialSize) {
                             if(master.isPangram(enteredWord, baseWord)){
                                 String enteredWordText = "<font color='#CC9900'>" + enteredWord + "</font> is a valid word, and a <font color='#CC9900'>PANGRAM</font>... Well Done!";
@@ -662,15 +722,6 @@ panel.add(outputLabel5);
                 bW7 = Character.toString(bWLetters[5]);
                 }
 
-
-                // String bW1 = Character.toString(bWLetters[0]);
-                // String bW2 = Character.toString(bWLetters[1]);
-                // String bW3 = Character.toString(bWLetters[2]);
-                // String bW4 = Character.toString(reqLetter);
-                // String bW5 = Character.toString(bWLetters[3]);
-                // String bW6 = Character.toString(bWLetters[4]);
-                // String bW7 = Character.toString(bWLetters[5]);
-
                 // Letter change code goes here after letters are created
                 letterbutton1.setText(bW1.toUpperCase());
                 letterbutton2.setText(bW2.toUpperCase());
@@ -687,7 +738,10 @@ panel.add(outputLabel5);
                 letterbutton5.setEnabled(true);
                 letterbutton6.setEnabled(true);
                 letterbutton7.setEnabled(true);
-
+                hintsButton.setEnabled(true);
+                shufflePuzzle.setEnabled(true);
+                foundWordsButton.setEnabled(true);
+                savePuzzleButton.setEnabled(true);
                 
                 textPane.setEnabled(true);
 
@@ -757,7 +811,7 @@ panel.add(outputLabel5);
                     return;
                 }
 
-
+                
                 master.totalPoints = 0;
 
                 master.foundWords = new ArrayList<>();
@@ -796,6 +850,10 @@ panel.add(outputLabel5);
                 letterbutton5.setEnabled(true);
                 letterbutton6.setEnabled(true);
                 letterbutton7.setEnabled(true);
+                shufflePuzzle.setEnabled(true);
+                hintsButton.setEnabled(true);
+                foundWordsButton.setEnabled(true);
+                savePuzzleButton.setEnabled(true);
 
                 
                 textPane.setEnabled(true);
@@ -885,7 +943,10 @@ panel.add(outputLabel5);
                 letterbutton5.setEnabled(true);
                 letterbutton6.setEnabled(true);
                 letterbutton7.setEnabled(true);
-
+                hintsButton.setEnabled(true);
+                shufflePuzzle.setEnabled(true);
+                foundWordsButton.setEnabled(true);
+                savePuzzleButton.setEnabled(true);
                 
                 textPane.setEnabled(true);
                 
@@ -1026,7 +1087,11 @@ panel.add(outputLabel5);
         public void actionPerformed(ActionEvent e) {
             if (howToPlayDialog == null) {
                 howToPlayDialog = new JDialog(mainFrame, "How To Play", true);
-                howToPlayDialog.setSize(400, 300);
+                howToPlayDialog.setModalityType(Dialog.ModalityType.MODELESS);
+                howToPlayDialog.setAlwaysOnTop(true);
+                howToPlayDialog.setFocusableWindowState(false);
+
+                howToPlayDialog.setSize(850, 400);
                 howToPlayDialog.setLocationRelativeTo(mainFrame);
                 
                 JTextArea helpTextArea = new JTextArea();
@@ -1041,7 +1106,7 @@ panel.add(outputLabel5);
                 + "- Your goal is to create words using 7 unique letters with a required letter.\n"
                 + "- Words must contain at least 4 letters.\n"
                 + "- Words must include the required letter.\n"
-                + "- Letters can be used more than once.\n"
+                + "- Letters can be used more than once.\n\n"
                 + "Buttons:\n"
                 + "1. NEW PUZZLE: Generates a new puzzle with 7 unique letters and a required letter.\n"
                 + "2. CUSTOM PUZZLE: Generates a new puzzle with a word of your choice using 7 unique letters and a required letter.\n"
@@ -1077,20 +1142,37 @@ panel.add(outputLabel5);
 
 
     
-       foundWordsButton.addActionListener(new ActionListener() {
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        updateFoundWordsDialog(); // Call the method to update the dialog
-        if (!foundwords.isVisible()) {
-            foundwords.setVisible(true);
-        } else {
-            foundwords.setVisible(false);
+    foundWordsButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            updateFoundWordsDialog(); // Call the method to update the dialog
+            if (!foundwords.isVisible()) {
+                foundwords.setVisible(true);
+            } else {
+                foundwords.setVisible(false);
+            }
+            textPane.requestFocusInWindow();
         }
-        textPane.requestFocusInWindow();
-    }
     });
 
-    
+    /***********************************************************************/
+    /*********************HINT BUTTON LOGIC****************************/
+    hintsButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            
+            updateHintsDialog(baseWord, reqLetter);
+            
+
+            if (!hints.isVisible()) {
+                hints.setVisible(true);
+            } else {
+                hints.setVisible(false);
+            }
+
+            textPane.requestFocusInWindow();
+        }
+    });
 
     /**********************************************************************/
     /************************EXIT BUTTON LOGIC*****************************/
@@ -1119,6 +1201,7 @@ panel.add(outputLabel5);
         buttonPanel.add(loadPuzzleButton);
         buttonPanel.add(howToPlayButton);
         buttonPanel.add(foundWordsButton);
+        buttonPanel.add(hintsButton);
         buttonPanel.add(exitButton);
 
         buttonPanel2.add(letterbutton1);

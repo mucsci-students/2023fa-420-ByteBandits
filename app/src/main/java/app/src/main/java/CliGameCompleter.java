@@ -12,12 +12,11 @@ import java.util.List;
 public class CliGameCompleter implements Completer {
     @Override
     public void complete(LineReader reader, ParsedLine line, List<Candidate> candidates) {
-        if (line.words().size() == 1) {
         String word = line.word();
 
         List<String> matchingCommands = new ArrayList<>();
 
-        for (String command : new String[]{
+        for (String command : new String[] {
             "/newpuzzle", "/basepuzzle", "/guess", "/viewpuzzle", "/foundwords",
             "/shuffle", "/cleansave", "/advancedsave", "/loadpuzzle", "/observestatus", "/help", "/exit"
         }) {
@@ -26,10 +25,11 @@ public class CliGameCompleter implements Completer {
             }
         }
 
-        for (String matchingCommand : matchingCommands) {
-            candidates.add(new Candidate(AttributedString.stripAnsi(matchingCommand), matchingCommand, null, null, null, null, true));
+        if (matchingCommands.size() == 1) {
+            // If there's only one match, add it to candidates
+            candidates.add(new Candidate(AttributedString.stripAnsi(matchingCommands.get(0)), matchingCommands.get(0), null, null, null, null, true));
         }
-        
-        }
+        // You can add further logic here if you want to handle multiple matches differently.
+        // For example, do not add any candidates or handle them in a specific way.
     }
 }
