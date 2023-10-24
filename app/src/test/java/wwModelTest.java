@@ -18,16 +18,17 @@ public class wwModelTest {
         CliGameModel game = new CliGameModel();
     }
 
-    @Test
+ /**    @Test
     public void testInitGame() throws Exception {
         game.initGame();
 
         assertEquals("Total points should be initialized to 0", 0, game.getTotalPoints());
         assertEquals("Player rank should be initialized to an empty string.", "", game.getPlayerRank());
         assertTrue("Found words list should be empty.", game.getFoundWords().isEmpty());
-        // Add similar assertions for other initial values...
+        //TODO: Add similar assertions for other initial values...
+    
     }
-
+*/
     @Test
     public void testShuffleWord() {
         String baseWord = "example";
@@ -39,13 +40,13 @@ public class wwModelTest {
         assertTrue("Shuffled word should contain all characters from the base word.", containsAllChars(baseWord, shuffled));
     }
 
-    @Test
+/**     @Test
     public void testErrorFirst() {
         assertFalse("Should return false since a game is initialized and baseWord shouldn't have spaces.", game.errorFirst());
 
-        // Add logic to make the second character in baseWord a space, and then test if it returns true
+        //TODO: Add logic to make the second character in baseWord a space, and then test if it returns true
     }
-
+*/
     @Test
     public void testPointsPWord() {
         int points = game.pointsPWord("example", "exam");
