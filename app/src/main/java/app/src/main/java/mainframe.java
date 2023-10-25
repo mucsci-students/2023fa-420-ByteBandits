@@ -18,6 +18,7 @@ import javax.swing.text.StyledDocument;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.util.Comparator;
 import java.util.List;
 import java.util.ArrayList;
 /***************************************************************/
@@ -28,6 +29,10 @@ public class mainframe {
     
     private int charCount = 0;
 
+
+    private String defaultRank = "Your current rank is: ";
+    private String defaultPoints = "Total points: ";
+  
     Color darkYellow = new Color(204, 153, 0);
     //create a button object view 
     public class CustomButton extends JButton {
@@ -108,7 +113,11 @@ public class mainframe {
     private JFrame secondFrame;
     private JDialog howToPlayDialog;
     private JDialog foundwords;
+
+    private JDialog ranks;
+    //private JProgressBar progressBar = new JProgressBar();
     private JDialog hints;
+
     final private Font mainFont = new Font("SansSerif", Font.BOLD, 18);
     final private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
@@ -151,7 +160,7 @@ public class mainframe {
             if (master.foundWords.isEmpty()) {
                 foundWordsArea.append("YOU HAVEN'T FOUND ANY WORDS");
             }
-    
+            master.foundWords.sort(Comparator.naturalOrder());
             for (String word : master.foundWords) {
                 word = word.toUpperCase();
                 foundWordsArea.append("- " + word + "\n");
@@ -163,12 +172,37 @@ public class mainframe {
             if (master.foundWords.isEmpty()) {
                 foundWordsArea.append("YOU HAVEN'T FOUND ANY WORDS");
             }
+            master.foundWords.sort(Comparator.naturalOrder());
     
             for (String word : master.foundWords) {
                 word = word.toUpperCase();
                 foundWordsArea.append("- " + word + "\n");
             }
         }
+    }
+
+    private void updateRanksDialog() {
+         ranks = new JDialog(mainFrame, "RANK BREAK DOWN", true);
+            ranks.setSize(400, 300);
+            ranks.setLocationRelativeTo(mainFrame);
+            JTextArea ranksArea = new JTextArea();
+            Color darkYellow = new Color(204, 153, 0);
+            ranksArea.setBackground(darkYellow);
+            ranksArea.setEditable(false);
+            ranksArea.setWrapStyleWord(true);
+            ranksArea.setLineWrap(true);
+            ranksArea.setFont(new Font("SansSerif", Font.PLAIN, 16));
+            ranksArea.setForeground(Color.BLACK);
+            String currentRankIndex []= {"Beginner", "Good Start", "Moving Up", "Good", "Solid", "Nice", "Great", "Amazing", "Genius", "Queen Bee"};
+                
+                for (int i = 1; i < currentRankIndex.length; i++) {
+                    helpers.calculateRankDifference(currentRankIndex[i], 0, acceptedWordList, baseWord.toLowerCase());
+
+                    if (helpers.pointsRequired != 0) {
+                        ranksArea.append("Rank: " + currentRankIndex[i] + "\nPoints needed: " + helpers.pointsRequired + "\n\n");
+                    }
+            }
+            ranks.add(new JScrollPane(ranksArea));
     }
 
     /**********************************************************/
@@ -274,24 +308,6 @@ public class mainframe {
         }
     });
     
-        // "GUI -> CLI" button
-    //     CustomButton guiToCliButton = new CustomButton("GUI -> CLI", false);
-    //     guiToCliButton.setBackground(new Color(204, 153, 0));
-    //     guiToCliButton.setOpaque(true); // Make the button opaque
-    //     guiToCliButton.setFont(new Font("SansSerif", Font.BOLD, 24));
-    //     guiToCliButton.setPreferredSize(new Dimension(200, 60)); // Increase the width
-    //     guiToCliButton.addActionListener(new ActionListener() {
-    //     @Override
-    //     public void actionPerformed(ActionEvent e) {
-    //         mainFrame.dispose();
-    //         try {
-    //             master.main(new String[0]);
-    //         } catch (Exception ex) {
-    //             ex.printStackTrace();
-    //         }
-    //     }
-    // });
-    
         // Add both buttons to the button panel
         buttonPanel.add(playButton);
         //buttonPanel.add(guiToCliButton);
@@ -317,16 +333,25 @@ public class mainframe {
         secondFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         secondFrame.getContentPane().setBackground(new Color(255, 255, 153));
 
+        JPanel rankPanel = new JPanel();
+        rankPanel.setOpaque(false);
+        rankPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        //rankPanel.setBounds(120, 200, 100, 100);
+
         // Create a panel for the buttons at the bottom
         JPanel buttonPanel = new JPanel();
         buttonPanel.setOpaque(false); 
         buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
 
+
+        // Create a panel for the buttons at the top
         JPanel buttonPanel2 = new JPanel();
         buttonPanel.setOpaque(false); 
         buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
         buttonPanel2.setBackground(new Color(255, 255, 153));
+        buttonPanel2.setBounds(120, 80, 100, 100);
 
+        //progressBar.setPreferredSize(new Dimension(350, 50));
         // Create buttons for the second screen
 
         String bW1 = Character.toString(bWLetters[0]);
@@ -344,6 +369,9 @@ public class mainframe {
         CustomButton savePuzzleButton = new CustomButton("SAVE PUZZLE", false);
         CustomButton loadPuzzleButton = new CustomButton("LOAD PUZZLE", false);
         CustomButton howToPlayButton = new CustomButton("HOW TO PLAY", false);
+        CustomButton rankBreakDownButton = new CustomButton("RANKS", false);
+        CustomButton backSpaceButton = new CustomButton("<", false);
+        CustomButton enterGuessButton = new CustomButton("ENTER GUESS", false);
         CustomButton exitButton = new CustomButton("EXIT", false);
         CustomButton hintsButton = new CustomButton("HINTS", false);
         CustomButton letterbutton1 = new CustomButton(bW1, false);
@@ -377,6 +405,9 @@ public class mainframe {
         loadPuzzleButton.setBackground(darkYellow); 
         howToPlayButton.setBackground(darkYellow); 
         foundWordsButton.setBackground(darkYellow);
+        rankBreakDownButton.setBackground(darkYellow);
+        backSpaceButton.setBackground(darkYellow);
+        enterGuessButton.setBackground(darkYellow);
         hintsButton.setBackground(darkYellow);
         exitButton.setBackground(darkYellow);
 
@@ -396,7 +427,7 @@ public class mainframe {
         letterbutton6.setForeground(Color.BLACK);
         letterbutton7.setForeground(Color.BLACK);
 
-        Dimension buttonSize = new Dimension(180, 50); 
+        Dimension buttonSize = new Dimension(150, 50); 
 
         shufflePuzzle.setPreferredSize(buttonSize);
         newPuzzleButton.setPreferredSize(buttonSize);
@@ -405,6 +436,9 @@ public class mainframe {
         loadPuzzleButton.setPreferredSize(buttonSize);
         howToPlayButton.setPreferredSize(buttonSize);
         foundWordsButton.setPreferredSize(buttonSize);
+        rankBreakDownButton.setPreferredSize(buttonSize);
+        backSpaceButton.setPreferredSize(buttonSize);
+        enterGuessButton.setPreferredSize(buttonSize);
         hintsButton.setPreferredSize(buttonSize);
         exitButton.setPreferredSize(buttonSize);
 
@@ -417,6 +451,9 @@ public class mainframe {
         loadPuzzleButton.setFont(buttonFont);
         howToPlayButton.setFont(buttonFont);
         foundWordsButton.setFont(buttonFont);
+        rankBreakDownButton.setFont(buttonFont);
+        backSpaceButton.setFont(buttonFont);
+        enterGuessButton.setFont(buttonFont);
         hintsButton.setFont(buttonFont);
         exitButton.setFont(buttonFont);
 
@@ -429,7 +466,7 @@ public class mainframe {
         letterbutton7.setFont(buttonFont);
 
         letterbutton4.setForeground(darkYellow);
-
+      
         StrategyNewPuzzle strategyNewPuzzle = new StrategyNewPuzzle(letterbutton1, letterbutton2, letterbutton3, letterbutton4, letterbutton5, letterbutton6, letterbutton7);
 
     /*********************************************************************/
@@ -477,9 +514,22 @@ public class mainframe {
     int xCenter = (secondFrame.getWidth() - textFieldWidth) / 2;
     int y = (secondFrame.getHeight() - textFieldHeight) / 9;
     
-    textPane.setBounds(xCenter, y, textFieldWidth, textFieldHeight);
     panel.add(textPane);
 
+    secondFrame.addComponentListener(new ComponentAdapter() {
+        @Override
+        public void componentResized(ComponentEvent e) {
+            int newWidth = secondFrame.getWidth();
+            int newHeight = secondFrame.getHeight();
+            
+            
+            int newX = (newWidth - textFieldWidth) / 2;
+            int newY = (newHeight - textFieldHeight) / 9;
+            
+           
+            textPane.setBounds(newX - 8, newY + 40, textFieldWidth, textFieldHeight);
+        }
+    });
 
     // Create JLabels view
 JLabel outputLabel = new JLabel();
@@ -487,6 +537,8 @@ JLabel outputLabel2 = new JLabel();
 JLabel outputLabel3 = new JLabel();
 JLabel outputLabel4 = new JLabel();
 JLabel outputLabel5 = new JLabel();
+JLabel outputLabel6 = new JLabel();
+JLabel outputLabel7 = new JLabel();
 Font labelFont = new Font("Sans Serif", Font.BOLD, 21);
 // Set the font for all labels with a larger font size
 outputLabel.setFont(labelFont);
@@ -494,22 +546,31 @@ outputLabel2.setFont(labelFont);
 outputLabel3.setFont(labelFont);
 outputLabel4.setFont(labelFont);
 outputLabel5.setFont(labelFont);
+outputLabel6.setFont(labelFont);
+outputLabel7.setFont(labelFont);
 
 // Set other properties and positions for your labels (as you've already done)
-outputLabel.setBounds(xCenter, y + textFieldHeight + 20, textFieldWidth, 30);
+outputLabel.setBounds(xCenter, y + textFieldHeight + 40, textFieldWidth, 30);
 outputLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
-outputLabel2.setBounds(xCenter, y + textFieldHeight + 40, textFieldWidth, 30);
-outputLabel2.setHorizontalAlignment(SwingConstants.CENTER);
+outputLabel5.setBounds(xCenter, y + textFieldHeight + 70, textFieldWidth, 30);
+outputLabel5.setHorizontalAlignment(SwingConstants.CENTER);
 
-outputLabel3.setBounds(xCenter, y + textFieldHeight + 60, textFieldWidth, 30);
-outputLabel3.setHorizontalAlignment(SwingConstants.CENTER);
-
-outputLabel4.setBounds(xCenter, y + textFieldHeight + 80, textFieldWidth, 30);
+outputLabel4.setBounds(xCenter, y + textFieldHeight + 90, textFieldWidth, 30);
 outputLabel4.setHorizontalAlignment(SwingConstants.CENTER);
 
-outputLabel5.setBounds(xCenter, y + textFieldHeight + 100, textFieldWidth, 30);
-outputLabel5.setHorizontalAlignment(SwingConstants.CENTER);
+//outputLabel6.setBounds(xCenter, y + textFieldHeight + 300, textFieldWidth, 30);
+outputLabel6.setHorizontalAlignment(SwingConstants.CENTER);
+
+//outputLabel7.setBounds(xCenter, y + textFieldHeight + 600, textFieldWidth, 30);
+outputLabel7.setHorizontalAlignment(SwingConstants.CENTER);
+
+rankPanel.add(outputLabel6);
+rankPanel.add(outputLabel7);
+
+outputLabel6.setText(defaultRank);
+outputLabel7.setText(defaultPoints);
+
 panel.add(outputLabel);
 panel.add(outputLabel2);
 panel.add(outputLabel3);
@@ -517,6 +578,7 @@ panel.add(outputLabel4);
 panel.add(outputLabel5);
 
 //calls class and helps get rid of Caret
+
     textPane.setCaret(new NoCaret());
      DocumentFilter filter = new DocumentFilter() {
         //being all capital letters in textbox no matter what view
@@ -595,16 +657,15 @@ panel.add(outputLabel5);
                             String playerRank = master.playerRank(baseWord, master.totalPoints, acceptedWordList);
                             String playerrank = playerRank; 
                             String labelText = "Your current rank is: <font color=#CC9900>" + playerrank + "</font>";
-                            outputLabel2.setText("<html>" + labelText + "</html>"); 
+                            outputLabel6.setText("<html>" + labelText + "</html");
                             String labelText1 = "Total points:   <font color='#CC9900'>" + master.totalPoints + "</font>";
-                            outputLabel3.setText("<html>" + labelText1 + "</html>");
-                            helpers.calculateRankDifference(playerRank, master.totalPoints, acceptedWordList, baseWord);
+                            outputLabel7.setText("<html>" + labelText1 + "</html>");
+                            //progressBar.setValue(master.totalPoints);
                             String nextRankText = "Total points needed for next rank   <font color='#CC9900'>" + helpers.nextRank + "</font>: ";
                             String pointsRequiredText = "<font color='#CC9900'>" + helpers.pointsRequired + "</font>";
                             outputLabel4.setText("<html>" + nextRankText + pointsRequiredText + "</html>");
-                            String differenceText = "Points needed to reach next rank: <font color='#CC9900'>" + helpers.difference + "</font>";
+                            String differenceText = "You need  <font color='#CC9900'>" + helpers.difference + "</font>" +  " points to reach next rank.";
                             outputLabel5.setText("<html>" + differenceText + "</html>");
-
                         } else {
                             outputLabel.setText("Invalid word, try again!");
 
@@ -614,7 +675,6 @@ panel.add(outputLabel5);
                 }//end
                 baseWord = baseWord.toUpperCase();
             }
-
         });
         //after endter is pressed makes it so that you can instantly guess letters again, sets textbox empty controller and view
     textPane.requestFocusInWindow();
@@ -690,6 +750,8 @@ panel.add(outputLabel5);
                 outputLabel3.setText("");
                 outputLabel4.setText("");
                 outputLabel5.setText("");
+                outputLabel6.setText(defaultRank);
+                outputLabel7.setText(defaultPoints);
                 master.totalPoints = 0;
                 try {
                     baseWord = master.getBaseWord(master.dictionaryFile());
@@ -703,10 +765,58 @@ panel.add(outputLabel5);
                     e1.printStackTrace();
                 }
 
+                master.foundWords = new ArrayList<>();
+                //progressBar.setMinimum(0);
+                //progressBar.setMaximum(helpers.possiblePoints(baseWord, acceptedWordList));
+                shuffleWord = master.shuffle(baseWord, reqLetter);
+
+                baseWord = shuffleWord;
+
+                String noReqLetter = master.removeChar(baseWord, reqLetter);
+
+                char[] bWLetters = noReqLetter.toCharArray();
+
+                String bW1 = "";
+                String bW2 = "";
+                String bW3 = "";
+                String bW4 = "";
+                String bW5 = "";
+                String bW6 = "";
+                String bW7 = "";
+
+                if (bWLetters.length >= 6) {
+                bW1 = Character.toString(bWLetters[0]);
+                bW2 = Character.toString(bWLetters[1]);
+                bW3 = Character.toString(bWLetters[2]);
+                bW4 = Character.toString(reqLetter);
+                bW5 = Character.toString(bWLetters[3]);
+                bW6 = Character.toString(bWLetters[4]);
+                bW7 = Character.toString(bWLetters[5]);
+                }
+
+                // Letter change code goes here after letters are created
+                letterbutton1.setText(bW1.toUpperCase());
+                letterbutton2.setText(bW2.toUpperCase());
+                letterbutton3.setText(bW3.toUpperCase());
+                letterbutton4.setText(bW4.toUpperCase());
+                letterbutton5.setText(bW5.toUpperCase());
+                letterbutton6.setText(bW6.toUpperCase());
+                letterbutton7.setText(bW7.toUpperCase());
+
+                letterbutton1.setEnabled(true);
+                letterbutton2.setEnabled(true);
+                letterbutton3.setEnabled(true);
+                letterbutton4.setEnabled(true);
+                letterbutton5.setEnabled(true);
+                letterbutton6.setEnabled(true);
+                letterbutton7.setEnabled(true);
+
+
                 hintsButton.setEnabled(true);
                 shufflePuzzle.setEnabled(true);
                 foundWordsButton.setEnabled(true);
                 savePuzzleButton.setEnabled(true);
+
 
                 strategyNewPuzzle.execute(mainframe.this);
                 
@@ -767,6 +877,8 @@ panel.add(outputLabel5);
                     outputLabel3.setText("");
                     outputLabel4.setText("");
                     outputLabel5.setText("");
+                    outputLabel6.setText(defaultRank);
+                    outputLabel7.setText(defaultPoints);
                     
 
                 }else{
@@ -842,6 +954,7 @@ panel.add(outputLabel5);
                 outputLabel3.setText("");
                 outputLabel4.setText("");
                 outputLabel5.setText("");
+                
 
                 //fetch list of all saved game names
                 List<String> saveNames = playerGameData.getAllSaveNames();
@@ -923,6 +1036,13 @@ panel.add(outputLabel5);
                 textPane.setEnabled(true);
                 
                 textPane.requestFocusInWindow();
+
+                String playerRank = master.playerRank(baseWord, master.totalPoints, acceptedWordList);
+                String playerrank = playerRank;
+                String labelText = "Your current rank is: <font color=#CC9900>" + playerrank + "</font>";
+                outputLabel6.setText("<html>" + labelText + "</html");
+                String labelText1 = "Total points:   <font color='#CC9900'>" + master.totalPoints + "</font>";
+                outputLabel7.setText("<html>" + labelText1 + "</html>");
             }
             
         });
@@ -1088,7 +1208,9 @@ panel.add(outputLabel5);
                 + "6. SAVE PUZZLE: Lets you save a blank puzzle.\n"
                 + "7. LOAD PUZZLE: The player can load a saved game.\n"
                 + "8. PRESS ENTER : The player can see their rank and progress on a current puzzle.\n"
-                + "9. EXIT : Leave the application."
+                + "9. <: You can use this button to remove typed/selected letters from your current attempt.\n"
+                + "10. ENTER GUESS: Use this button to submit your current guess.\n"
+                + "11. EXIT : Leave the application."
         );
 
                 // Wrap the text area in a JScrollPane
@@ -1128,6 +1250,84 @@ panel.add(outputLabel5);
     });
 
     /***********************************************************************/
+
+    /*********************BACKSPACE BUTTON LOGIC****************************/
+    
+    backSpaceButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String currentString = textPane.getText();
+
+            if (currentString.length() > 0) {
+                currentString = currentString.substring(0, currentString.length() - 1);
+
+                textPane.setText(currentString);
+            }
+            textPane.requestFocusInWindow();
+        }
+    });
+
+    /***********************************************************************/
+    /*********************ENTER GUESS BUTTON LOGIC**************************/
+
+    enterGuessButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String enteredWord = textPane.getText().trim().toLowerCase();
+            int initialSize = master.foundWords.size();
+            baseWord = baseWord.toLowerCase();
+        
+            if (master.foundWords.contains(enteredWord)) {
+                outputLabel.setText("You already guessed this word correctly. Try again!");
+            } else {
+                enteredWord = enteredWord.toUpperCase();
+                master.guessGUI(enteredWord, baseWord, acceptedWordList, master.playerRank(baseWord, master.totalPoints, acceptedWordList));
+                if (master.foundWords.size() > initialSize) {
+                    if (master.isPangram(enteredWord, baseWord)) {
+                        String enteredWordText = "<font color='#CC9900'>" + enteredWord + "</font> is a valid word, and a <font color='#CC9900'>PANGRAM</font>... Well Done!";
+                        outputLabel.setText("<html>" + enteredWordText + "</html>");
+                    } else {
+                        String enteredWordText = "<font color='#CC9900'>" + enteredWord + "</font> is a valid word!";
+                        outputLabel.setText("<html>" + enteredWordText + "</html>");
+                    }
+                    String playerRank = master.playerRank(baseWord, master.totalPoints, acceptedWordList);
+                    String playerrank = playerRank;
+                    String labelText = "Your current rank is: <font color=#CC9900>" + playerrank + "</font>";
+                    outputLabel6.setText("<html>" + labelText + "</html");
+                    String labelText1 = "Total points:   <font color='#CC9900'>" + master.totalPoints + "</font>";
+                    outputLabel7.setText("<html>" + labelText1 + "</html>");
+                    //progressBar.setValue(master.totalPoints);
+                    String differenceText = "You need  <font color='#CC9900'>" + helpers.difference + "</font>" +  " points to reach next rank.";
+                    outputLabel5.setText("<html>" + differenceText + "</html>");
+                } else {
+                    outputLabel.setText("Invalid word, try again!");
+                }
+                enteredWord = enteredWord.toLowerCase();
+            }
+            baseWord = baseWord.toUpperCase();
+            textPane.setText(defaultText);
+            textPane.requestFocusInWindow();
+        }
+    });
+
+    /***********************************************************************/
+    /*********************RANK BREAKDOWN BUTTON LOGIC***********************/
+
+    rankBreakDownButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+        updateRanksDialog(); // Call the method to update the dialog
+        if (!ranks.isVisible()) {
+            ranks.setVisible(true);
+        } else {
+            ranks.setVisible(false);
+        }
+        textPane.requestFocusInWindow();
+    
+        }
+    });
+    
+
     /*********************HINT BUTTON LOGIC****************************/
     hintsButton.addActionListener(new ActionListener() {
         @Override
@@ -1145,6 +1345,7 @@ panel.add(outputLabel5);
             textPane.requestFocusInWindow();
         }
     });
+
 
     /**********************************************************************/
     /************************EXIT BUTTON LOGIC*****************************/
@@ -1173,6 +1374,11 @@ panel.add(outputLabel5);
         buttonPanel.add(loadPuzzleButton);
         buttonPanel.add(howToPlayButton);
         buttonPanel.add(foundWordsButton);
+
+        buttonPanel.add(rankBreakDownButton);
+        buttonPanel.add(backSpaceButton);
+        buttonPanel.add(enterGuessButton);
+
         buttonPanel.add(hintsButton);
         buttonPanel.add(exitButton);
 
@@ -1183,9 +1389,11 @@ panel.add(outputLabel5);
         buttonPanel2.add(letterbutton5);
         buttonPanel2.add(letterbutton6);
         buttonPanel2.add(letterbutton7);
+        //rankPanel.add(progressBar);
 
         secondFrame.add(buttonPanel, BorderLayout.SOUTH);
         secondFrame.add(buttonPanel2, BorderLayout.CENTER);
+        secondFrame.add(rankPanel, BorderLayout.NORTH);
         secondFrame.setVisible(true);
     }
     

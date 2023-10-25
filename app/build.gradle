@@ -23,7 +23,7 @@ application
             srcDirs 'src/main/resources'
         }
     }
-    test { // Add this block for test sources
+    test {
         java.srcDirs 'app/src/test'
     }
 }
@@ -39,9 +39,7 @@ processResources {
 
 
 dependencies {
-    //testImplementation 'org.junit.jupiter:junit-jupiter:5.9.1'
     testImplementation 'junit:junit:4.13.2'
-
 
     // This dependency is used by the application.
     implementation 'org.jline:jline:3.22.0'
