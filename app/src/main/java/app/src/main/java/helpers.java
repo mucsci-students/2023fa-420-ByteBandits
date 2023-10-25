@@ -194,7 +194,7 @@ public static boolean sameChars(String baseWord, String dicString) {
  
  public static void calculateRankDifference(String currentRank, int playerPoints, List<String> possibleWords, String baseWord) {
     nextRank = "";
-   pointsRequired = 0;
+    pointsRequired = 0;
 
     int currentRankIndex = Arrays.asList("Beginner", "Good Start", "Moving Up", "Good", "Solid", "Nice", "Great", "Amazing", "Genius", "Queen Bee").indexOf(currentRank);
 
