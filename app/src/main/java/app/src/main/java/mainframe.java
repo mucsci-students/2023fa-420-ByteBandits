@@ -17,32 +17,33 @@ import javax.swing.text.StyledDocument;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.util.List;
 import java.io.*;
-import java.util.*;
+import java.util.List;
+import java.util.ArrayList;
 /***************************************************************/
 /***************************************************************/
 
 public class mainframe {
-    JTextPane textPane;
+    protected JTextPane textPane;
     
     private int charCount = 0;
 
+
     private String defaultRank = "Your current rank is: ";
     private String defaultPoints = "Total points: ";
-    
-    
+  
     Color darkYellow = new Color(204, 153, 0);
-    class CustomButton extends JButton {
+    //create a button object view 
+    public class CustomButton extends JButton {
         private Color originalBackgroundColor;
         private boolean isLetterButton4;
-    
+      
         public CustomButton(String text, boolean isLetterButton4) {
             super(text);
             this.isLetterButton4 = isLetterButton4;
             initialize();
         }
-    
+        //initialize all buttons mixture of view and controller
         private void initialize(){
             originalBackgroundColor = isLetterButton4 ? new Color(0, 0, 0) : new Color(204, 153, 0);
     
@@ -53,6 +54,7 @@ public class mainframe {
             setForeground(isLetterButton4 ? Color.BLACK : Color.BLACK);
             setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
             setUI(new BasicButtonUI());
+
     
             addMouseListener(new MouseAdapter(){
                 @Override
@@ -93,29 +95,33 @@ public class mainframe {
             });
         }
     }
-
+    //model
     private playerData playerGameData = new playerData();
     
     playerData saveFile = new playerData();
-    String baseWord = "       ";
-    char reqLetter = master.getReqLetter(baseWord);
-    String shuffleWord = baseWord;
+
+    public static String baseWord = "       ";
+    public static char reqLetter = master.getReqLetter(baseWord);
+    public static String shuffleWord = baseWord;
+
     List<String> acceptedWordList;
     
     char[] bWLetters = baseWord.toCharArray();
-    
+    //view class creae mainfram secondframe
     private JFrame mainFrame;
     private JFrame secondFrame;
     private JDialog howToPlayDialog;
     private JDialog foundwords;
+
     private JDialog ranks;
     //private JProgressBar progressBar = new JProgressBar();
+    private JDialog hints;
+
     final private Font mainFont = new Font("SansSerif", Font.BOLD, 18);
     final private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
     /*************************************************************/
     /*******************BACKGORUND PANEL**************************/
-
     class BackgroundPanel extends JPanel {
         private Image backgroundImage;
 
@@ -136,6 +142,10 @@ public class mainframe {
     private void updateFoundWordsDialog() {
         if (foundwords == null) {
             foundwords = new JDialog(mainFrame, "FOUND WORD LIST", true);
+            foundwords.setModalityType(Dialog.ModalityType.MODELESS);
+            foundwords.setAlwaysOnTop(true);
+            foundwords.setFocusableWindowState(false);
+
             foundwords.setSize(400, 300);
             foundwords.setLocationRelativeTo(mainFrame);
             JTextArea foundWordsArea = new JTextArea();
@@ -193,6 +203,52 @@ public class mainframe {
             }
             ranks.add(new JScrollPane(ranksArea));
     }
+
+    /**********************************************************/
+    /**********************************************************/
+  
+    private void updateHintsDialog(String baseWord, char reqLetter) {
+        if (hints != null){
+            hints.dispose();
+            hints = null;
+        }
+        
+        hints = new JDialog(mainFrame, "Hints", true);
+        hints.setModalityType(Dialog.ModalityType.MODELESS);
+        hints.setAlwaysOnTop(true);
+        hints.setFocusableWindowState(false);
+        
+        hints.setSize(1000, 800);
+        hints.setLocationRelativeTo(mainFrame);
+
+        JTextPane hintsTextArea = new JTextPane();
+        hintsTextArea.setContentType("text/html");
+        hintsTextArea.setEditable(false);
+        Color darkYellow = new Color(204, 153, 0);
+        hintsTextArea.setBackground(darkYellow);
+
+        hintsTextArea.setFont(new Font("SansSerif", Font.PLAIN, 16));
+                
+        hintsTextArea.setForeground(Color.BLACK);
+
+        try {
+            String formattedHintsText = helpers.dynamicHints(baseWord, reqLetter);
+                
+            hintsTextArea.setText(formattedHintsText);
+        } catch (FileNotFoundException e1) {
+            e1.printStackTrace();
+        }
+
+        JScrollPane scrollPane = new JScrollPane(hintsTextArea);
+        scrollPane.setPreferredSize(new Dimension(380, 250)); 
+    
+            
+        hints.setContentPane(scrollPane);
+        
+    }
+
+    /**********************************************************/
+    /**********************************************************/
 
     public mainframe() {
         mainFrame = new JFrame("Welcome to Wordy Wasps");
@@ -264,7 +320,6 @@ public class mainframe {
     /************************************************************/
     /*********************SECOND SCREEN**************************/
     //Shows after player clicks PLAY
-
     private void showSecondScreen() {
         mainFrame.setVisible(false);
         
@@ -317,6 +372,7 @@ public class mainframe {
         CustomButton backSpaceButton = new CustomButton("<", false);
         CustomButton enterGuessButton = new CustomButton("ENTER GUESS", false);
         CustomButton exitButton = new CustomButton("EXIT", false);
+        CustomButton hintsButton = new CustomButton("HINTS", false);
         CustomButton letterbutton1 = new CustomButton(bW1, false);
         CustomButton letterbutton2 = new CustomButton(bW2, false);
         CustomButton letterbutton3 = new CustomButton(bW3, false);
@@ -332,6 +388,10 @@ public class mainframe {
         letterbutton5.setEnabled(false);
         letterbutton6.setEnabled(false);
         letterbutton7.setEnabled(false);
+        hintsButton.setEnabled(false);
+        shufflePuzzle.setEnabled(false);
+        foundWordsButton.setEnabled(false);
+        savePuzzleButton.setEnabled(false);
 
 
         Color darkYellow = new Color(204, 153, 0);
@@ -347,6 +407,7 @@ public class mainframe {
         rankBreakDownButton.setBackground(darkYellow);
         backSpaceButton.setBackground(darkYellow);
         enterGuessButton.setBackground(darkYellow);
+        hintsButton.setBackground(darkYellow);
         exitButton.setBackground(darkYellow);
 
         letterbutton1.setBackground(darkYellow);
@@ -377,6 +438,7 @@ public class mainframe {
         rankBreakDownButton.setPreferredSize(buttonSize);
         backSpaceButton.setPreferredSize(buttonSize);
         enterGuessButton.setPreferredSize(buttonSize);
+        hintsButton.setPreferredSize(buttonSize);
         exitButton.setPreferredSize(buttonSize);
 
         Font buttonFont = new Font("SansSerif", Font.BOLD, 15);
@@ -391,6 +453,7 @@ public class mainframe {
         rankBreakDownButton.setFont(buttonFont);
         backSpaceButton.setFont(buttonFont);
         enterGuessButton.setFont(buttonFont);
+        hintsButton.setFont(buttonFont);
         exitButton.setFont(buttonFont);
 
         letterbutton1.setFont(buttonFont);
@@ -402,12 +465,13 @@ public class mainframe {
         letterbutton7.setFont(buttonFont);
 
         letterbutton4.setForeground(darkYellow);
+      
+        StrategyNewPuzzle strategyNewPuzzle = new StrategyNewPuzzle(letterbutton1, letterbutton2, letterbutton3, letterbutton4, letterbutton5, letterbutton6, letterbutton7);
 
-    
     /*********************************************************************/
     /**************************GUESSING TEXTBOX***************************/
 
-    
+    //border view
 
     Border goldBorder = BorderFactory.createLineBorder(darkYellow, 4);
 
@@ -416,14 +480,14 @@ public class mainframe {
 
     
     Border compoundBorder = BorderFactory.createCompoundBorder(goldBorder, blackBorder);
-
+//getting rid of caret blinking class paint view, controller noCaret 
     class NoCaret extends DefaultCaret {
         @Override
         public void paint(Graphics g) {
             
         }
     }
-    
+    //view
     JPanel panel = new JPanel(null);
     panel.setOpaque(false); 
     secondFrame.add(panel);
@@ -466,7 +530,7 @@ public class mainframe {
         }
     });
 
-    // Create JLabels
+    // Create JLabels view
 JLabel outputLabel = new JLabel();
 JLabel outputLabel2 = new JLabel();
 JLabel outputLabel3 = new JLabel();
@@ -512,27 +576,31 @@ panel.add(outputLabel3);
 panel.add(outputLabel4);
 panel.add(outputLabel5);
 
+//calls class and helps get rid of Caret
+
     textPane.setCaret(new NoCaret());
      DocumentFilter filter = new DocumentFilter() {
+        //being all capital letters in textbox no matter what view
             @Override
             public void insertString(FilterBypass fb, int offset, String text, AttributeSet attr) throws BadLocationException {
                 fb.insertString(offset, text.toUpperCase(), attr);
             }
-
+            //replacing any lowercase characters into uppercase view
             @Override
             public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
                 fb.replace(offset, length, text.toUpperCase(), attrs);
             }
         };
-
+        //setting 2 methods to always be running so it is always uppercase view
         ((AbstractDocument) textPane.getDocument()).setDocumentFilter(filter);
         
+        //typing controller, maybe updating view and model
         textPane.addKeyListener(new KeyAdapter() {
             @Override
             public void keyTyped(KeyEvent e) {
                 char typedChar = e.getKeyChar();
                 char[] tester = baseWord.toCharArray();
-        
+                //ensuring you arent typing words that are not in baseword, controller
                 boolean contained = false;
         
                 for (char c : tester) {
@@ -545,19 +613,19 @@ panel.add(outputLabel5);
                 if (!Character.isAlphabetic(typedChar) || !contained) {
                     e.consume(); 
                 } else if (charCount >= maxCharacterCount) {
-                    e.consume(); 
+                    e.consume(); //doesnt let you type any numbers or symbols, making sure doesnt go over letter limit controller
                 } else {
                     charCount++;
                 }
             }
-
+            //making sure when a key is pressed
             @Override
             public void keyPressed(KeyEvent e) {
                 textPane.requestFocusInWindow();
-                if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
+                if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) { //backspace charcount goes down controller
             
                     charCount = Math.max(0, charCount - 1);
-                } else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                } else if (e.getKeyCode() == KeyEvent.VK_ENTER) {//enter submit word controller 
                     
                     String enteredWord = textPane.getText().trim();
                     enteredWord = enteredWord.toLowerCase();
@@ -575,6 +643,8 @@ panel.add(outputLabel5);
                     } else {
                         enteredWord = enteredWord.toUpperCase();
                         master.guessGUI(enteredWord, baseWord, acceptedWordList, master.playerRank(baseWord, master.totalPoints, acceptedWordList));
+                        updateFoundWordsDialog();
+                        
                         if (master.foundWords.size() > initialSize) {
                             if(master.isPangram(enteredWord, baseWord)){
                                 String enteredWordText = "<font color='#CC9900'>" + enteredWord + "</font> is a valid word, and a <font color='#CC9900'>PANGRAM</font>... Well Done!";
@@ -601,10 +671,11 @@ panel.add(outputLabel5);
                         }
                         enteredWord = enteredWord.toLowerCase();
                     }
-                }
+                }//end
                 baseWord = baseWord.toUpperCase();
             }
         });
+        //after endter is pressed makes it so that you can instantly guess letters again, sets textbox empty controller and view
     textPane.requestFocusInWindow();
     String defaultText = "";
     textPane.setText(defaultText);
@@ -612,7 +683,7 @@ panel.add(outputLabel5);
     
 
     textPane.setBorder(compoundBorder);
-
+    //controller and view    
     textPane.addFocusListener(new FocusAdapter() {
         @Override
         public void focusGained(FocusEvent e) {
@@ -692,6 +763,7 @@ panel.add(outputLabel5);
                 } catch (FileNotFoundException e1) {
                     e1.printStackTrace();
                 }
+
                 master.foundWords = new ArrayList<>();
                 //progressBar.setMinimum(0);
                 //progressBar.setMaximum(helpers.possiblePoints(baseWord, acceptedWordList));
@@ -738,6 +810,14 @@ panel.add(outputLabel5);
                 letterbutton6.setEnabled(true);
                 letterbutton7.setEnabled(true);
 
+
+                hintsButton.setEnabled(true);
+                shufflePuzzle.setEnabled(true);
+                foundWordsButton.setEnabled(true);
+                savePuzzleButton.setEnabled(true);
+
+
+                strategyNewPuzzle.execute(mainframe.this);
                 
                 textPane.setEnabled(true);
 
@@ -809,47 +889,13 @@ panel.add(outputLabel5);
                     return;
                 }
 
+                shufflePuzzle.setEnabled(true);
+                hintsButton.setEnabled(true);
+                foundWordsButton.setEnabled(true);
+                savePuzzleButton.setEnabled(true);
 
-                master.totalPoints = 0;
+                strategyNewPuzzle.execute(mainframe.this);
 
-                master.foundWords = new ArrayList<>();
-                
-                shuffleWord = master.shuffle(baseWord, reqLetter);
-                
-                // Letter change code goes here after letters are created
-                baseWord = shuffleWord;
-
-                String noReqLetter = master.removeChar(baseWord, reqLetter);
-
-                char[] bWLetters = noReqLetter.toCharArray();
-
-                String bW1 = Character.toString(bWLetters[0]);
-                String bW2 = Character.toString(bWLetters[1]);
-                String bW3 = Character.toString(bWLetters[2]);
-                String bW4 = Character.toString(reqLetter);
-                String bW5 = Character.toString(bWLetters[3]);
-                String bW6 = Character.toString(bWLetters[4]);
-                String bW7 = Character.toString(bWLetters[5]);
-
-                // Letter change code goes here after letters are created
-                letterbutton1.setText(bW1.toUpperCase());
-                letterbutton2.setText(bW2.toUpperCase());
-                letterbutton3.setText(bW3.toUpperCase());
-                letterbutton4.setText(bW4.toUpperCase());
-                letterbutton5.setText(bW5.toUpperCase());
-                letterbutton6.setText(bW6.toUpperCase());
-                letterbutton7.setText(bW7.toUpperCase());
-
-                
-                letterbutton1.setEnabled(true);
-                letterbutton2.setEnabled(true);
-                letterbutton3.setEnabled(true);
-                letterbutton4.setEnabled(true);
-                letterbutton5.setEnabled(true);
-                letterbutton6.setEnabled(true);
-                letterbutton7.setEnabled(true);
-
-                
                 textPane.setEnabled(true);
 
                 textPane.requestFocusInWindow();
@@ -861,29 +907,46 @@ panel.add(outputLabel5);
 
     /**********************************************************************/
     /*********************SAVE PUZZLE LOGIC********************************/
-        savePuzzleButton.addActionListener(new ActionListener() {
+        savePuzzleButton.addActionListener(new ActionListener() 
+        {
             @Override
-            public void actionPerformed(ActionEvent e)  {
-                try{
-                List<String> possibleWords = master.acceptedWords(baseWord, reqLetter);
-                int maxPoints = helpers.possiblePoints(baseWord, possibleWords);
-                // Call the saveGameData method with the appropriate parameters
-                playerGameData.saveGameData(baseWord, master.foundWords, master.totalPoints, "" + reqLetter, maxPoints);
+            public void actionPerformed(ActionEvent e)
+            {
+                String saveFileName = JOptionPane.showInputDialog("Enter a name for your saved game:");
+                CliGameModel.setSaveFileName(saveFileName);
+                if (saveFileName != null && !saveFileName.trim().isEmpty())
+                {
+                    try
+                    {
+                        List<String> possibleWords = master.acceptedWords(baseWord, reqLetter);
+                        int maxPoints = helpers.possiblePoints(baseWord, possibleWords);
+                        // Call the saveGameData method with the appropriate parameters
+                        playerGameData.saveGameData(saveFileName, baseWord, master.foundWords, master.totalPoints, "" + reqLetter, maxPoints);
+                    }
+                    catch (FileNotFoundException e1)
+                    {
+                        System.err.println("File not found " + e1.getMessage());
+                    }
                 }
-                catch (FileNotFoundException e1){
-                    System.err.println("File not found " + e1.getMessage());
+
+                else 
+                {
+                    JOptionPane.showMessageDialog(null, "You did not provide a valid save name. Game was not saved.");
                 }
             }
-        });
+        }
+        );
 
     /**********************************************************************/
     /**********************************************************************/
 
     /**********************************************************************/
     /*********************LOAD PUZZLE LOGIC********************************/
-        loadPuzzleButton.addActionListener(new ActionListener() {
+        loadPuzzleButton.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent e) 
+            {
 
                 outputLabel.setText("");
                 outputLabel2.setText("");
@@ -892,15 +955,41 @@ panel.add(outputLabel5);
                 outputLabel5.setText("");
                 
 
-                playerGameData.loadGameData(); // Load game data from the JSON file
+                //fetch list of all saved game names
+                List<String> saveNames = playerGameData.getAllSaveNames();
+
+                //remove some irrelevant keys that are not save game names
+                saveNames.remove("maxPoints");
+                saveNames.remove("playerPoints");
+                saveNames.remove("requiredLetter");
+                saveNames.remove("baseWord");
+                saveNames.remove("foundWords");
+
+                // Show the names in a JOptionPane
+                String chosenSave = (String) JOptionPane.showInputDialog(
+                null, 
+                "Select a saved game:", 
+                "Load Game",
+                JOptionPane.QUESTION_MESSAGE, 
+                null, 
+                saveNames.toArray(), 
+                saveNames.isEmpty() ? null : saveNames.get(0));
+
+                if (chosenSave == null) 
+                {
+                    // User canceled or closed the dialog
+                    return;
+                }
+
+                playerGameData.loadGameData(chosenSave); // Load selected game data 
                 // Load game variables from playerGameData
                 baseWord = playerGameData.getBaseWord();
                 shuffleWord = playerGameData.getBaseWord();
                 List<String> foundWords = playerGameData.getFoundWords();
-                master.totalPoints = playerGameData.getPlayerPoints();
+                CliGameModel.setTotalPoints(playerGameData.getPlayerPoints());
                 reqLetter = playerGameData.getRequiredLetter().charAt(0);
                 int possiblePoints = playerGameData.getMaxPoints();
-
+                CliGameModel.setSaveFileName(chosenSave);
                 baseWord = baseWord.toLowerCase();
                 
                 try {
@@ -938,7 +1027,10 @@ panel.add(outputLabel5);
                 letterbutton5.setEnabled(true);
                 letterbutton6.setEnabled(true);
                 letterbutton7.setEnabled(true);
-
+                hintsButton.setEnabled(true);
+                shufflePuzzle.setEnabled(true);
+                foundWordsButton.setEnabled(true);
+                savePuzzleButton.setEnabled(true);
                 
                 textPane.setEnabled(true);
                 
@@ -1086,7 +1178,11 @@ panel.add(outputLabel5);
         public void actionPerformed(ActionEvent e) {
             if (howToPlayDialog == null) {
                 howToPlayDialog = new JDialog(mainFrame, "How To Play", true);
-                howToPlayDialog.setSize(400, 300);
+                howToPlayDialog.setModalityType(Dialog.ModalityType.MODELESS);
+                howToPlayDialog.setAlwaysOnTop(true);
+                howToPlayDialog.setFocusableWindowState(false);
+
+                howToPlayDialog.setSize(850, 400);
                 howToPlayDialog.setLocationRelativeTo(mainFrame);
                 
                 JTextArea helpTextArea = new JTextArea();
@@ -1101,7 +1197,7 @@ panel.add(outputLabel5);
                 + "- Your goal is to create words using 7 unique letters with a required letter.\n"
                 + "- Words must contain at least 4 letters.\n"
                 + "- Words must include the required letter.\n"
-                + "- Letters can be used more than once.\n"
+                + "- Letters can be used more than once.\n\n"
                 + "Buttons:\n"
                 + "1. NEW PUZZLE: Generates a new puzzle with 7 unique letters and a required letter.\n"
                 + "2. CUSTOM PUZZLE: Generates a new puzzle with a word of your choice using 7 unique letters and a required letter.\n"
@@ -1139,20 +1235,21 @@ panel.add(outputLabel5);
 
 
     
-       foundWordsButton.addActionListener(new ActionListener() {
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        updateFoundWordsDialog(); // Call the method to update the dialog
-        if (!foundwords.isVisible()) {
-            foundwords.setVisible(true);
-        } else {
-            foundwords.setVisible(false);
+    foundWordsButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            updateFoundWordsDialog(); // Call the method to update the dialog
+            if (!foundwords.isVisible()) {
+                foundwords.setVisible(true);
+            } else {
+                foundwords.setVisible(false);
+            }
+            textPane.requestFocusInWindow();
         }
-        textPane.requestFocusInWindow();
-    }
     });
 
     /***********************************************************************/
+
     /*********************BACKSPACE BUTTON LOGIC****************************/
     
     backSpaceButton.addActionListener(new ActionListener() {
@@ -1230,6 +1327,25 @@ panel.add(outputLabel5);
     });
     
 
+    /*********************HINT BUTTON LOGIC****************************/
+    hintsButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            
+            updateHintsDialog(baseWord, reqLetter);
+            
+
+            if (!hints.isVisible()) {
+                hints.setVisible(true);
+            } else {
+                hints.setVisible(false);
+            }
+
+            textPane.requestFocusInWindow();
+        }
+    });
+
+
     /**********************************************************************/
     /************************EXIT BUTTON LOGIC*****************************/
     
@@ -1249,7 +1365,7 @@ panel.add(outputLabel5);
     /**********************************************************************/
     /**********************************************************************/  
 
-        // Add buttons to the button panel
+        // Add buttons to the button panel view
         buttonPanel.add(shufflePuzzle);
         buttonPanel.add(newUserPuzzleButton);
         buttonPanel.add(newPuzzleButton);
@@ -1257,9 +1373,12 @@ panel.add(outputLabel5);
         buttonPanel.add(loadPuzzleButton);
         buttonPanel.add(howToPlayButton);
         buttonPanel.add(foundWordsButton);
+
         buttonPanel.add(rankBreakDownButton);
         buttonPanel.add(backSpaceButton);
         buttonPanel.add(enterGuessButton);
+
+        buttonPanel.add(hintsButton);
         buttonPanel.add(exitButton);
 
         buttonPanel2.add(letterbutton1);
