@@ -18,6 +18,7 @@ import javax.swing.text.StyledDocument;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.util.Comparator;
 import java.util.List;
 import java.util.ArrayList;
 /***************************************************************/
