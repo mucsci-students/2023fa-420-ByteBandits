@@ -30,8 +30,8 @@ public class mainframe {
     private int charCount = 0;
 
 
-    private String defaultRank = "|  Your current rank is: Beginner |  ";
-    private String defaultPoints = "Total points: 0  |";
+    private String defaultRank = "| Your current rank is: Beginner | ";
+    private String defaultPoints = "Total points: 0 |";
   
     Color darkYellow = new Color(204, 153, 0);
     //create a button object view 
@@ -166,6 +166,7 @@ public class mainframe {
                 foundWordsArea.append("- " + word + "\n");
             }
             foundwords.add(new JScrollPane(foundWordsArea));
+            
         } else {
             JTextArea foundWordsArea = (JTextArea) ((JScrollPane) foundwords.getContentPane().getComponent(0)).getViewport().getView();
             foundWordsArea.setText("");
@@ -182,26 +183,33 @@ public class mainframe {
     }
 
     private void updateRanksDialog() {
-         ranks = new JDialog(mainFrame, "RANK BREAK DOWN", true);
-            ranks.setSize(400, 300);
-            ranks.setLocationRelativeTo(mainFrame);
-            JTextArea ranksArea = new JTextArea();
-            Color darkYellow = new Color(204, 153, 0);
-            ranksArea.setBackground(darkYellow);
-            ranksArea.setEditable(false);
-            ranksArea.setWrapStyleWord(true);
-            ranksArea.setLineWrap(true);
-            ranksArea.setFont(new Font("SansSerif", Font.PLAIN, 16));
-            ranksArea.setForeground(Color.BLACK);
-            String currentRankIndex []= {"Beginner", "Good Start", "Moving Up", "Good", "Solid", "Nice", "Great", "Amazing", "Genius", "Queen Bee"};
+        ranks = new JDialog(mainFrame, "RANK BREAK DOWN", true);
+        ranks.setModalityType(Dialog.ModalityType.MODELESS);
+        ranks.setAlwaysOnTop(true);
+        ranks.setFocusableWindowState(false);
+
+        ranks.setSize(400, 630);
+        ranks.setLocationRelativeTo(mainFrame);
+        JTextArea ranksArea = new JTextArea();
+        Color darkYellow = new Color(204, 153, 0);
+
+        ranksArea.setBackground(darkYellow);
+        ranksArea.setEditable(false);
+        ranksArea.setWrapStyleWord(true);
+        ranksArea.setLineWrap(true);
+        ranksArea.setFont(new Font("SansSerif", Font.PLAIN, 16));
+        ranksArea.setForeground(Color.BLACK);
+        String currentRankIndex []= {"Beginner", "Good Start", "Moving Up", "Good", "Solid", "Nice", "Great", "Amazing", "Genius", "Queen Bee"};
                 
-                for (int i = 1; i < currentRankIndex.length; i++) {
-                    helpers.calculateRankDifference(currentRankIndex[i], 0, acceptedWordList, baseWord.toLowerCase());
-                    if (helpers.pointsRequired != 0) {
-                        ranksArea.append("Rank: " + currentRankIndex[i] + "\nPoints needed: " + helpers.pointsRequired + "\n\n");
-                    }
+            for (int i = 0; i < currentRankIndex.length; i++) {
+                helpers.calculateRankDifference(currentRankIndex[i], 0, acceptedWordList, baseWord.toLowerCase());
+                if (helpers.pointsRequired != 0) {
+                    ranksArea.append("Rank: " + currentRankIndex[i+1] + "\nPoints needed: " + helpers.pointsRequired + "\n\n");
+                }
             }
-            ranks.add(new JScrollPane(ranksArea));
+        
+        ranks.add(new JScrollPane(ranksArea));
+        
     }
 
     /**********************************************************/
@@ -647,6 +655,8 @@ panel.add(outputLabel5);
                         enteredWord = enteredWord.toUpperCase();
                         master.guessGUI(enteredWord, baseWord, acceptedWordList, master.playerRank(baseWord, master.totalPoints, acceptedWordList));
                         updateFoundWordsDialog();
+
+                        int possiblePoints = helpers.possiblePoints(baseWord, acceptedWordList);
                         
                         if (master.foundWords.size() > initialSize) {
                             if(master.isPangram(enteredWord, baseWord)){
@@ -656,14 +666,14 @@ panel.add(outputLabel5);
                                 String enteredWordText = "<font color='#CC9900'>" + enteredWord + "</font> is a valid word!";
                                 outputLabel.setText("<html>" + enteredWordText + "</html>");
                             }
-                            String playerRank = master.playerRank(baseWord, master.totalPoints, acceptedWordList);
-                            String playerrank = playerRank; 
-                            String labelText = "|  Your current rank is: <font color=#CC9900>" + playerrank + "</font>  |  ";
-                            outputLabel6.setText("<html>" + labelText + "</html");
+                            master.playerRank = master.playerRank(baseWord, master.totalPoints, acceptedWordList);
+                            
+                            String labelText = "|  Your current rank is: <font color=#CC9900>" + master.playerRank + "</font>  |  ";
+                            outputLabel6.setText("<html>" + labelText + "</html>");
                             String labelText1 = "Total points:   <font color='#CC9900'>" + master.totalPoints + "</font>  |";
                             outputLabel7.setText("<html>" + labelText1 + "</html>");
                             //progressBar.setValue(master.totalPoints);
-                            String differenceText = "You need  <font color='#CC9900'>" + helpers.difference + "</font>" +  " points to reach next rank.";
+                            String differenceText = "You need  <font color='#CC9900'>" +  helpers.difference + "</font>" +  " points to reach next rank.";
                             outputLabel5.setText("<html>" + differenceText + "</html>");
                         } else {
                             outputLabel.setText("Invalid word, try again!");
@@ -995,7 +1005,7 @@ panel.add(outputLabel5);
                 List<String> foundWords = playerGameData.getFoundWords();
                 CliGameModel.setTotalPoints(playerGameData.getPlayerPoints());
                 reqLetter = playerGameData.getRequiredLetter().charAt(0);
-                int possiblePoints = playerGameData.getMaxPoints();
+                int playerPoints = playerGameData.getPlayerPoints();
                 CliGameModel.setSaveFileName(chosenSave);
                 baseWord = baseWord.toLowerCase();
                 
@@ -1025,7 +1035,6 @@ panel.add(outputLabel5);
                 letterbutton6.setText(Character.toString(bWLetters[4]).toUpperCase());
                 letterbutton7.setText(Character.toString(bWLetters[5]).toUpperCase());
                 
-                
 
                 letterbutton1.setEnabled(true);
                 letterbutton2.setEnabled(true);
@@ -1046,11 +1055,12 @@ panel.add(outputLabel5);
                 
                 textPane.requestFocusInWindow();
 
-                String playerRank = master.playerRank(baseWord, master.totalPoints, acceptedWordList);
-                String playerrank = playerRank;
-                String labelText = "Your current rank is: <font color=#CC9900>" + playerrank + "</font>";
-                outputLabel6.setText("<html>" + labelText + "</html");
-                String labelText1 = "Total points:   <font color='#CC9900'>" + master.totalPoints + "</font>";
+                master.playerRank = master.playerRank(baseWord, playerPoints, acceptedWordList);
+                master.totalPoints = playerPoints;
+                
+                String labelText = "|  Your current rank is: <font color=#CC9900>" + master.playerRank + "</font>  |  ";
+                outputLabel6.setText("<html>" + labelText + "</html>");
+                String labelText1 = "Total points:   <font color='#CC9900'>" + playerPoints + "</font>  |";
                 outputLabel7.setText("<html>" + labelText1 + "</html>");
             }
             
@@ -1301,11 +1311,11 @@ panel.add(outputLabel5);
                         String enteredWordText = "<font color='#CC9900'>" + enteredWord + "</font> is a valid word!";
                         outputLabel.setText("<html>" + enteredWordText + "</html>");
                     }
-                    String playerRank = master.playerRank(baseWord, master.totalPoints, acceptedWordList);
-                    String playerrank = playerRank;
-                    String labelText = "Your current rank is: <font color=#CC9900>" + playerrank + "</font>";
-                    outputLabel6.setText("<html>" + labelText + "</html");
-                    String labelText1 = "Total points:   <font color='#CC9900'>" + master.totalPoints + "</font>";
+                    master.playerRank = master.playerRank(baseWord, master.totalPoints, acceptedWordList);
+                    
+                    String labelText = "|  Your current rank is: <font color=#CC9900>" + master.playerRank + "</font>  |  ";
+                    outputLabel6.setText("<html>" + labelText + "</html>");
+                    String labelText1 = "Total points:   <font color='#CC9900'>" + master.totalPoints + "</font>  |";
                     outputLabel7.setText("<html>" + labelText1 + "</html>");
                     //progressBar.setValue(master.totalPoints);
                     String differenceText = "You need  <font color='#CC9900'>" + helpers.difference + "</font>" +  " points to reach next rank.";
