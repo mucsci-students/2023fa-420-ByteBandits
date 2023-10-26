@@ -1,5 +1,7 @@
 package app.src.main.java;
 
+
+import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 import app.src.main.java.CliGameModel;
@@ -142,7 +144,7 @@ public class CliGameView{
     * This function is used to prompt user for word.
     */
     public static void displayGuessInstructions() {
-        System.out.print("Guess a word: ");
+        System.out.print("Guess a word or stop guessing with '/q': ");
     }
     
     /*
@@ -225,6 +227,7 @@ public class CliGameView{
             }
         
             System.out.println();
+            foundWords.sort(Comparator.naturalOrder());
         
             for(int j = 0; j < foundWords.size(); j++){
                 System.out.printf(yellowColor + "* " + resetColor + "%-16s" + yellowColor + "*%n", foundWords.get(j));
