@@ -29,6 +29,8 @@ public class CliGameModel extends helpers {
     private static List<String> acceptedWordList;
 
     private static String saveFileName;
+
+    private Scanner console = new Scanner(System.in);
     
     /**
      * @throws FileNotFoundException
@@ -119,7 +121,9 @@ public class CliGameModel extends helpers {
         CliGameModel.acceptedWordList = acceptedWordList;
     }
 
-
+    public void setScanner(Scanner scanner) {
+        this.console = scanner;
+    }
     /*
     * initGame
     * param: N/A
@@ -173,7 +177,7 @@ public class CliGameModel extends helpers {
         playerRank = "";
         foundWords = new ArrayList<>();
         
-        Scanner console = new Scanner(System.in);
+        console = new Scanner(System.in);
         CliGameView.basePuzzleChooseMessage();
         baseWord = console.next();
     
