@@ -34,6 +34,7 @@ public class mainframe {
     private String defaultPoints = "Total points: ";
 
     private Color pastelYellow = new Color(166, 102, 22);
+
     //create a button object view 
     public class CustomButton extends JButton {
         private Color originalBackgroundColor;
@@ -197,7 +198,6 @@ public class mainframe {
                 
                 for (int i = 1; i < currentRankIndex.length; i++) {
                     helpers.calculateRankDifference(currentRankIndex[i], 0, acceptedWordList, baseWord.toLowerCase());
-
                     if (helpers.pointsRequired != 0) {
                         ranksArea.append("Rank: " + currentRankIndex[i] + "\nPoints needed: " + helpers.pointsRequired + "\n\n");
                     }
@@ -211,7 +211,7 @@ public class mainframe {
     private void updateHintsDialog(String baseWord, char reqLetter) {
         if (hints != null){
             hints.dispose();
-            hints = null;
+            
         }
         
         hints = new JDialog(mainFrame, "Hints", true);
@@ -232,7 +232,7 @@ public class mainframe {
         hintsTextArea.setForeground(Color.BLACK);
 
         try {
-            String formattedHintsText = helpers.dynamicHints(baseWord, reqLetter);
+            String formattedHintsText = helpers.dynamicHints(baseWord.toLowerCase(), reqLetter);
                 
             hintsTextArea.setText(formattedHintsText);
         } catch (FileNotFoundException e1) {
@@ -400,6 +400,9 @@ public class mainframe {
         shufflePuzzle.setEnabled(false);
         foundWordsButton.setEnabled(false);
         savePuzzleButton.setEnabled(false);
+        backSpaceButton.setEnabled(false);
+        enterGuessButton.setEnabled(false);
+        rankBreakDownButton.setEnabled(false);
 
 
         
@@ -434,7 +437,7 @@ public class mainframe {
         letterbutton6.setForeground(Color.BLACK);
         letterbutton7.setForeground(Color.BLACK);
 
-        Dimension buttonSize = new Dimension(150, 50); 
+        Dimension buttonSize = new Dimension(115, 50); 
 
         shufflePuzzle.setPreferredSize(buttonSize);
         newPuzzleButton.setPreferredSize(buttonSize);
@@ -449,7 +452,7 @@ public class mainframe {
         hintsButton.setPreferredSize(buttonSize);
         exitButton.setPreferredSize(buttonSize);
 
-        Font buttonFont = new Font("SansSerif", Font.BOLD, 15);
+        Font buttonFont = new Font("SansSerif", Font.BOLD, 12);
 
         shufflePuzzle.setFont(buttonFont);
         newPuzzleButton.setFont(buttonFont);
@@ -534,7 +537,7 @@ public class mainframe {
             int newY = (newHeight - textFieldHeight) / 9;
             
            
-            textPane.setBounds(newX - 8, newY + 40, textFieldWidth, textFieldHeight);
+            textPane.setBounds(newX, newY + 40, textFieldWidth, textFieldHeight);
         }
     });
 
@@ -666,14 +669,11 @@ panel.add(outputLabel5);
                                 }
                             String playerRank = master.playerRank(baseWord, master.totalPoints, acceptedWordList);
                             String playerrank = playerRank; 
-                            String labelText = "Your current rank is: <font color=#CC9900>" + playerrank + "</font>";
+                            String labelText = "|  Your current rank is: <font color=#CC9900>" + playerrank + "</font>  |  ";
                             outputLabel6.setText("<html>" + labelText + "</html");
-                            String labelText1 = "Total points:   <font color='#CC9900'>" + master.totalPoints + "</font>";
+                            String labelText1 = "Total points:   <font color='#CC9900'>" + master.totalPoints + "</font>  |";
                             outputLabel7.setText("<html>" + labelText1 + "</html>");
                             //progressBar.setValue(master.totalPoints);
-                            String nextRankText = "Total points needed for next rank   <font color='#CC9900'>" + helpers.nextRank + "</font>: ";
-                            String pointsRequiredText = "<font color='#CC9900'>" + helpers.pointsRequired + "</font>";
-                            outputLabel4.setText("<html>" + nextRankText + pointsRequiredText + "</html>");
                             String differenceText = "You need  <font color='#CC9900'>" + helpers.difference + "</font>" +  " points to reach next rank.";
                             outputLabel5.setText("<html>" + differenceText + "</html>");
                         } else {
@@ -826,6 +826,10 @@ panel.add(outputLabel5);
                 shufflePuzzle.setEnabled(true);
                 foundWordsButton.setEnabled(true);
                 savePuzzleButton.setEnabled(true);
+                backSpaceButton.setEnabled(true);
+                enterGuessButton.setEnabled(true);
+                rankBreakDownButton.setEnabled(true);
+
 
 
                 strategyNewPuzzle.execute(mainframe.this);
@@ -904,6 +908,9 @@ panel.add(outputLabel5);
                 hintsButton.setEnabled(true);
                 foundWordsButton.setEnabled(true);
                 savePuzzleButton.setEnabled(true);
+                backSpaceButton.setEnabled(true);
+                enterGuessButton.setEnabled(true);
+                rankBreakDownButton.setEnabled(true);
 
                 strategyNewPuzzle.execute(mainframe.this);
 
@@ -1042,6 +1049,9 @@ panel.add(outputLabel5);
                 shufflePuzzle.setEnabled(true);
                 foundWordsButton.setEnabled(true);
                 savePuzzleButton.setEnabled(true);
+                backSpaceButton.setEnabled(true);
+                enterGuessButton.setEnabled(true);
+                rankBreakDownButton.setEnabled(true);
                 
                 textPane.setEnabled(true);
                 
@@ -1193,7 +1203,7 @@ panel.add(outputLabel5);
                 howToPlayDialog.setAlwaysOnTop(true);
                 howToPlayDialog.setFocusableWindowState(false);
 
-                howToPlayDialog.setSize(850, 400);
+                howToPlayDialog.setSize(950, 400);
                 howToPlayDialog.setLocationRelativeTo(mainFrame);
                 
                 JTextArea helpTextArea = new JTextArea();
@@ -1209,17 +1219,18 @@ panel.add(outputLabel5);
                 + "- Words must include the required letter.\n"
                 + "- Letters can be used more than once.\n\n"
                 + "Buttons:\n"
-                + "1. NEW PUZZLE: Generates a new puzzle with 7 unique letters and a required letter.\n"
-                + "2. CUSTOM PUZZLE: Generates a new puzzle with a word of your choice using 7 unique letters and a required letter.\n"
-                + "3. FOUND WORDS: Generates a list of words that you have found.\n"
-                + "4. PRESS ENTER: Allows you to guess your words.\n"
-                + "5. SHUFFLE PUZZLE: Allows you to shuffle around the letters.\n"
-                + "6. SAVE PUZZLE: Lets you save a blank puzzle.\n"
-                + "7. LOAD PUZZLE: The player can load a saved game.\n"
-                + "8. PRESS ENTER : The player can see their rank and progress on a current puzzle.\n"
-                + "9. <: You can use this button to remove typed/selected letters from your current attempt.\n"
-                + "10. ENTER GUESS: Use this button to submit your current guess.\n"
-                + "11. EXIT : Leave the application."
+                + "  1. NEW PUZZLE: Generates a new puzzle with 7 unique letters and a required letter.\n"
+                + "  2. CUSTOM PUZZLE: Generates a new puzzle with a word of your choice using 7 unique letters and a required letter.\n"
+                + "  3. FOUND WORDS: Generates a list of words that you have found.\n"
+                + "  4. PRESS ENTER: Allows you to guess your words.\n"
+                + "  5. SHUFFLE PUZZLE: Allows you to shuffle around the letters.\n"
+                + "  6. SAVE PUZZLE: Lets you save a blank puzzle.\n"
+                + "  7. LOAD PUZZLE: The player can load a saved game.\n"
+                + "  8. PRESS ENTER : The player can see their rank and progress on a current puzzle.\n"
+                + "  9. <: You can use this button to remove typed/selected letters from your current attempt.\n"
+                + "10. HINTS: This button will display a pop-up containing helpful information to assist your guesses.\n"
+                + "11. ENTER GUESS: Use this button to submit your current guess.\n"
+                + "12. EXIT: Leave the application."
         );
 
                 // Wrap the text area in a JScrollPane
@@ -1269,6 +1280,7 @@ panel.add(outputLabel5);
 
             if (currentString.length() > 0) {
                 currentString = currentString.substring(0, currentString.length() - 1);
+                charCount = Math.max(0, charCount - 1);
 
                 textPane.setText(currentString);
             }

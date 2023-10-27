@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.Map;
-import java.util.TreeMap;
 
 /*********************************************************/
 /*********************************************************/
@@ -127,7 +126,7 @@ public static boolean isUnique(String s)
         matrixStr.append("</td>");
     }
 
-    matrixStr.append("&nbsp;&nbsp;&nbsp;<b style=\" font-size: 14px;\">&#8721</b>");
+    matrixStr.append("&nbsp;&nbsp;&nbsp;<b style=\" font-family: Garamond, serif; font-size: 16px;\">&#8721</b>");
 
     int index = 0;
     for (int i = 0; i < hintsMatrix.length; i++) {
@@ -139,7 +138,7 @@ public static boolean isUnique(String s)
             matrixStr.append("</b>&nbsp;&nbsp;");
             index++;
         } else {
-            matrixStr.append("<b style=\" font-size: 12px;\">&#8721 : &nbsp;&nbsp;</b>");
+            matrixStr.append("<b style=\" font-family: Garamond, serif; font-size: 16px;\">&#8721 : &nbsp;&nbsp;</b>");
         }
         
         for (int j = 0; j < hintsMatrix[i].length; j++) {
