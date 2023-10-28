@@ -15,6 +15,8 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
+
+
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
@@ -29,13 +31,13 @@ public class mainframe {
     
     private int charCount = 0;
 
-
-    private String defaultRank = "Your current rank is: ";
-    private String defaultPoints = "Total points: ";
-
     private Color pastelYellow = new Color(166, 102, 22);
 
-    //create a button object view 
+    private String defaultRank = "| Your current rank is: Beginner | ";
+    private String defaultPoints = "Total points: 0 |";
+  
+    Color darkYellow = new Color(204, 153, 0);
+
     public class CustomButton extends JButton {
         private Color originalBackgroundColor;
         private boolean isLetterButton4;
@@ -56,8 +58,6 @@ public class mainframe {
             setForeground(isLetterButton4 ? Color.BLACK : Color.BLACK);
             setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
             setUI(new BasicButtonUI());
-        
-        
     
             addMouseListener(new MouseAdapter(){
                 @Override
@@ -108,14 +108,14 @@ public class mainframe {
     public static char reqLetter = master.getReqLetter(baseWord);
     public static String shuffleWord = baseWord;
 
-    List<String> acceptedWordList;
+    static List<String> acceptedWordList;
     
     char[] bWLetters = baseWord.toCharArray();
     //view class creae mainfram secondframe
-    private JFrame mainFrame;
+    private static JFrame mainFrame;
     private JFrame secondFrame;
     private JDialog howToPlayDialog;
-    private JDialog foundwords;
+    private static JDialog foundwords;
 
     private JDialog ranks;
     //private JProgressBar progressBar = new JProgressBar();
@@ -143,7 +143,7 @@ public class mainframe {
     }
     /**********************************************************/
     /**********************************************************/
-    private void updateFoundWordsDialog() {
+    public static void updateFoundWordsDialog() {
         if (foundwords == null) {
             foundwords = new JDialog(mainFrame, "FOUND WORD LIST", true);
             foundwords.setModalityType(Dialog.ModalityType.MODELESS);
@@ -182,32 +182,6 @@ public class mainframe {
                 foundWordsArea.append("- " + word + "\n");
             }
         }
-    }
-
-    private void updateRanksDialog() {
-
-         ranks = new JDialog(mainFrame, "RANK BREAK DOWN", true);
-            ranks.setSize(400, 300);
-            ranks.setLocationRelativeTo(mainFrame);
-            JTextArea ranksArea = new JTextArea();
-            ranksArea.setBackground(pastelYellow);
-            ranksArea.setEditable(false);
-            ranksArea.setWrapStyleWord(true);
-            ranksArea.setLineWrap(true);
-            ranksArea.setFont(new Font("SansSerif", Font.PLAIN, 16));
-            ranksArea.setForeground(Color.BLACK);
-            String currentRankIndex []= {"Beginner", "Good Start", "Moving Up", "Good", "Solid", "Nice", "Great", "Amazing", "Genius", "Queen Bee"};
-
-                
-            for (int i = 0; i < currentRankIndex.length; i++) {
-                helpers.calculateRankDifference(currentRankIndex[i], 0, acceptedWordList, baseWord.toLowerCase());
-                if (helpers.pointsRequired != 0) {
-                    ranksArea.append("Rank: " + currentRankIndex[i+1] + "\nPoints needed: " + helpers.pointsRequired + "\n\n");
-                }
-            }
-        
-        ranks.add(new JScrollPane(ranksArea));
-        
     }
 
     /**********************************************************/
@@ -256,6 +230,7 @@ public class mainframe {
     /**********************************************************/
 
     public mainframe() {
+        System.out.println("mainframe() constructor called"); // Debugging statement
         mainFrame = new JFrame("Welcome to Wordy Wasps");
         mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -296,6 +271,7 @@ public class mainframe {
         buttonPanel.setOpaque(false);
     
         // "PLAY" button
+       
         CustomButton playButton = new CustomButton("PLAY", false);
         playButton.setBackground(new Color(255, 160, 96));
         playButton.setOpaque(true); // Make the button opaque
@@ -304,6 +280,8 @@ public class mainframe {
     playButton.addActionListener(new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
+            System.out.println("playButton ActionListener called"); // Debugging statement
+
             showSecondScreen();
         }
     });
@@ -321,7 +299,7 @@ public class mainframe {
     /************************************************************/
     /*********************SECOND SCREEN**************************/
     //Shows after player clicks PLAY
-    private void showSecondScreen() {
+    public void showSecondScreen() {
         mainFrame.setVisible(false);
         ImageIcon backgroundIcon = new ImageIcon("./src/main/resources/visualcontent/waspnest.gif");
 
@@ -483,6 +461,7 @@ public class mainframe {
         letterbutton4.setForeground(pastelYellow);
       
         StrategyNewPuzzle strategyNewPuzzle = new StrategyNewPuzzle(letterbutton1, letterbutton2, letterbutton3, letterbutton4, letterbutton5, letterbutton6, letterbutton7);
+
 
     /*********************************************************************/
     /**************************GUESSING TEXTBOX***************************/
@@ -672,13 +651,17 @@ panel.add(outputLabel5);
                                 String enteredWordText = "<font color='#CC9900'>" + enteredWord + "</font> is a valid word!";
                                 outputLabel.setText("<html>" + enteredWordText + "</html>");
 
+
                                 // Show heart
-                                placePic(secondFrame, "./src/main/resources/visualcontent/correct.png", 0.17, 0.5, true);
-                                }
-                            String playerRank = master.playerRank(baseWord, master.totalPoints, acceptedWordList);
-                            String playerrank = playerRank; 
-                            String labelText = "|  Your current rank is: <font color=#CC9900>" + playerrank + "</font>  |  ";
-                            outputLabel6.setText("<html>" + labelText + "</html");
+                            placePic(secondFrame, "./src/main/resources/visualcontent/correct.png", 0.17, 0.5, true);
+                                
+                            }
+                            master.playerRank = master.playerRank(baseWord, master.totalPoints, acceptedWordList);
+                            
+                            String labelText = "|  Your current rank is: <font color=#CC9900>" + master.playerRank + "</font>  |  ";
+                            outputLabel6.setText("<html>" + labelText + "</html>");
+                            master.playerRank = master.playerRank(baseWord, master.totalPoints, acceptedWordList);
+                            
 
                             String labelText1 = "Total points:   <font color='#CC9900'>" + master.totalPoints + "</font>  |";
                             outputLabel7.setText("<html>" + labelText1 + "</html>");
@@ -1346,7 +1329,15 @@ panel.add(outputLabel5);
     rankBreakDownButton.addActionListener(new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-        updateRanksDialog(); // Call the method to update the dialog
+        RanksDialogBuilder ranksDialogBuilder = new RanksDialogBuilder(mainFrame);
+        ranksDialogBuilder.setTitle("RANK BREAK DOWN")
+            .setRankNames(new String[]{"Beginner", "Good Start", "Moving Up", "Good", "Solid", "Nice", "Great", "Amazing", "Genius", "Queen Bee"})
+            .setAcceptedWordList(acceptedWordList)
+            .setBaseWord(baseWord);
+            
+            JDialog ranksDialog = ranksDialogBuilder.build();
+            ranksDialog.setVisible(true);
+            rankBreakDownButton.setBackground(darkYellow);
         if (!ranks.isVisible()) {
             ranks.setVisible(true);
         } else {
@@ -1439,7 +1430,7 @@ panel.add(outputLabel5);
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
-                    new mainframe();
+                    mainframe mainframe = new mainframe();
                 }
             });
         }
