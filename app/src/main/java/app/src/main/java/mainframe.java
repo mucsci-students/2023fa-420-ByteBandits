@@ -31,7 +31,7 @@ public class mainframe {
     
     private int charCount = 0;
 
-    Color pastelYellow = new Color(166, 102, 22);
+    static Color pastelYellow = new Color(166, 102, 22);
 
     private String defaultRank = "| Your current rank is: Beginner | ";
     private String defaultPoints = "Total points: 0 |";
