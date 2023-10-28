@@ -36,7 +36,7 @@ public class mainframe {
     private String defaultPoints = "Total points: 0 |";
   
     Color darkYellow = new Color(204, 153, 0);
-    //create a button object view 
+
     public class CustomButton extends JButton {
         private Color originalBackgroundColor;
         private boolean isLetterButton4;
