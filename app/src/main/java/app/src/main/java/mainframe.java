@@ -633,8 +633,6 @@ panel.add(outputLabel5);
                         updateFoundWordsDialog();
 
                         int possiblePoints = helpers.possiblePoints(baseWord, acceptedWordList);
-
-                        int possiblePoints = helpers.possiblePoints(baseWord, acceptedWordList);
                         
                         if (master.foundWords.size() > initialSize) {
                             if(master.isPangram(enteredWord, baseWord)){
@@ -650,12 +648,9 @@ panel.add(outputLabel5);
                             outputLabel6.setText("<html>" + labelText + "</html>");
                             master.playerRank = master.playerRank(baseWord, master.totalPoints, acceptedWordList);
                             
-                            String labelText = "|  Your current rank is: <font color=#CC9900>" + master.playerRank + "</font>  |  ";
-                            outputLabel6.setText("<html>" + labelText + "</html>");
                             String labelText1 = "Total points:   <font color='#CC9900'>" + master.totalPoints + "</font>  |";
                             outputLabel7.setText("<html>" + labelText1 + "</html>");
                             //progressBar.setValue(master.totalPoints);
-                            String differenceText = "You need  <font color='#CC9900'>" +  helpers.difference + "</font>" +  " points to reach next rank.";
                             String differenceText = "You need  <font color='#CC9900'>" +  helpers.difference + "</font>" +  " points to reach next rank.";
                             outputLabel5.setText("<html>" + differenceText + "</html>");
                         } else {
