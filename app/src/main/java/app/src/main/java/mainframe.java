@@ -15,6 +15,8 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
+
+
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
@@ -29,12 +31,13 @@ public class mainframe {
     
     private int charCount = 0;
 
+    static Color pastelYellow = new Color(166, 102, 22);
 
-    private String defaultRank = "Your current rank is: ";
-    private String defaultPoints = "Total points: ";
+    private String defaultRank = "| Your current rank is: Beginner | ";
+    private String defaultPoints = "Total points: 0 |";
+  
+    Color darkYellow = new Color(204, 153, 0);
 
-    private Color pastelYellow = new Color(166, 102, 22);
-    //create a button object view 
     public class CustomButton extends JButton {
         private Color originalBackgroundColor;
         private boolean isLetterButton4;
@@ -55,8 +58,6 @@ public class mainframe {
             setForeground(isLetterButton4 ? Color.BLACK : Color.BLACK);
             setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
             setUI(new BasicButtonUI());
-        
-        
     
             addMouseListener(new MouseAdapter(){
                 @Override
@@ -107,14 +108,14 @@ public class mainframe {
     public static char reqLetter = master.getReqLetter(baseWord);
     public static String shuffleWord = baseWord;
 
-    List<String> acceptedWordList;
+    static List<String> acceptedWordList;
     
     char[] bWLetters = baseWord.toCharArray();
     //view class creae mainfram secondframe
-    private JFrame mainFrame;
+    private static JFrame mainFrame;
     private JFrame secondFrame;
     private JDialog howToPlayDialog;
-    private JDialog foundwords;
+    private static JDialog foundwords;
 
     private JDialog ranks;
     //private JProgressBar progressBar = new JProgressBar();
@@ -142,7 +143,7 @@ public class mainframe {
     }
     /**********************************************************/
     /**********************************************************/
-    private void updateFoundWordsDialog() {
+    public static void updateFoundWordsDialog() {
         if (foundwords == null) {
             foundwords = new JDialog(mainFrame, "FOUND WORD LIST", true);
             foundwords.setModalityType(Dialog.ModalityType.MODELESS);
@@ -167,6 +168,7 @@ public class mainframe {
                 foundWordsArea.append("- " + word + "\n");
             }
             foundwords.add(new JScrollPane(foundWordsArea));
+            
         } else {
             JTextArea foundWordsArea = (JTextArea) ((JScrollPane) foundwords.getContentPane().getComponent(0)).getViewport().getView();
             foundWordsArea.setText("");
@@ -182,36 +184,13 @@ public class mainframe {
         }
     }
 
-    private void updateRanksDialog() {
-         ranks = new JDialog(mainFrame, "RANK BREAK DOWN", true);
-            ranks.setSize(400, 300);
-            ranks.setLocationRelativeTo(mainFrame);
-            JTextArea ranksArea = new JTextArea();
-            ranksArea.setBackground(pastelYellow);
-            ranksArea.setEditable(false);
-            ranksArea.setWrapStyleWord(true);
-            ranksArea.setLineWrap(true);
-            ranksArea.setFont(new Font("SansSerif", Font.PLAIN, 16));
-            ranksArea.setForeground(Color.BLACK);
-            String currentRankIndex []= {"Beginner", "Good Start", "Moving Up", "Good", "Solid", "Nice", "Great", "Amazing", "Genius", "Queen Bee"};
-                
-                for (int i = 1; i < currentRankIndex.length; i++) {
-                    helpers.calculateRankDifference(currentRankIndex[i], 0, acceptedWordList, baseWord.toLowerCase());
-
-                    if (helpers.pointsRequired != 0) {
-                        ranksArea.append("Rank: " + currentRankIndex[i] + "\nPoints needed: " + helpers.pointsRequired + "\n\n");
-                    }
-            }
-            ranks.add(new JScrollPane(ranksArea));
-    }
-
     /**********************************************************/
     /**********************************************************/
   
     private void updateHintsDialog(String baseWord, char reqLetter) {
         if (hints != null){
             hints.dispose();
-            hints = null;
+            
         }
         
         hints = new JDialog(mainFrame, "Hints", true);
@@ -232,7 +211,7 @@ public class mainframe {
         hintsTextArea.setForeground(Color.BLACK);
 
         try {
-            String formattedHintsText = helpers.dynamicHints(baseWord, reqLetter);
+            String formattedHintsText = helpers.dynamicHints(baseWord.toLowerCase(), reqLetter);
                 
             hintsTextArea.setText(formattedHintsText);
         } catch (FileNotFoundException e1) {
@@ -251,6 +230,7 @@ public class mainframe {
     /**********************************************************/
 
     public mainframe() {
+        System.out.println("mainframe() constructor called"); // Debugging statement
         mainFrame = new JFrame("Welcome to Wordy Wasps");
         mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -291,6 +271,7 @@ public class mainframe {
         buttonPanel.setOpaque(false);
     
         // "PLAY" button
+       
         CustomButton playButton = new CustomButton("PLAY", false);
         playButton.setBackground(new Color(255, 160, 96));
         playButton.setOpaque(true); // Make the button opaque
@@ -299,6 +280,8 @@ public class mainframe {
     playButton.addActionListener(new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
+            System.out.println("playButton ActionListener called"); // Debugging statement
+
             showSecondScreen();
         }
     });
@@ -316,7 +299,7 @@ public class mainframe {
     /************************************************************/
     /*********************SECOND SCREEN**************************/
     //Shows after player clicks PLAY
-    private void showSecondScreen() {
+    public void showSecondScreen() {
         mainFrame.setVisible(false);
         ImageIcon backgroundIcon = new ImageIcon("./src/main/resources/visualcontent/waspnest.gif");
 
@@ -400,6 +383,9 @@ public class mainframe {
         shufflePuzzle.setEnabled(false);
         foundWordsButton.setEnabled(false);
         savePuzzleButton.setEnabled(false);
+        backSpaceButton.setEnabled(false);
+        enterGuessButton.setEnabled(false);
+        rankBreakDownButton.setEnabled(false);
 
 
         
@@ -434,7 +420,7 @@ public class mainframe {
         letterbutton6.setForeground(Color.BLACK);
         letterbutton7.setForeground(Color.BLACK);
 
-        Dimension buttonSize = new Dimension(150, 50); 
+        Dimension buttonSize = new Dimension(115, 50); 
 
         shufflePuzzle.setPreferredSize(buttonSize);
         newPuzzleButton.setPreferredSize(buttonSize);
@@ -449,7 +435,7 @@ public class mainframe {
         hintsButton.setPreferredSize(buttonSize);
         exitButton.setPreferredSize(buttonSize);
 
-        Font buttonFont = new Font("SansSerif", Font.BOLD, 15);
+        Font buttonFont = new Font("SansSerif", Font.BOLD, 12);
 
         shufflePuzzle.setFont(buttonFont);
         newPuzzleButton.setFont(buttonFont);
@@ -475,6 +461,7 @@ public class mainframe {
         letterbutton4.setForeground(pastelYellow);
       
         StrategyNewPuzzle strategyNewPuzzle = new StrategyNewPuzzle(letterbutton1, letterbutton2, letterbutton3, letterbutton4, letterbutton5, letterbutton6, letterbutton7);
+
 
     /*********************************************************************/
     /**************************GUESSING TEXTBOX***************************/
@@ -534,7 +521,7 @@ public class mainframe {
             int newY = (newHeight - textFieldHeight) / 9;
             
            
-            textPane.setBounds(newX - 8, newY + 40, textFieldWidth, textFieldHeight);
+            textPane.setBounds(newX, newY + 40, textFieldWidth, textFieldHeight);
         }
     });
 
@@ -652,6 +639,8 @@ panel.add(outputLabel5);
                         enteredWord = enteredWord.toUpperCase();
                         master.guessGUI(enteredWord, baseWord, acceptedWordList, master.playerRank(baseWord, master.totalPoints, acceptedWordList));
                         updateFoundWordsDialog();
+
+                        int possiblePoints = helpers.possiblePoints(baseWord, acceptedWordList);
                         
                         if (master.foundWords.size() > initialSize) {
                             if(master.isPangram(enteredWord, baseWord)){
@@ -661,20 +650,23 @@ panel.add(outputLabel5);
                             else{
                                 String enteredWordText = "<font color='#CC9900'>" + enteredWord + "</font> is a valid word!";
                                 outputLabel.setText("<html>" + enteredWordText + "</html>");
+
+
                                 // Show heart
-                                placePic(secondFrame, "./src/main/resources/visualcontent/correct.png", 0.17, 0.5, true);
-                                }
-                            String playerRank = master.playerRank(baseWord, master.totalPoints, acceptedWordList);
-                            String playerrank = playerRank; 
-                            String labelText = "Your current rank is: <font color=#CC9900>" + playerrank + "</font>";
-                            outputLabel6.setText("<html>" + labelText + "</html");
-                            String labelText1 = "Total points:   <font color='#CC9900'>" + master.totalPoints + "</font>";
+                            placePic(secondFrame, "./src/main/resources/visualcontent/correct.png", 0.17, 0.5, true);
+                                
+                            }
+                            master.playerRank = master.playerRank(baseWord, master.totalPoints, acceptedWordList);
+                            
+                            String labelText = "|  Your current rank is: <font color=#CC9900>" + master.playerRank + "</font>  |  ";
+                            outputLabel6.setText("<html>" + labelText + "</html>");
+                            master.playerRank = master.playerRank(baseWord, master.totalPoints, acceptedWordList);
+                            
+
+                            String labelText1 = "Total points:   <font color='#CC9900'>" + master.totalPoints + "</font>  |";
                             outputLabel7.setText("<html>" + labelText1 + "</html>");
                             //progressBar.setValue(master.totalPoints);
-                            String nextRankText = "Total points needed for next rank   <font color='#CC9900'>" + helpers.nextRank + "</font>: ";
-                            String pointsRequiredText = "<font color='#CC9900'>" + helpers.pointsRequired + "</font>";
-                            outputLabel4.setText("<html>" + nextRankText + pointsRequiredText + "</html>");
-                            String differenceText = "You need  <font color='#CC9900'>" + helpers.difference + "</font>" +  " points to reach next rank.";
+                            String differenceText = "You need  <font color='#CC9900'>" +  helpers.difference + "</font>" +  " points to reach next rank.";
                             outputLabel5.setText("<html>" + differenceText + "</html>");
                         } else {
                             outputLabel.setText("Invalid word, try again!");
@@ -826,6 +818,10 @@ panel.add(outputLabel5);
                 shufflePuzzle.setEnabled(true);
                 foundWordsButton.setEnabled(true);
                 savePuzzleButton.setEnabled(true);
+                backSpaceButton.setEnabled(true);
+                enterGuessButton.setEnabled(true);
+                rankBreakDownButton.setEnabled(true);
+
 
 
                 strategyNewPuzzle.execute(mainframe.this);
@@ -904,6 +900,9 @@ panel.add(outputLabel5);
                 hintsButton.setEnabled(true);
                 foundWordsButton.setEnabled(true);
                 savePuzzleButton.setEnabled(true);
+                backSpaceButton.setEnabled(true);
+                enterGuessButton.setEnabled(true);
+                rankBreakDownButton.setEnabled(true);
 
                 strategyNewPuzzle.execute(mainframe.this);
 
@@ -999,7 +998,7 @@ panel.add(outputLabel5);
                 List<String> foundWords = playerGameData.getFoundWords();
                 CliGameModel.setTotalPoints(playerGameData.getPlayerPoints());
                 reqLetter = playerGameData.getRequiredLetter().charAt(0);
-                int possiblePoints = playerGameData.getMaxPoints();
+                int playerPoints = playerGameData.getPlayerPoints();
                 CliGameModel.setSaveFileName(chosenSave);
                 baseWord = baseWord.toLowerCase();
                 
@@ -1029,7 +1028,6 @@ panel.add(outputLabel5);
                 letterbutton6.setText(Character.toString(bWLetters[4]).toUpperCase());
                 letterbutton7.setText(Character.toString(bWLetters[5]).toUpperCase());
                 
-                
 
                 letterbutton1.setEnabled(true);
                 letterbutton2.setEnabled(true);
@@ -1042,16 +1040,20 @@ panel.add(outputLabel5);
                 shufflePuzzle.setEnabled(true);
                 foundWordsButton.setEnabled(true);
                 savePuzzleButton.setEnabled(true);
+                backSpaceButton.setEnabled(true);
+                enterGuessButton.setEnabled(true);
+                rankBreakDownButton.setEnabled(true);
                 
                 textPane.setEnabled(true);
                 
                 textPane.requestFocusInWindow();
 
-                String playerRank = master.playerRank(baseWord, master.totalPoints, acceptedWordList);
-                String playerrank = playerRank;
-                String labelText = "Your current rank is: <font color=#CC9900>" + playerrank + "</font>";
-                outputLabel6.setText("<html>" + labelText + "</html");
-                String labelText1 = "Total points:   <font color='#CC9900'>" + master.totalPoints + "</font>";
+                master.playerRank = master.playerRank(baseWord, playerPoints, acceptedWordList);
+                master.totalPoints = playerPoints;
+                
+                String labelText = "|  Your current rank is: <font color=#CC9900>" + master.playerRank + "</font>  |  ";
+                outputLabel6.setText("<html>" + labelText + "</html>");
+                String labelText1 = "Total points:   <font color='#CC9900'>" + playerPoints + "</font>  |";
                 outputLabel7.setText("<html>" + labelText1 + "</html>");
             }
             
@@ -1193,7 +1195,7 @@ panel.add(outputLabel5);
                 howToPlayDialog.setAlwaysOnTop(true);
                 howToPlayDialog.setFocusableWindowState(false);
 
-                howToPlayDialog.setSize(850, 400);
+                howToPlayDialog.setSize(950, 400);
                 howToPlayDialog.setLocationRelativeTo(mainFrame);
                 
                 JTextArea helpTextArea = new JTextArea();
@@ -1209,17 +1211,18 @@ panel.add(outputLabel5);
                 + "- Words must include the required letter.\n"
                 + "- Letters can be used more than once.\n\n"
                 + "Buttons:\n"
-                + "1. NEW PUZZLE: Generates a new puzzle with 7 unique letters and a required letter.\n"
-                + "2. CUSTOM PUZZLE: Generates a new puzzle with a word of your choice using 7 unique letters and a required letter.\n"
-                + "3. FOUND WORDS: Generates a list of words that you have found.\n"
-                + "4. PRESS ENTER: Allows you to guess your words.\n"
-                + "5. SHUFFLE PUZZLE: Allows you to shuffle around the letters.\n"
-                + "6. SAVE PUZZLE: Lets you save a blank puzzle.\n"
-                + "7. LOAD PUZZLE: The player can load a saved game.\n"
-                + "8. PRESS ENTER : The player can see their rank and progress on a current puzzle.\n"
-                + "9. <: You can use this button to remove typed/selected letters from your current attempt.\n"
-                + "10. ENTER GUESS: Use this button to submit your current guess.\n"
-                + "11. EXIT : Leave the application."
+                + "  1. NEW PUZZLE: Generates a new puzzle with 7 unique letters and a required letter.\n"
+                + "  2. CUSTOM PUZZLE: Generates a new puzzle with a word of your choice using 7 unique letters and a required letter.\n"
+                + "  3. FOUND WORDS: Generates a list of words that you have found.\n"
+                + "  4. PRESS ENTER: Allows you to guess your words.\n"
+                + "  5. SHUFFLE PUZZLE: Allows you to shuffle around the letters.\n"
+                + "  6. SAVE PUZZLE: Lets you save a blank puzzle.\n"
+                + "  7. LOAD PUZZLE: The player can load a saved game.\n"
+                + "  8. PRESS ENTER : The player can see their rank and progress on a current puzzle.\n"
+                + "  9. <: You can use this button to remove typed/selected letters from your current attempt.\n"
+                + "10. HINTS: This button will display a pop-up containing helpful information to assist your guesses.\n"
+                + "11. ENTER GUESS: Use this button to submit your current guess.\n"
+                + "12. EXIT: Leave the application."
         );
 
                 // Wrap the text area in a JScrollPane
@@ -1269,6 +1272,7 @@ panel.add(outputLabel5);
 
             if (currentString.length() > 0) {
                 currentString = currentString.substring(0, currentString.length() - 1);
+                charCount = Math.max(0, charCount - 1);
 
                 textPane.setText(currentString);
             }
@@ -1299,11 +1303,11 @@ panel.add(outputLabel5);
                         String enteredWordText = "<font color='#CC9900'>" + enteredWord + "</font> is a valid word!";
                         outputLabel.setText("<html>" + enteredWordText + "</html>");
                     }
-                    String playerRank = master.playerRank(baseWord, master.totalPoints, acceptedWordList);
-                    String playerrank = playerRank;
-                    String labelText = "Your current rank is: <font color=#CC9900>" + playerrank + "</font>";
-                    outputLabel6.setText("<html>" + labelText + "</html");
-                    String labelText1 = "Total points:   <font color='#CC9900'>" + master.totalPoints + "</font>";
+                    master.playerRank = master.playerRank(baseWord, master.totalPoints, acceptedWordList);
+                    
+                    String labelText = "|  Your current rank is: <font color=#CC9900>" + master.playerRank + "</font>  |  ";
+                    outputLabel6.setText("<html>" + labelText + "</html>");
+                    String labelText1 = "Total points:   <font color='#CC9900'>" + master.totalPoints + "</font>  |";
                     outputLabel7.setText("<html>" + labelText1 + "</html>");
                     //progressBar.setValue(master.totalPoints);
                     String differenceText = "You need  <font color='#CC9900'>" + helpers.difference + "</font>" +  " points to reach next rank.";
@@ -1325,7 +1329,15 @@ panel.add(outputLabel5);
     rankBreakDownButton.addActionListener(new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-        updateRanksDialog(); // Call the method to update the dialog
+        RanksDialogBuilder ranksDialogBuilder = new RanksDialogBuilder(mainFrame);
+        ranksDialogBuilder.setTitle("RANK BREAK DOWN")
+            .setRankNames(new String[]{"Beginner", "Good Start", "Moving Up", "Good", "Solid", "Nice", "Great", "Amazing", "Genius", "Queen Bee"})
+            .setAcceptedWordList(acceptedWordList)
+            .setBaseWord(baseWord);
+            
+            JDialog ranksDialog = ranksDialogBuilder.build();
+            ranksDialog.setVisible(true);
+            rankBreakDownButton.setBackground(darkYellow);
         if (!ranks.isVisible()) {
             ranks.setVisible(true);
         } else {
@@ -1418,7 +1430,7 @@ panel.add(outputLabel5);
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
-                    new mainframe();
+                    mainframe mainframe = new mainframe();
                 }
             });
         }
