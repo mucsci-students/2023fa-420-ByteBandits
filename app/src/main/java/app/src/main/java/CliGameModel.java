@@ -30,7 +30,7 @@ public class CliGameModel extends helpers {
 
     private static String saveFileName;
 
-    private Scanner console = new Scanner(System.in);
+    public static Scanner console = new Scanner(System.in);
     
     /**
      * @throws FileNotFoundException
@@ -60,7 +60,7 @@ public class CliGameModel extends helpers {
         return foundWords;
     }
 
-    public List<String> getAcceptedWordList()
+    public static List<String> getAcceptedWordList()
     {
         return acceptedWordList;
     }
@@ -124,6 +124,10 @@ public class CliGameModel extends helpers {
     public void setScanner(Scanner scanner) {
         this.console = scanner;
     }
+
+    public String getUserInput() {
+        return console.nextLine();
+    }
     /*
     * initGame
     * param: N/A
@@ -150,7 +154,7 @@ public class CliGameModel extends helpers {
      * @throws InterruptedException
      * 
      */
-    public void newPuzzle() throws FileNotFoundException, InterruptedException
+    public static void newPuzzle() throws FileNotFoundException, InterruptedException
     {
         totalPoints = 0;
         foundWords = new ArrayList<>();
@@ -177,7 +181,6 @@ public class CliGameModel extends helpers {
         playerRank = "";
         foundWords = new ArrayList<>();
         
-        console = new Scanner(System.in);
         CliGameView.basePuzzleChooseMessage();
         baseWord = console.next();
     
@@ -225,12 +228,11 @@ public class CliGameModel extends helpers {
     * returns: N/A
     * This function lets the player guess words for a puzzle.
     */
-    public void guess(String baseWord, List<String> acceptedWords, String playerRank) {
-        Scanner guessedWord = new Scanner(System.in);
+    public static void guess(String baseWord, List<String> acceptedWords, String playerRank) {
         CliGameView.displayGuessIntro();
         while (true) {
             CliGameView.displayGuessInstructions();
-            String validWord = guessedWord.nextLine();
+            String validWord = console.nextLine();
     
             if (validWord.equals("/q")) {
                 CliGameView.displayGuessExit();
@@ -424,17 +426,19 @@ public class CliGameModel extends helpers {
     * of all the words on the file that have all unique letters.
     */
     public static List<String> dictionaryFile() throws FileNotFoundException{
-        Scanner scanner = new Scanner(new File("./src/main/resources/7-letter-words.txt"));
+        Scanner oldConsole = console;
+        console = new Scanner(new File("./src/main/resources/7-letter-words.txt"));
         List<String> sevenLetterWords = new ArrayList<>();
 
-        while(scanner.hasNextLine()){
-            String a = scanner.nextLine();
+        while(console.hasNextLine()){
+            String a = console.nextLine();
 
             if(isUnique(a)){
                 sevenLetterWords.add(a);
             }
         } 
 
+        console = oldConsole;
         return sevenLetterWords;
     }
 
@@ -526,20 +530,21 @@ public class CliGameModel extends helpers {
     * and then finally returns it. 
     */
     public static List<String> acceptedWords(String baseWord, char reqLetter) throws FileNotFoundException{
-        Scanner scanner = new Scanner(CliGameModel.class.getResourceAsStream("/4-15_Dictionary.txt"));
+        Scanner oldConsole= console;
+        console = new Scanner(CliGameModel.class.getResourceAsStream("/4-15_Dictionary.txt"));
 
         List<String> acceptedWordList = new ArrayList<>();
         String reqLetter2 = Character.toString(reqLetter);
     
-        String sNL = scanner.nextLine();
-        while(scanner.hasNextLine()){
+        String sNL = console.nextLine();
+        while(console.hasNextLine()){
             if(sameChars(baseWord, sNL) && sNL.contains(reqLetter2)){
                 acceptedWordList.add(sNL);
             }
 
-            sNL = scanner.nextLine();  
+            sNL = console.nextLine();  
         }
-
+        console = oldConsole;
         return acceptedWordList;
     }
 }
