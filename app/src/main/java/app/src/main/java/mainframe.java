@@ -12,6 +12,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultCaret;
 import javax.swing.text.DocumentFilter;
 import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
@@ -35,6 +36,10 @@ public class mainframe {
 
     private String defaultRank = "| Your current rank is: Beginner | ";
     private String defaultPoints = "Total points: 0 |";
+
+    boolean isRanksDialogOpen = false;
+    
+    
   
     Color darkYellow = new Color(204, 153, 0);
 
@@ -91,7 +96,7 @@ public class mainframe {
                         setBackground(Color.BLACK);
                         setForeground(pastelYellow); 
                     }else{
-                        setBackground(new Color(204, 153, 0));
+                        setBackground(pastelYellow);
                         setForeground(Color.BLACK); 
                     }
                 }
@@ -182,15 +187,16 @@ public class mainframe {
                 foundWordsArea.append("- " + word + "\n");
             }
         }
+        
     }
 
     /**********************************************************/
     /**********************************************************/
-  
+    
     private void updateHintsDialog(String baseWord, char reqLetter) {
+        
         if (hints != null){
             hints.dispose();
-            
         }
         
         hints = new JDialog(mainFrame, "Hints", true);
@@ -262,7 +268,8 @@ public class mainframe {
         mainFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowOpened(WindowEvent e) {
-                placePic(mainFrame, "./src/main/resources/visualcontent/wwtitle.png", 0.17, 0.1, false);
+                placePic(mainFrame, "./src/main/resources/visualcontent/wwtitle.png", 0.17, 0.1, false, true);
+                
             }
         });
     
@@ -486,12 +493,23 @@ public class mainframe {
     JPanel panel = new JPanel(null);
     panel.setOpaque(false); 
     secondFrame.add(panel);
-    
+    //textPane is the area in which the letters typed by the user can be seen
     JTextPane textPane = new JTextPane();
+
     
-    textPane.setOpaque(false);
+    textPane.setOpaque(true);
     textPane.setBorder(BorderFactory.createEmptyBorder());
+    
     StyledDocument doc = textPane.getStyledDocument();
+    Style blackTextStyle = textPane.addStyle("Black text", null);
+    StyleConstants.setForeground(blackTextStyle, Color.BLACK);
+
+    try {
+        doc.insertString(doc.getLength(), "This is red text.", blackTextStyle);
+    } catch (BadLocationException e) {
+        e.printStackTrace();
+    }
+
     SimpleAttributeSet center = new SimpleAttributeSet();
     StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
     doc.setParagraphAttributes(0, doc.getLength(), center, false);
@@ -504,6 +522,9 @@ public class mainframe {
     
     Font textFieldFont = new Font("SansSerif", Font.BOLD, 39);
     textPane.setFont(textFieldFont);
+    textPane.setBackground(pastelYellow);
+
+    
     
     int xCenter = (secondFrame.getWidth() - textFieldWidth) / 2;
     int y = (secondFrame.getHeight() - textFieldHeight) / 9;
@@ -517,7 +538,7 @@ public class mainframe {
             int newHeight = secondFrame.getHeight();
             
             
-            int newX = (newWidth - textFieldWidth) / 2;
+            int newX = (newWidth - textFieldWidth) / 2 - 7;
             int newY = (newHeight - textFieldHeight) / 9;
             
            
@@ -534,6 +555,7 @@ JLabel outputLabel5 = new JLabel();
 JLabel outputLabel6 = new JLabel();
 JLabel outputLabel7 = new JLabel();
 Font labelFont = new Font("Sans Serif", Font.BOLD, 21);
+Color labelColor = Color.WHITE;
 // Set the font for all labels with a larger font size
 outputLabel.setFont(labelFont);
 outputLabel2.setFont(labelFont);
@@ -543,7 +565,16 @@ outputLabel5.setFont(labelFont);
 outputLabel6.setFont(labelFont);
 outputLabel7.setFont(labelFont);
 
-// Set other properties and positions for your labels (as you've already done)
+// Set the text color for all labels to black
+outputLabel.setForeground(labelColor);
+outputLabel2.setForeground(labelColor);
+outputLabel3.setForeground(labelColor);
+outputLabel4.setForeground(labelColor);
+outputLabel5.setForeground(labelColor);
+outputLabel6.setForeground(labelColor);
+outputLabel7.setForeground(labelColor);
+
+// Set other properties and positions for your labels 
 outputLabel.setBounds(xCenter, y + textFieldHeight + 40, textFieldWidth, 30);
 outputLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
@@ -652,8 +683,8 @@ panel.add(outputLabel5);
                                 outputLabel.setText("<html>" + enteredWordText + "</html>");
 
 
-                                // Show heart
-                            placePic(secondFrame, "./src/main/resources/visualcontent/correct.png", 0.17, 0.5, true);
+                            // Show heart
+                            placePic(secondFrame, "./src/main/resources/visualcontent/correct.png", 0.17, 0.5, true, false);
                                 
                             }
                             master.playerRank = master.playerRank(baseWord, master.totalPoints, acceptedWordList);
@@ -682,6 +713,7 @@ panel.add(outputLabel5);
     textPane.requestFocusInWindow();
     String defaultText = "";
     textPane.setText(defaultText);
+    
     
     
 
@@ -1326,25 +1358,28 @@ panel.add(outputLabel5);
     /***********************************************************************/
     /*********************RANK BREAKDOWN BUTTON LOGIC***********************/
 
+    
+    
     rankBreakDownButton.addActionListener(new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-        RanksDialogBuilder ranksDialogBuilder = new RanksDialogBuilder(mainFrame);
-        ranksDialogBuilder.setTitle("RANK BREAK DOWN")
-            .setRankNames(new String[]{"Beginner", "Good Start", "Moving Up", "Good", "Solid", "Nice", "Great", "Amazing", "Genius", "Queen Bee"})
-            .setAcceptedWordList(acceptedWordList)
-            .setBaseWord(baseWord);
             
-            JDialog ranksDialog = ranksDialogBuilder.build();
-            ranksDialog.setVisible(true);
-            rankBreakDownButton.setBackground(darkYellow);
-        if (!ranks.isVisible()) {
-            ranks.setVisible(true);
-        } else {
-            ranks.setVisible(false);
-        }
-        textPane.requestFocusInWindow();
-    
+            if (!isRanksDialogOpen) {
+                RanksDialogBuilder ranksDialogBuilder = new RanksDialogBuilder(mainFrame);
+                ranksDialogBuilder.setTitle("RANK BREAK DOWN")
+                    .setRankNames(new String[]{"Beginner", "Good Start", "Moving Up", "Good", "Solid", "Nice", "Great", "Amazing", "Genius", "Queen Bee"})
+                    .setAcceptedWordList(acceptedWordList)
+                    .setBaseWord(baseWord);
+                    
+                ranks = ranksDialogBuilder.build();
+                ranks.setVisible(true);
+                rankBreakDownButton.setBackground(darkYellow);
+                isRanksDialogOpen = true;
+            } else {
+                ranks.setVisible(false);
+                isRanksDialogOpen = false;
+            }
+            textPane.requestFocusInWindow();
         }
     });
     
@@ -1448,20 +1483,28 @@ panel.add(outputLabel5);
     * The gif will be shown for 4 seconds before being hidden.
     */
 
-    public void placePic(JFrame targetFrame, String gifPath, double xFractionFromRight, double yFractionFromTop, boolean useTimer) {
+    public void placePic(JFrame targetFrame, String gifPath, double xFractionFromRight, double yFractionFromTop, boolean useTimer, boolean isTitle) {
         ImageIcon gifIcon = new ImageIcon(gifPath);
         JLabel gifLabel = new JLabel(gifIcon);
         gifLabel.setOpaque(false);
-        
-        // Position adjustments
-        int xPos = (int) (targetFrame.getWidth() * (1 - xFractionFromRight) - gifIcon.getIconWidth());
-        int yPos = (int) (targetFrame.getHeight() * yFractionFromTop - gifIcon.getIconHeight() / 2);
-        
+    
+        int xPos, yPos;
+    
+        if (isTitle) {
+            // If it's a title, position at the top center
+            xPos = (int) ((targetFrame.getWidth() - gifIcon.getIconWidth()) / 2);
+            yPos = (int) (targetFrame.getHeight() * yFractionFromTop - gifIcon.getIconHeight() / 2);
+        } else {
+            // If it's not a title, use the specified fractions from the right and top
+            xPos = (int) (targetFrame.getWidth() * (1 - xFractionFromRight) - gifIcon.getIconWidth());
+            yPos = (int) (targetFrame.getHeight() * yFractionFromTop - gifIcon.getIconHeight() / 2);
+        }
+    
         // Set the gifLabel position
         targetFrame.setLayout(null); // Set to absolute positioning
         gifLabel.setBounds(xPos, yPos, gifIcon.getIconWidth(), gifIcon.getIconHeight());
-        
-        // Add the GIF JLabel to the secondFrame
+    
+        // Add the GIF JLabel to the frame
         targetFrame.add(gifLabel);
         targetFrame.revalidate();
         targetFrame.repaint();
@@ -1480,5 +1523,6 @@ panel.add(outputLabel5);
             timer.setRepeats(false);  // Ensure the timer only runs once
             timer.start();
         }
-    }    
+    }
+       
 }
