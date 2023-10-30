@@ -101,6 +101,7 @@ To conclude your game session, simply utilize the /exit command.
 - Builder-  This design pattern is used to implement the rank dialogue popup in the game.
 - MVC- This design pattern is used to implement the CLI version of this game.
 - Strategy- This design pattern is used to implement the building of the New Puzzle button and building of the Custom Puzzle button in the GUI.
+- Factory- This design pattern is used to provide method declarations for obtaining resources, specifically dictionary and game data.
 
 ## Authors
 - Logan Wasmer
