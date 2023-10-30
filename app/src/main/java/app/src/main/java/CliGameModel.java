@@ -6,7 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
-import java.io.IOException; 
+import java.io.IOException;
+
 import app.src.main.java.CliGameController;
 
 public class CliGameModel extends helpers {
@@ -426,8 +427,9 @@ public class CliGameModel extends helpers {
     * of all the words on the file that have all unique letters.
     */
     public static List<String> dictionaryFile() throws FileNotFoundException{
+        ResourceFactory resourceFactory = new FileResourceFactory(); //Access Factory Design Pattern
         Scanner oldConsole = console;
-        console = new Scanner(new File("./src/main/resources/7-letter-words.txt"));
+        console = resourceFactory.getDictionaryResource();
         List<String> sevenLetterWords = new ArrayList<>();
 
         while(console.hasNextLine()){
@@ -530,8 +532,10 @@ public class CliGameModel extends helpers {
     * and then finally returns it. 
     */
     public static List<String> acceptedWords(String baseWord, char reqLetter) throws FileNotFoundException{
+        ResourceFactory resourceFactory = new FileResourceFactory(); //Access Factory Design Pattern
         Scanner oldConsole= console;
-        console = new Scanner(CliGameModel.class.getResourceAsStream("/4-15_Dictionary.txt"));
+
+        console = resourceFactory.getGameDataResource();
 
         List<String> acceptedWordList = new ArrayList<>();
         String reqLetter2 = Character.toString(reqLetter);
