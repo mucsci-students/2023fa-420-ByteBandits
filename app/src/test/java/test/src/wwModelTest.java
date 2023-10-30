@@ -195,7 +195,7 @@ public void testLoadPuzzle() throws FileNotFoundException {
     */
 /**********************************************************************/
 /**********************************************************************/
-
+//Tests for Setters
     @Test
     public void testSetPossiblePoints() {
         CliGameModel.setPossiblePoints(100);
@@ -247,6 +247,19 @@ public void testLoadPuzzle() throws FileNotFoundException {
         assertEquals(acceptedWords, CliGameModel.getAcceptedWordList());
     }
 
+/**********************************************************************/
+/**********************************************************************/
+//Tests for Getters
+
+@Test
+public void testGetReqLetter() {
+    char expectedReqLetter = 'k'; // Or whatever value you know it should be.
+    CliGameModel.setReqLetter(expectedReqLetter); // Assuming you have a setter method. If not, you might need to set this through some other mechanism, like a constructor or another method in CliGameModel.
+
+    char actualReqLetter = CliGameModel.getReqLetter();
+
+    assertEquals("ReqLetter should match the set value", expectedReqLetter, actualReqLetter);
+}
 
 /**********************************************************************/
 /**********************************************************************/
