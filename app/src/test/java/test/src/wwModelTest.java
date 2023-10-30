@@ -55,19 +55,23 @@ public class wwModelTest {
 
 /**********************************************************************/
 /**********************************************************************/
+
 /** 
-//Tests for Saving
  @Test
     public void testSavePuzzle() {
         // Setup
         CliGameModel.setTotalPoints(0);
         CliGameModel.setAcceptedWordList(Arrays.asList("jack", "jackpot"));
+        CliGameModel.setBaseWord("jackpot");
+
+        CliGameModel.setShuffleWord("jackpot"); 
+        CliGameModel.setReqLetter('k'); 
         // Action
         CliGameModel.savePuzzle();
 
         // Assert
         // Verify the saveGameData method was called on mockSaveFile with the expected arguments
-        verify(mockSaveFile).saveGameData(anyString(), anyString(), anyList(), eq(0), eq("k"), anyInt());
+        verify(mockSaveFile).saveGameData(anyString(), eq("jackpot"), eq(Arrays.asList("jack", "jackpot")), eq(0), eq("k"), anyInt());
     }
 
     @Test
@@ -253,14 +257,23 @@ public void testLoadPuzzle() throws FileNotFoundException {
 
 @Test
 public void testGetReqLetter() {
-    char expectedReqLetter = 'k'; // Or whatever value you know it should be.
-    CliGameModel.setReqLetter(expectedReqLetter); // Assuming you have a setter method. If not, you might need to set this through some other mechanism, like a constructor or another method in CliGameModel.
+    char expectedReqLetter = 'k'; 
+    CliGameModel.setReqLetter(expectedReqLetter); 
 
     char actualReqLetter = CliGameModel.getReqLetter();
 
     assertEquals("ReqLetter should match the set value", expectedReqLetter, actualReqLetter);
 }
 
+@Test
+public void testGetSaveFileName() {
+    String expectedFileName = "save1"; 
+    CliGameModel.setSaveFileName(expectedFileName); 
+
+    String actualFileName = CliGameModel.getSaveFileName();
+
+    assertEquals("FileName should match the set value", expectedFileName, actualFileName);
+}
 /**********************************************************************/
 /**********************************************************************/
 //Tests for basePuzzle
