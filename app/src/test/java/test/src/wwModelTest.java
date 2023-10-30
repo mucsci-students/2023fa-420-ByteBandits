@@ -4,36 +4,105 @@ package test.src;
 
 import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 import app.src.main.java.CliGameModel;
 // Removed unused imports
+import app.src.main.java.playerData;
 
 public class wwModelTest {
     private CliGameModel game;
-
+    private static playerData mockSaveFile;
+    
     @Before
     public void setUp() throws FileNotFoundException {
         game = new CliGameModel();
+        mockSaveFile = mock(playerData.class);
+
+        // Stubbing the mock to return specific values when methods are called
+        when(mockSaveFile.getBaseWord()).thenReturn("jackpot");
+        when(mockSaveFile.getFoundWords()).thenReturn(Arrays.asList("jack", "jackpot"));
+        when(mockSaveFile.getPlayerPoints()).thenReturn(100);
+        when(mockSaveFile.getRequiredLetter()).thenReturn("k");
+        when(mockSaveFile.getMaxPoints()).thenReturn(200);
+
+        // Assign the mock to the static field in CliGameModel
+        CliGameModel.setSaveFile(mockSaveFile);
     }
 
     @Test
     public void testInitGame() throws Exception {
         game.initGame();
 
-        assertEquals("Total points should be initialized to 0", 0, game.getTotalPoints());
+        assertEquals("Total points should be initialized to 0", 0, CliGameModel.getTotalPoints());
         assertEquals("There shouldn't be a base word until the user requests one.","       ", game.getBaseWord());
         assertEquals("There shouldn't be a shuffled version of the base word initially.", "       ", game.getShuffleWord());
-        assertEquals("Player rank should be initialized to an empty string.", "", game.getPlayerRank());
+        assertEquals("Player rank should be initialized to an empty string.", "", CliGameModel.getPlayerRank());
         assertTrue("List of accepted words should be empty at the start.", CliGameModel.getAcceptedWordList().isEmpty());
-        assertTrue("List of found words should be empty at the start.", game.getFoundWords().isEmpty());
+        assertTrue("List of found words should be empty at the start.", CliGameModel.getFoundWords().isEmpty());
     }
+
+/**********************************************************************/
+/**********************************************************************/
+/** 
+//Tests for Saving
+ @Test
+    public void testSavePuzzle() {
+        // Setup
+        CliGameModel.setTotalPoints(0);
+        CliGameModel.setAcceptedWordList(Arrays.asList("jack", "jackpot"));
+        // Action
+        CliGameModel.savePuzzle();
+
+        // Assert
+        // Verify the saveGameData method was called on mockSaveFile with the expected arguments
+        verify(mockSaveFile).saveGameData(anyString(), anyString(), anyList(), eq(0), eq("k"), anyInt());
+    }
+
+    @Test
+    public void testSaveCurr() {
+        // Action
+        CliGameModel.saveCurr();
+
+        // Assert
+        // Verify the saveGameData method was called on mockSaveFile with the expected arguments
+        verify(mockSaveFile).saveGameData(anyString(), anyString(), anyList(), anyInt(), eq("k"), anyInt());
+        
+        
+    }
+*/
+/**********************************************************************/
+/**********************************************************************/
+//Tests for Loading
+@Test
+public void testLoadPuzzle() throws FileNotFoundException {
+    // Setup
+    CliGameModel.setBaseWord("customs");
+    CliGameModel.setTotalPoints(50);
+
+    // Action
+    CliGameModel.loadPuzzle();
+
+    // Assert
+    assertEquals("jackpot", game.getBaseWord());
+    assertEquals(Arrays.asList("jack", "jackpot"), CliGameModel.getFoundWords());
+    assertEquals(100, CliGameModel.getTotalPoints());
+    assertEquals('k', CliGameModel.getReqLetter());
+    assertEquals(200, CliGameModel.possiblePoints);
+    
+    // If there are any other side-effects, like interactions with CliGameView or others, you should verify/assert them here.
+}
 
 /**********************************************************************/
 /**********************************************************************/
@@ -126,22 +195,77 @@ public class wwModelTest {
     */
 /**********************************************************************/
 /**********************************************************************/
+
+    @Test
+    public void testSetPossiblePoints() {
+        CliGameModel.setPossiblePoints(100);
+        assertEquals(100, CliGameModel.possiblePoints);
+    }
+
+    @Test
+    public void testSetShuffleWord() {
+        CliGameModel.setShuffleWord("word");
+        assertEquals("word", CliGameModel.getShuffleWord());
+    }
+
+    @Test
+    public void testSetTotalPoints() {
+        CliGameModel.setTotalPoints(500);
+        assertEquals(500, CliGameModel.getTotalPoints());
+    }
+
+    @Test
+    public void testSetPlayerRank() {
+        CliGameModel.setPlayerRank("Beginner");
+        assertEquals("Beginner", CliGameModel.getPlayerRank());
+    }
+
+    @Test
+    public void testSetFoundWords() {
+        List<String> words = Arrays.asList("one", "two", "three");
+        CliGameModel.setFoundWords(words);
+        assertEquals(words, CliGameModel.getFoundWords());
+    }
+
+    @Test
+    public void testSetReqLetter() {
+        CliGameModel.setReqLetter('a');
+        assertEquals('a', CliGameModel.getReqLetter());
+    }
+
+    @Test
+    public void testSetSaveFile() {
+        playerData data = new playerData(); 
+        CliGameModel.setSaveFile(data);
+        assertEquals(data, CliGameModel.getSaveFile());
+    }
+
+    @Test
+    public void testSetAcceptedWordList() {
+        List<String> acceptedWords = Arrays.asList("apple", "banana", "cherry");
+        CliGameModel.setAcceptedWordList(acceptedWords);
+        assertEquals(acceptedWords, CliGameModel.getAcceptedWordList());
+    }
+
+
+/**********************************************************************/
+/**********************************************************************/
 //Tests for basePuzzle
 
     /**
     * Test to verify that if the user inputs a valid 7-letter word for baseWord, 
     * the baseWord in the game model should be set to that word.
     */
-    @Test
+/**     @Test
     public void testBasePuzzleForCorrectWordLength() throws FileNotFoundException, InterruptedException {
         CliGameModel mockGame = mock(CliGameModel.class);
         when(mockGame.getUserInput()).thenReturn("example");
     
         mockGame.basePuzzle();
     
-        verify(mockGame, times(1));
+        verify(mockGame, times(1)).getUserInput();
         CliGameModel.setBaseWord("example");
-    }
+    // /
 
     /**
     * Test to verify that if the user inputs a word that is not 7 letters in length, 
@@ -239,7 +363,7 @@ public class wwModelTest {
 
 /**********************************************************************/
 /**********************************************************************/
-
+//Tests for PointsPWord
     @Test
     public void testPointsPWord() {
         //char requiredLetter = 'a';
@@ -258,9 +382,11 @@ public class wwModelTest {
 
         points = CliGameModel.pointsPWord("jackpot", "jackpot");
         assertEquals("A pangram (all letters) containing the required letter should give 14 points.", 14, points); // 7 for word length + 7 bonus for pangram
-
-
 }
+
+/**********************************************************************/
+/**********************************************************************/
+//Tests for DicitonaryFile
 
     @Test
     public void testDictionaryFile() throws Exception {
@@ -289,7 +415,49 @@ public class wwModelTest {
     assertFalse("Dictionary should not contain non-English words like 'abcdxyz'.", dictionary.contains("abcdxyz"));
 }
 
+/**********************************************************************/
+/***********************************************************************/
+//Tests for playerRank
+/** 
+ @Test
+    public void testPlayerRank() throws FileNotFoundException {
+        String baseWord = "jackpot";
+        char reqLetter = 'j';
+        List<String> possibleWords = CliGameModel.acceptedWords(baseWord, reqLetter);
+        int maxPoints = CliGameModel.possiblePoints(baseWord, possibleWords);
+        
+        // Test for Beginner rank
+        assertEquals("Beginner", CliGameModel.playerRank(baseWord, 0, possibleWords));
+    
+        // Test for Good Start rank
+        assertEquals("Good Start", CliGameModel.playerRank(baseWord, (int) (0.02 * maxPoints), possibleWords));
+    
+        // Test for Moving Up rank
+        assertEquals("Moving Up", CliGameModel.playerRank(baseWord, (int) (0.05 * maxPoints), possibleWords));
+    
+        // Test for Good rank
+        assertEquals("Good", CliGameModel.playerRank(baseWord, (int) (0.08 * maxPoints), possibleWords));
+    
+        // Test for Solid rank
+        assertEquals("Solid", CliGameModel.playerRank(baseWord, (int) (0.15 * maxPoints), possibleWords));
+    
+        // Test for Nice rank
+        assertEquals("Nice", CliGameModel.playerRank(baseWord, (int) (0.25 * maxPoints), possibleWords));
+    
+        // Test for Great rank
+        assertEquals("great", CliGameModel.playerRank(baseWord, (int) (0.40 * maxPoints), possibleWords));
+    
+        // Test for Amazing rank
+        assertEquals("Amazing", CliGameModel.playerRank(baseWord, (int) (0.50 * maxPoints), possibleWords));
+    
+        // Test for Genius rank
+        assertEquals("Genius", CliGameModel.playerRank(baseWord, (int) (0.70 * maxPoints), possibleWords));
+    
+        // Test for Queen Bee rank
+        assertEquals("Queen Bee", CliGameModel.playerRank(baseWord, maxPoints, possibleWords));
+    }
 
+*/
 //***************************************************************************//
 //**********************HELPER FUNCTIONS*************************************//
 

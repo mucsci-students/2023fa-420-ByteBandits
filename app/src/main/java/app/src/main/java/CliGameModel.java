@@ -10,7 +10,7 @@ import java.io.IOException;
 import app.src.main.java.CliGameController;
 
 public class CliGameModel extends helpers {
-    private static int possiblePoints;
+    public static int possiblePoints;
     
     private static String baseWord;
     
@@ -45,17 +45,17 @@ public class CliGameModel extends helpers {
         return baseWord;
     }
 
-    public String getShuffleWord()
+    public static String getShuffleWord()
     {
         return shuffleWord;
     }
 
-    public char getReqLetter()
+    public static char getReqLetter()
     {
         return reqLetter;
     }
 
-    public List<String> getFoundWords()
+    public static List<String> getFoundWords()
     {
         return foundWords;
     }
@@ -65,17 +65,17 @@ public class CliGameModel extends helpers {
         return acceptedWordList;
     }
 
-    public int getTotalPoints()
+    public static int getTotalPoints()
     {
         return totalPoints;
     }
 
-    public String getPlayerRank()
+    public static String getPlayerRank()
     {
         return playerRank;
     }
 
-    public playerData getSaveFile()
+    public static playerData getSaveFile()
     {
         return saveFile;
     }
@@ -402,7 +402,7 @@ public class CliGameModel extends helpers {
             playerRank = "Nice";
         }
         if(isBetween(playerPoints, great, amazing)){
-            playerRank = "great";
+            playerRank = "Great";
         }
         if(isBetween(playerPoints, amazing, genuis)){
             playerRank = "Amazing";
