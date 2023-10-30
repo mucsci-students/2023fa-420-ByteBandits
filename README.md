@@ -103,6 +103,7 @@ To conclude your game session, simply utilize the /exit command.
 - Strategy- This design pattern is used to implement the building of the New Puzzle button and building of the Custom Puzzle button in the GUI.
 - Factory- This design pattern is used to provide method declarations for obtaining resources, specifically dictionary and game data.
 
+
 ## Authors
 - Logan Wasmer
 - Ilynd Rapant
