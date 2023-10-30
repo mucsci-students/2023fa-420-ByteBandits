@@ -486,11 +486,12 @@ public class mainframe {
     JPanel panel = new JPanel(null);
     panel.setOpaque(false); 
     secondFrame.add(panel);
-    
+    //textPane is the area in which the letters typed by the user can be seen
     JTextPane textPane = new JTextPane();
     
-    textPane.setOpaque(false);
+    textPane.setOpaque(true);
     textPane.setBorder(BorderFactory.createEmptyBorder());
+    
     StyledDocument doc = textPane.getStyledDocument();
     SimpleAttributeSet center = new SimpleAttributeSet();
     StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
@@ -504,6 +505,9 @@ public class mainframe {
     
     Font textFieldFont = new Font("SansSerif", Font.BOLD, 39);
     textPane.setFont(textFieldFont);
+    textPane.setBackground(pastelYellow);
+
+    
     
     int xCenter = (secondFrame.getWidth() - textFieldWidth) / 2;
     int y = (secondFrame.getHeight() - textFieldHeight) / 9;
@@ -517,7 +521,7 @@ public class mainframe {
             int newHeight = secondFrame.getHeight();
             
             
-            int newX = (newWidth - textFieldWidth) / 2;
+            int newX = (newWidth - textFieldWidth) / 2 - 7;
             int newY = (newHeight - textFieldHeight) / 9;
             
            
@@ -534,6 +538,7 @@ JLabel outputLabel5 = new JLabel();
 JLabel outputLabel6 = new JLabel();
 JLabel outputLabel7 = new JLabel();
 Font labelFont = new Font("Sans Serif", Font.BOLD, 21);
+Color labelColor = Color.WHITE;
 // Set the font for all labels with a larger font size
 outputLabel.setFont(labelFont);
 outputLabel2.setFont(labelFont);
@@ -543,7 +548,16 @@ outputLabel5.setFont(labelFont);
 outputLabel6.setFont(labelFont);
 outputLabel7.setFont(labelFont);
 
-// Set other properties and positions for your labels (as you've already done)
+// Set the text color for all labels to black
+outputLabel.setForeground(labelColor);
+outputLabel2.setForeground(labelColor);
+outputLabel3.setForeground(labelColor);
+outputLabel4.setForeground(labelColor);
+outputLabel5.setForeground(labelColor);
+outputLabel6.setForeground(labelColor);
+outputLabel7.setForeground(labelColor);
+
+// Set other properties and positions for your labels 
 outputLabel.setBounds(xCenter, y + textFieldHeight + 40, textFieldWidth, 30);
 outputLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
@@ -682,6 +696,7 @@ panel.add(outputLabel5);
     textPane.requestFocusInWindow();
     String defaultText = "";
     textPane.setText(defaultText);
+    
     
     
 
