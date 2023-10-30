@@ -31,6 +31,7 @@ public class mainframe {
     
     private int charCount = 0;
 
+    static Color pastelYellow = new Color(166, 102, 22);
 
     private String defaultRank = "| Your current rank is: Beginner | ";
     private String defaultPoints = "Total points: 0 |";
@@ -62,7 +63,7 @@ public class mainframe {
                 @Override
                 public void mouseEntered(MouseEvent e){
                     if(isLetterButton4){
-                        setBorder(BorderFactory.createLineBorder(darkYellow, 4)); 
+                        setBorder(BorderFactory.createLineBorder(pastelYellow, 4)); 
                     }else{
                       setBorder(BorderFactory.createLineBorder(Color.BLACK, 4));  
                     }
@@ -88,7 +89,7 @@ public class mainframe {
                 public void mouseReleased(MouseEvent e){
                     if (isLetterButton4){
                         setBackground(Color.BLACK);
-                        setForeground(darkYellow); 
+                        setForeground(pastelYellow); 
                     }else{
                         setBackground(new Color(204, 153, 0));
                         setForeground(Color.BLACK); 
@@ -97,6 +98,7 @@ public class mainframe {
             });
         }
     }
+    
     //model
     private playerData playerGameData = new playerData();
     
@@ -123,7 +125,7 @@ public class mainframe {
     final private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
     /*************************************************************/
-    /*******************BACKGORUND PANEL**************************/
+    /*******************BACKGROUND PANEL**************************/
     class BackgroundPanel extends JPanel {
         private Image backgroundImage;
 
@@ -151,8 +153,7 @@ public class mainframe {
             foundwords.setSize(400, 300);
             foundwords.setLocationRelativeTo(mainFrame);
             JTextArea foundWordsArea = new JTextArea();
-            Color darkYellow = new Color(204, 153, 0);
-            foundWordsArea.setBackground(darkYellow);
+            foundWordsArea.setBackground(pastelYellow);
             foundWordsArea.setEditable(false);
             foundWordsArea.setWrapStyleWord(true);
             foundWordsArea.setLineWrap(true);
@@ -203,8 +204,7 @@ public class mainframe {
         JTextPane hintsTextArea = new JTextPane();
         hintsTextArea.setContentType("text/html");
         hintsTextArea.setEditable(false);
-        Color darkYellow = new Color(204, 153, 0);
-        hintsTextArea.setBackground(darkYellow);
+        hintsTextArea.setBackground(pastelYellow);
 
         hintsTextArea.setFont(new Font("SansSerif", Font.PLAIN, 16));
                 
@@ -237,38 +237,34 @@ public class mainframe {
         mainFrame.setSize(screenSize);
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        ImageIcon gifIcon = new ImageIcon("./src/main/resources/guicontent/bg1.jpg");
-
+        ImageIcon gifIcon = new ImageIcon("./src/main/resources/visualcontent/bg1.jpg");  
         Image gifImage = gifIcon.getImage();
         BackgroundPanel backgroundPanel = new BackgroundPanel(gifImage);
         backgroundPanel.setLayout(new BorderLayout());
-    
+        mainFrame.add(backgroundPanel);
+       
         // Create a JPanel for the top section
         JPanel topPanel = new JPanel(new BorderLayout());
         topPanel.setOpaque(false);
-    
-        // Centered JLabel
-        JLabel welcomeLabel = new JLabel("<html><font color='black'>W</font><font color='#FFD700'>O</font><font color='black'>R</font><font color='#FFD700'>D</font><font color='black'>Y</font><font color='#FFD700'>W</font><font color='black'>A</font><font color='#FFD700'>S</font><font color='black'>P</font><font color='#FFD700'>S</font></html>", JLabel.CENTER);
-        Font titleFont = new Font("SansSerif", Font.BOLD, 72);
-        welcomeLabel.setFont(titleFont);
-        topPanel.add(welcomeLabel, BorderLayout.CENTER);
-    
         backgroundPanel.add(topPanel, BorderLayout.NORTH);
-    
-        
         JPanel centerPanel = new JPanel(new BorderLayout());
         centerPanel.setOpaque(false);
     
         
-        ImageIcon gifIcon1 = new ImageIcon("./src/main/resources/guicontent/finalWaspGif.gif");
+        ImageIcon gifIcon1 = new ImageIcon("./src/main/resources/visualcontent/wasp.gif");
         Image originalImage = gifIcon1.getImage();
-        Image resizedImage = originalImage.getScaledInstance(650, 500, Image.SCALE_DEFAULT);
+        Image resizedImage = originalImage.getScaledInstance(550, 400, Image.SCALE_DEFAULT);
         ImageIcon resizedGifIcon = new ImageIcon(resizedImage);
         JLabel gifLabel1 = new JLabel(resizedGifIcon);
-
         centerPanel.add(gifLabel1, BorderLayout.CENTER);
-
         backgroundPanel.add(centerPanel, BorderLayout.CENTER);
+    
+        mainFrame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowOpened(WindowEvent e) {
+                placePic(mainFrame, "./src/main/resources/visualcontent/wwtitle.png", 0.17, 0.1, false);
+            }
+        });
     
         // Create a panel for the buttons at the bottom
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -277,7 +273,7 @@ public class mainframe {
         // "PLAY" button
        
         CustomButton playButton = new CustomButton("PLAY", false);
-        playButton.setBackground(new Color(204, 153, 0));
+        playButton.setBackground(new Color(255, 160, 96));
         playButton.setOpaque(true); // Make the button opaque
         playButton.setFont(new Font("SansSerif", Font.BOLD, 24));
         playButton.setPreferredSize(new Dimension(200, 60)); // Increase the width
@@ -305,15 +301,27 @@ public class mainframe {
     //Shows after player clicks PLAY
     public void showSecondScreen() {
         mainFrame.setVisible(false);
+        ImageIcon backgroundIcon = new ImageIcon("./src/main/resources/visualcontent/waspnest.gif");
+
+        JPanel backgroundPanel = new JPanel(new BorderLayout()) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                g.drawImage(backgroundIcon.getImage(), 0, 0, getWidth(), getHeight(), this);
+            }
+        };
+        
         
         // Create the second frame
         secondFrame = new JFrame("Wordy Wasps - Main Menu");
+        
         secondFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         secondFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+        secondFrame.setContentPane(backgroundPanel);
         secondFrame.setSize(screenSize);
         secondFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        secondFrame.getContentPane().setBackground(new Color(255, 255, 153));
+        
+
 
         JPanel rankPanel = new JPanel();
         rankPanel.setOpaque(false);
@@ -330,7 +338,7 @@ public class mainframe {
         JPanel buttonPanel2 = new JPanel();
         buttonPanel.setOpaque(false); 
         buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-        buttonPanel2.setBackground(new Color(255, 255, 153));
+        buttonPanel2.setOpaque(false);
         buttonPanel2.setBounds(120, 80, 100, 100);
 
         //progressBar.setPreferredSize(new Dimension(350, 50));
@@ -380,34 +388,34 @@ public class mainframe {
         rankBreakDownButton.setEnabled(false);
 
 
-        Color darkYellow = new Color(204, 153, 0);
+        
 
         Color black = new Color(0,0,0);
-        shufflePuzzle.setBackground(darkYellow);
-        newPuzzleButton.setBackground(darkYellow); 
-        newUserPuzzleButton.setBackground(darkYellow);
-        savePuzzleButton.setBackground(darkYellow);
-        loadPuzzleButton.setBackground(darkYellow); 
-        howToPlayButton.setBackground(darkYellow); 
-        foundWordsButton.setBackground(darkYellow);
-        rankBreakDownButton.setBackground(darkYellow);
-        backSpaceButton.setBackground(darkYellow);
-        enterGuessButton.setBackground(darkYellow);
-        hintsButton.setBackground(darkYellow);
-        exitButton.setBackground(darkYellow);
+        shufflePuzzle.setBackground(pastelYellow);
+        newPuzzleButton.setBackground(pastelYellow); 
+        newUserPuzzleButton.setBackground(pastelYellow);
+        savePuzzleButton.setBackground(pastelYellow);
+        loadPuzzleButton.setBackground(pastelYellow); 
+        howToPlayButton.setBackground(pastelYellow); 
+        foundWordsButton.setBackground(pastelYellow);
+        rankBreakDownButton.setBackground(pastelYellow);
+        backSpaceButton.setBackground(pastelYellow);
+        enterGuessButton.setBackground(pastelYellow);
+        hintsButton.setBackground(pastelYellow);
+        exitButton.setBackground(pastelYellow);
 
-        letterbutton1.setBackground(darkYellow);
-        letterbutton2.setBackground(darkYellow);
-        letterbutton3.setBackground(darkYellow);
+        letterbutton1.setBackground(pastelYellow);
+        letterbutton2.setBackground(pastelYellow);
+        letterbutton3.setBackground(pastelYellow);
         letterbutton4.setBackground(black);
-        letterbutton5.setBackground(darkYellow);
-        letterbutton6.setBackground(darkYellow);
-        letterbutton7.setBackground(darkYellow);
+        letterbutton5.setBackground(pastelYellow);
+        letterbutton6.setBackground(pastelYellow);
+        letterbutton7.setBackground(pastelYellow);
 
         letterbutton1.setForeground(Color.BLACK);
         letterbutton2.setForeground(Color.BLACK);
         letterbutton3.setForeground(Color.BLACK);
-        letterbutton4.setForeground(darkYellow);
+        letterbutton4.setForeground(pastelYellow);
         letterbutton5.setForeground(Color.BLACK);
         letterbutton6.setForeground(Color.BLACK);
         letterbutton7.setForeground(Color.BLACK);
@@ -450,7 +458,7 @@ public class mainframe {
         letterbutton6.setFont(buttonFont);
         letterbutton7.setFont(buttonFont);
 
-        letterbutton4.setForeground(darkYellow);
+        letterbutton4.setForeground(pastelYellow);
       
         StrategyNewPuzzle strategyNewPuzzle = new StrategyNewPuzzle(letterbutton1, letterbutton2, letterbutton3, letterbutton4, letterbutton5, letterbutton6, letterbutton7);
 
@@ -460,7 +468,7 @@ public class mainframe {
 
     //border view
 
-    Border goldBorder = BorderFactory.createLineBorder(darkYellow, 4);
+    Border goldBorder = BorderFactory.createLineBorder(pastelYellow, 4);
 
    
     Border blackBorder = BorderFactory.createLineBorder(Color.BLACK, 4);
@@ -638,9 +646,15 @@ panel.add(outputLabel5);
                             if(master.isPangram(enteredWord, baseWord)){
                                 String enteredWordText = "<font color='#CC9900'>" + enteredWord + "</font> is a valid word, and a <font color='#CC9900'>PANGRAM</font>... Well Done!";
                                 outputLabel.setText("<html>" + enteredWordText + "</html>");
-                            }else{
+                            }
+                            else{
                                 String enteredWordText = "<font color='#CC9900'>" + enteredWord + "</font> is a valid word!";
                                 outputLabel.setText("<html>" + enteredWordText + "</html>");
+
+
+                                // Show heart
+                            placePic(secondFrame, "./src/main/resources/visualcontent/correct.png", 0.17, 0.5, true);
+                                
                             }
                             master.playerRank = master.playerRank(baseWord, master.totalPoints, acceptedWordList);
                             
@@ -648,6 +662,7 @@ panel.add(outputLabel5);
                             outputLabel6.setText("<html>" + labelText + "</html>");
                             master.playerRank = master.playerRank(baseWord, master.totalPoints, acceptedWordList);
                             
+
                             String labelText1 = "Total points:   <font color='#CC9900'>" + master.totalPoints + "</font>  |";
                             outputLabel7.setText("<html>" + labelText1 + "</html>");
                             //progressBar.setValue(master.totalPoints);
@@ -1185,8 +1200,7 @@ panel.add(outputLabel5);
                 
                 JTextArea helpTextArea = new JTextArea();
                 helpTextArea.setEditable(false);
-                Color darkYellow = new Color(204, 153, 0);
-                helpTextArea.setBackground(darkYellow);
+                helpTextArea.setBackground(pastelYellow);
                 helpTextArea.setWrapStyleWord(true);
                 helpTextArea.setLineWrap(true);
                 helpTextArea.setFont(new Font("SansSerif", Font.PLAIN, 16));
@@ -1366,10 +1380,7 @@ panel.add(outputLabel5);
 
     /**********************************************************************/
     /**********************************************************************/
-
-
-
-
+    
     /**********************************************************************/
     /**********************************************************************/  
 
@@ -1424,5 +1435,50 @@ panel.add(outputLabel5);
             });
         }
     }
+    /**********************************************************************/
+    /**************************PLACEPIC************************************/
+    /*
+    * placePic
+    * param: gifPath - The path to the gif file to be displayed.
+    * param: xFractionFromRight - The horizontal position fraction (from right) where the gif should be displayed.
+    * param: yFractionFromTop - The vertical position fraction (from top) where the gif should be displayed.
+    * param: useTimer - Whether the picture will show up temporarily or not.
+    * returns: N/A
+    * Displays a gif on the secondFrame at a specified position relative to the frame's dimensions.
+    * The gif will be shown for 4 seconds before being hidden.
+    */
+
+    public void placePic(JFrame targetFrame, String gifPath, double xFractionFromRight, double yFractionFromTop, boolean useTimer) {
+        ImageIcon gifIcon = new ImageIcon(gifPath);
+        JLabel gifLabel = new JLabel(gifIcon);
+        gifLabel.setOpaque(false);
+        
+        // Position adjustments
+        int xPos = (int) (targetFrame.getWidth() * (1 - xFractionFromRight) - gifIcon.getIconWidth());
+        int yPos = (int) (targetFrame.getHeight() * yFractionFromTop - gifIcon.getIconHeight() / 2);
+        
+        // Set the gifLabel position
+        targetFrame.setLayout(null); // Set to absolute positioning
+        gifLabel.setBounds(xPos, yPos, gifIcon.getIconWidth(), gifIcon.getIconHeight());
+        
+        // Add the GIF JLabel to the secondFrame
+        targetFrame.add(gifLabel);
+        targetFrame.revalidate();
+        targetFrame.repaint();
     
+        // If useTimer is true, use a Timer to hide the GIF after 4 seconds
+        if (useTimer) {
+            Timer timer = new Timer(4000, new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    gifLabel.setVisible(false);
+                    targetFrame.remove(gifLabel);
+                    targetFrame.revalidate();
+                    targetFrame.repaint();
+                }
+            });
+            timer.setRepeats(false);  // Ensure the timer only runs once
+            timer.start();
+        }
+    }    
 }
