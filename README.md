@@ -12,8 +12,9 @@
 6. [Saving and Loading](#saving-and-loading)
 7. [Help](#help)
 8. [Exiting the Game](#exiting-the-game)
-9. [Authors](#authors)
-10. [Contact](#contact)
+9. [Design Patterns Used](#design-patterns-used)
+10. [Authors](#authors)
+11. [Contact](#contact)
 
 ## Introduction
 
@@ -95,6 +96,13 @@ For assistance or inquiries about the game, invoke the /help command.
 
 ## Exiting the Game
 To conclude your game session, simply utilize the /exit command.
+
+## Design Patterns Used
+- Builder-  This design pattern is used to implement the rank dialogue popup in the game.
+- MVC- This design pattern is used to implement the CLI version of this game.
+- Strategy- This design pattern is used to implement the building of the New Puzzle button and building of the Custom Puzzle button in the GUI.
+- Factory- This design pattern is used to provide method declarations for obtaining resources, specifically dictionary and game data.
+
 
 ## Authors
 - Logan Wasmer
