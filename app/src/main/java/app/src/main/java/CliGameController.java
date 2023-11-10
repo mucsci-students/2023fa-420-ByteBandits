@@ -3,19 +3,31 @@ package app.src.main.java;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.nio.channels.FileChannel;
+import java.nio.channels.FileLock;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import org.jline.reader.*;
 import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
 
 public class CliGameController {
-    private CliGameModel model;
+    private static CliGameController instance;
     private CliGameView view;
     private LineReader lineReader;
+    private CliGameModel model;
 
     public CliGameController(CliGameModel model, CliGameView view) {
         this.model = model;
         this.view = view;
+    }
+    public static CliGameController getInstance(CliGameModel model, CliGameView view) {
+        if (instance == null) {
+            instance = new CliGameController(model, view);
+        }
+        return instance;
     }
 
     public void startGame() throws FileNotFoundException, InterruptedException {
