@@ -257,9 +257,9 @@ public void testLoadPuzzle() throws FileNotFoundException {
 
 @Test
 public void testGetReqLetter() {
-    char expectedReqLetter = 'k'; 
-    CliGameModel.setReqLetter(expectedReqLetter); 
-
+    char expectedReqLetter = 'k'; // Or whatever value you know it should be.
+    CliGameModel.setReqLetter(expectedReqLetter); // Assuming you have a setter method. If not, you might need to set this through some other mechanism, like a constructor or another method in CliGameModel.
+    
     char actualReqLetter = CliGameModel.getReqLetter();
 
     assertEquals("ReqLetter should match the set value", expectedReqLetter, actualReqLetter);
