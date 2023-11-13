@@ -15,15 +15,20 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
-
-
+import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
+
 import java.io.*;
 import java.util.Comparator;
 import java.util.List;
 import java.util.ArrayList;
+
+import javax.imageio.ImageIO;
+
 /***************************************************************/
 /***************************************************************/
 
@@ -146,8 +151,47 @@ public class mainframe {
             }
         }
     }
+    /*************************************************************************/
+    /********************SCREENSHOT CODE**************************************/
+
+    private void captureAndSaveScreenshot() {
+        try {
+        
+            Robot robot = new Robot();
+    
+            int x = secondFrame.getX() + secondFrame.getWidth() / 4;
+            int y = secondFrame.getY() + secondFrame.getHeight() / 25;
+            int width = secondFrame.getWidth() / 2;
+            int height = secondFrame.getHeight()/3;
+    
+            BufferedImage screenImage = robot.createScreenCapture(new Rectangle(x, y, width, height));
+
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setDialogTitle("Save Screenshot");
+            fileChooser.setFileFilter(new FileNameExtensionFilter("PNG files (*.png)", "png"));
+    
+            int userSelection = fileChooser.showSaveDialog(secondFrame);
+    
+            if (userSelection == JFileChooser.APPROVE_OPTION) {
+                File selectedFile = fileChooser.getSelectedFile();
+
+                if (!selectedFile.getName().toLowerCase().endsWith(".png")) {
+                    selectedFile = new File(selectedFile.getParentFile(), selectedFile.getName() + ".png");
+                }
+    
+                ImageIO.write(screenImage, "png", selectedFile);
+    
+                System.out.println("Screenshot saved to: " + selectedFile.getAbsolutePath());
+            }
+        } catch (AWTException | IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+    
+
     /**********************************************************/
     /**********************************************************/
+
     public static void updateFoundWordsDialog() {
         if (foundwords == null) {
             foundwords = new JDialog(mainFrame, "FOUND WORD LIST", true);
@@ -370,6 +414,7 @@ public class mainframe {
         CustomButton backSpaceButton = new CustomButton("<", false);
         CustomButton enterGuessButton = new CustomButton("ENTER GUESS", false);
         CustomButton exitButton = new CustomButton("EXIT", false);
+        CustomButton captureScreenshotButton = new CustomButton("CAPTURE", false);
         CustomButton hintsButton = new CustomButton("HINTS", false);
         CustomButton letterbutton1 = new CustomButton(bW1, false);
         CustomButton letterbutton2 = new CustomButton(bW2, false);
@@ -389,6 +434,7 @@ public class mainframe {
         hintsButton.setEnabled(false);
         shufflePuzzle.setEnabled(false);
         foundWordsButton.setEnabled(false);
+        captureScreenshotButton.setEnabled(false);
         savePuzzleButton.setEnabled(false);
         backSpaceButton.setEnabled(false);
         enterGuessButton.setEnabled(false);
@@ -405,6 +451,7 @@ public class mainframe {
         loadPuzzleButton.setBackground(pastelYellow); 
         howToPlayButton.setBackground(pastelYellow); 
         foundWordsButton.setBackground(pastelYellow);
+        captureScreenshotButton.setBackground(pastelYellow);
         rankBreakDownButton.setBackground(pastelYellow);
         backSpaceButton.setBackground(pastelYellow);
         enterGuessButton.setBackground(pastelYellow);
@@ -436,6 +483,7 @@ public class mainframe {
         loadPuzzleButton.setPreferredSize(buttonSize);
         howToPlayButton.setPreferredSize(buttonSize);
         foundWordsButton.setPreferredSize(buttonSize);
+        captureScreenshotButton.setPreferredSize(buttonSize);
         rankBreakDownButton.setPreferredSize(buttonSize);
         backSpaceButton.setPreferredSize(buttonSize);
         enterGuessButton.setPreferredSize(buttonSize);
@@ -451,6 +499,7 @@ public class mainframe {
         loadPuzzleButton.setFont(buttonFont);
         howToPlayButton.setFont(buttonFont);
         foundWordsButton.setFont(buttonFont);
+        captureScreenshotButton.setFont(buttonFont);
         rankBreakDownButton.setFont(buttonFont);
         backSpaceButton.setFont(buttonFont);
         enterGuessButton.setFont(buttonFont);
@@ -849,6 +898,8 @@ panel.add(outputLabel5);
                 hintsButton.setEnabled(true);
                 shufflePuzzle.setEnabled(true);
                 foundWordsButton.setEnabled(true);
+                captureScreenshotButton.setEnabled(true);
+                
                 savePuzzleButton.setEnabled(true);
                 backSpaceButton.setEnabled(true);
                 enterGuessButton.setEnabled(true);
@@ -931,6 +982,7 @@ panel.add(outputLabel5);
                 shufflePuzzle.setEnabled(true);
                 hintsButton.setEnabled(true);
                 foundWordsButton.setEnabled(true);
+                captureScreenshotButton.setEnabled(true);
                 savePuzzleButton.setEnabled(true);
                 backSpaceButton.setEnabled(true);
                 enterGuessButton.setEnabled(true);
@@ -1071,6 +1123,7 @@ panel.add(outputLabel5);
                 hintsButton.setEnabled(true);
                 shufflePuzzle.setEnabled(true);
                 foundWordsButton.setEnabled(true);
+                captureScreenshotButton.setEnabled(true);
                 savePuzzleButton.setEnabled(true);
                 backSpaceButton.setEnabled(true);
                 enterGuessButton.setEnabled(true);
@@ -1254,7 +1307,8 @@ panel.add(outputLabel5);
                 + "  9. <: You can use this button to remove typed/selected letters from your current attempt.\n"
                 + "10. HINTS: This button will display a pop-up containing helpful information to assist your guesses.\n"
                 + "11. ENTER GUESS: Use this button to submit your current guess.\n"
-                + "12. EXIT: Leave the application."
+                + "12. CAPTURE: Capture your game progress and save it to your PC.\n"
+                + "13. EXIT: Leave the application."
         );
 
                 // Wrap the text area in a JScrollPane
@@ -1274,12 +1328,20 @@ panel.add(outputLabel5);
         }
     });
     
+    /***********************************************************************/
+    /*********************CAPTURE SCREENSHOT****************************/
+    
+
+    captureScreenshotButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            captureAndSaveScreenshot();
+        }
+    });
 
     /***********************************************************************/
     /*********************FOUND WORD LIST LOGIC****************************/
 
-
-    
     foundWordsButton.addActionListener(new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -1427,6 +1489,7 @@ panel.add(outputLabel5);
         buttonPanel.add(loadPuzzleButton);
         buttonPanel.add(howToPlayButton);
         buttonPanel.add(foundWordsButton);
+        buttonPanel.add(captureScreenshotButton);
 
         buttonPanel.add(rankBreakDownButton);
         buttonPanel.add(backSpaceButton);
