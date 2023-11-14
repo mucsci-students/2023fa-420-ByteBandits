@@ -944,6 +944,29 @@ panel.add(outputLabel5);
     newUserPuzzleButton.addActionListener(new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
+                boolean hintsBool = false;
+                boolean ranksBool = false;
+                boolean foundWordsBool = false;
+                boolean howToPlayBool = false;
+
+                if (hints != null && hints.isVisible()) {
+                    hints.dispose();
+                    hintsBool = true;
+                }
+                if (ranks != null && ranks.isVisible()) {
+                    isRanksDialogOpen = false;
+                    ranks.dispose();
+                    ranksBool = true;  
+                }
+                if (foundwords != null && foundwords.isVisible()) {
+                    foundwords.dispose();
+                    foundWordsBool = true;
+                }
+                if (howToPlayDialog != null && howToPlayDialog.isVisible()){
+                    howToPlayDialog.dispose();
+                    howToPlayBool = true;
+                }
+
             JTextField inputField = new JTextField();
             inputField.setPreferredSize(new Dimension(200, 30));
     
@@ -979,11 +1002,42 @@ panel.add(outputLabel5);
                     JOptionPane.showMessageDialog(secondFrame, "Bzzt. Make sure there are no spaces in your word! Bzz.");
                     return;
                 }
+
+                if (userWord.equals("")) {
+                    if(hintsBool){
+                        hintsButton.doClick();
+                    }
+                    if(ranksBool){
+                        rankBreakDownButton.doClick();
+                    }
+                    if(foundWordsBool){
+                        foundWordsButton.doClick();
+                    }
+                    if(howToPlayBool){
+                        howToPlayButton.doClick();
+                    }
+                    textPane.requestFocusInWindow();
+                    return;
+                    
+                }
     
                 if (userWord != null && !userWord.isEmpty() && userWord.length() == 7) {
                     if (!master.isUnique(userWord)) {
                         JOptionPane.showMessageDialog(secondFrame, "Bzzt. Oops, all letters have to be unique! Bzz.");
-                        return;
+                        if(hintsBool){
+                        hintsButton.doClick();
+                    }
+                    if(ranksBool){
+                        rankBreakDownButton.doClick();
+                    }
+                    if(foundWordsBool){
+                        foundWordsButton.doClick();
+                    }
+                    if(howToPlayBool){
+                        howToPlayButton.doClick();
+                    }
+                    textPane.requestFocusInWindow();
+                    return;
                     }
     
                     baseWord = userWord;
@@ -997,7 +1051,20 @@ panel.add(outputLabel5);
     
                     if (!acceptedWordList.contains(baseWord)) {
                         JOptionPane.showMessageDialog(secondFrame, "Buzz. Are you making stuff up now!  Make sure you type a valid word! Buzz.");
-                        return;
+                        if(hintsBool){
+                        hintsButton.doClick();
+                    }
+                    if(ranksBool){
+                        rankBreakDownButton.doClick();
+                    }
+                    if(foundWordsBool){
+                        foundWordsButton.doClick();
+                    }
+                    if(howToPlayBool){
+                        howToPlayButton.doClick();
+                    }
+                    textPane.requestFocusInWindow();
+                    return;
                     }
     
                     outputLabel.setText("");
@@ -1013,6 +1080,19 @@ panel.add(outputLabel5);
                     }
     
                     JOptionPane.showMessageDialog(secondFrame, "Bzzuh Bzzoh, word has to have 7 letters! Buzz.");
+                    if(hintsBool){
+                        hintsButton.doClick();
+                    }
+                    if(ranksBool){
+                        rankBreakDownButton.doClick();
+                    }
+                    if(foundWordsBool){
+                        foundWordsButton.doClick();
+                    }
+                    if(howToPlayBool){
+                        howToPlayButton.doClick();
+                    }
+                    textPane.requestFocusInWindow();
                     return;
                 }
     
@@ -1043,8 +1123,24 @@ panel.add(outputLabel5);
                 if(foundwords != null && foundwords.isVisible()){
                     foundwords.dispose();
                 }
+            }else{
+                if(hintsBool){
+                        hintsButton.doClick();
+                    }
+                    if(ranksBool){
+                        rankBreakDownButton.doClick();
+                    }
+                    if(foundWordsBool){
+                        foundWordsButton.doClick();
+                    }
+                    if(howToPlayBool){
+                        howToPlayButton.doClick();
+                    }
+                    textPane.requestFocusInWindow();
             }
+            textPane.requestFocusInWindow();
         }
+        
     });
     
     
@@ -1058,6 +1154,29 @@ panel.add(outputLabel5);
             @Override
             public void actionPerformed(ActionEvent e)
             {
+                boolean hintsBool = false;
+                boolean ranksBool = false;
+                boolean foundWordsBool = false;
+                boolean howToPlayBool = false;
+
+                if (hints != null && hints.isVisible()) {
+                    hints.dispose();
+                    hintsBool = true;
+                }
+                if (ranks != null && ranks.isVisible()) {
+                    isRanksDialogOpen = false;
+                    ranks.dispose();
+                    ranksBool = true;  
+                }
+                if (foundwords != null && foundwords.isVisible()) {
+                    foundwords.dispose();
+                    foundWordsBool = true;
+                }
+                if (howToPlayDialog != null && howToPlayDialog.isVisible()){
+                    howToPlayDialog.dispose();
+                    howToPlayBool = true;
+                }
+                
                 String saveFileName = JOptionPane.showInputDialog("Enter a name for your saved game:");
                 CliGameModel.setSaveFileName(saveFileName);
                 if (saveFileName != null && !saveFileName.trim().isEmpty())
@@ -1073,12 +1192,38 @@ panel.add(outputLabel5);
                     {
                         System.err.println("File not found " + e1.getMessage());
                     }
+                    if(hintsBool){
+                        hintsButton.doClick();
+                    }
+                    if(ranksBool){
+                        rankBreakDownButton.doClick();
+                    }
+                    if(foundWordsBool){
+                        foundWordsButton.doClick();
+                    }
+                    if(howToPlayBool){
+                        howToPlayButton.doClick();
+                    }
+                    
                 }
 
                 else 
                 {
                     JOptionPane.showMessageDialog(null, "You did not provide a valid save name. Game was not saved.");
+                    if(hintsBool){
+                        hintsButton.doClick();
+                    }
+                    if(ranksBool){
+                        rankBreakDownButton.doClick();
+                    }
+                    if(foundWordsBool){
+                        foundWordsButton.doClick();
+                    }
+                    if(howToPlayBool){
+                        howToPlayButton.doClick();
+                    }
                 }
+                textPane.requestFocusInWindow();
             }
         }
         );
@@ -1158,6 +1303,7 @@ panel.add(outputLabel5);
                     if(howToPlayBool){
                         howToPlayButton.doClick();
                     }
+                    textPane.requestFocusInWindow();
                     return;
                 }
 
@@ -1238,6 +1384,7 @@ panel.add(outputLabel5);
                     foundwords.dispose();
                 }
             }
+            
             
         });
         
