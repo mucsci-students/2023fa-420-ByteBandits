@@ -97,19 +97,30 @@ public class CliGameController {
                 CliGameView.displaMessageShuffle();
                 model.shuffle(model.getBaseWord(), model.getReqLetter());
                 break;
-            case "/cleansave":
+                case "/cleansave":
                 error = model.errorFirst();
                 if (error) {
                     break;
                 }
-                model.savePuzzle();
+                try {
+                    model.savePuzzle();
+                    System.out.println("Puzzle saved successfully.");
+                } catch (Exception e) {
+                    System.err.println("An error occurred while saving the puzzle: " + e.getMessage());
+                }
                 break;
+            
             case "/advancedsave":
                 error = model.errorFirst();
                 if (error) {
                     break;
                 }
-                model.saveCurr();
+                try {
+                    model.saveCurr();
+                    System.out.println("Current game state saved successfully.");
+                } catch (Exception e) {
+                    System.err.println("An error occurred while saving the current game state: " + e.getMessage());
+                }
                 break;
             case "/loadpuzzle":
                 model.loadPuzzle();

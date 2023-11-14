@@ -19,7 +19,8 @@ public class master extends helpers{
 
     public static List<String> foundWords = new ArrayList<>();
 
-    
+    public static String author;
+    public static List<String> wordList; // TODO: WORK ON THESE LATER SPRINT 4
     
 public static void cliMode() throws FileNotFoundException, InterruptedException{
     
@@ -28,6 +29,7 @@ public static void cliMode() throws FileNotFoundException, InterruptedException{
     char reqLetter = getReqLetter(baseWord);
     List<String> acceptedWordList = acceptedWords(baseWord, reqLetter);
     String shuffleWord = baseWord;
+    
     
     intro();
     
@@ -69,6 +71,7 @@ public static void cliMode() throws FileNotFoundException, InterruptedException{
             Scanner console = new Scanner(System.in);
             System.out.println("Please choose a baseword: ");
             baseWord = console.next();
+            
             
             if (baseWord.length() != 7) 
             {
@@ -175,7 +178,7 @@ public static void cliMode() throws FileNotFoundException, InterruptedException{
                     break;
                 }
 
-                saveFile.saveGameData(CliGameModel.getSaveFileName(), shuffleWord, foundWords, totalPoints, String.valueOf(reqLetter), possiblePoints);
+                //saveFile.saveGameData(CliGameModel.getSaveFileName(), shuffleWord, foundWords, totalPoints, String.valueOf(reqLetter), possiblePoints, author, wordList);
 
                 System.out.println("Game Status Saved!\n");
 
@@ -189,7 +192,7 @@ public static void cliMode() throws FileNotFoundException, InterruptedException{
                     break;
                 }
             
-                saveFile.saveGameData(CliGameModel.getSaveFileName(),shuffleWord, foundWords, totalPoints, String.valueOf(reqLetter), possiblePoints(baseWord, acceptedWordList));
+                //saveFile.saveGameData(CliGameModel.getSaveFileName(),shuffleWord, foundWords, totalPoints, String.valueOf(reqLetter), possiblePoints(baseWord, acceptedWordList), author, wordList);
                 System.out.println("\nGame Status Saved!\n");
 
                 break;

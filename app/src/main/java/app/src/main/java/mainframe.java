@@ -117,6 +117,8 @@ public class mainframe {
     public static String baseWord = "       ";
     public static char reqLetter = master.getReqLetter(baseWord);
     public static String shuffleWord = baseWord;
+    public static String author;
+    public static List<String> wordList;
 
     static List<String> acceptedWordList;
     
@@ -1004,32 +1006,47 @@ panel.add(outputLabel5);
         savePuzzleButton.addActionListener(new ActionListener() 
         {
             @Override
-            public void actionPerformed(ActionEvent e)
-            {
+            public void actionPerformed(ActionEvent e) {
                 String saveFileName = JOptionPane.showInputDialog("Enter a name for your saved game:");
-                CliGameModel.setSaveFileName(saveFileName);
-                if (saveFileName != null && !saveFileName.trim().isEmpty())
-                {
-                    try
-                    {
+        
+                // Check if the user closed the dialog
+                if (saveFileName == null) {
+                    JOptionPane.showMessageDialog(null, "Game save cancelled.");
+                    return;
+                }
+        
+                String author = JOptionPane.showInputDialog("Enter your username:");
+        
+                CliGameModel.setSaveFileName(saveFileName.trim());
+                CliGameModel.setAuthor(author != null ? author.trim() : "");
+        
+                if (!saveFileName.trim().isEmpty() && author != null && !author.trim().isEmpty()) {
+                    // Prompt for encryption choice
+                    int encryptOption = JOptionPane.showConfirmDialog(null, "Do you want to encrypt your save data?", "Encrypt Save", JOptionPane.YES_NO_OPTION);
+        
+                    if (encryptOption == JOptionPane.CLOSED_OPTION || encryptOption == JOptionPane.CANCEL_OPTION) {
+                        JOptionPane.showMessageDialog(null, "You did not complete game save. Game was not saved.");
+                        return;
+                    }
+        
+                    boolean encrypt = (encryptOption == JOptionPane.YES_OPTION);
+        
+                    try {
                         List<String> possibleWords = master.acceptedWords(baseWord, reqLetter);
                         int maxPoints = helpers.possiblePoints(baseWord, possibleWords);
-                        // Call the saveGameData method with the appropriate parameters
-                        playerGameData.saveGameData(saveFileName, baseWord, master.foundWords, master.totalPoints, "" + reqLetter, maxPoints);
+                        playerGameData.saveGameData(saveFileName, baseWord, master.foundWords, master.totalPoints, "" + reqLetter, maxPoints, author, wordList, encrypt);
                     }
-                    catch (FileNotFoundException e1)
-                    {
+                    catch (FileNotFoundException e1) {
                         System.err.println("File not found " + e1.getMessage());
+                    } catch (Exception e2) {
+                        System.out.print("Could not encrypt save.");
+                        e2.printStackTrace();
                     }
-                }
-
-                else 
-                {
-                    JOptionPane.showMessageDialog(null, "You did not provide a valid save name. Game was not saved.");
+                } else {
+                    JOptionPane.showMessageDialog(null, "You did not provide a valid save name or username. Game was not saved.");
                 }
             }
-        }
-        );
+        });
 
     /**********************************************************************/
     /**********************************************************************/

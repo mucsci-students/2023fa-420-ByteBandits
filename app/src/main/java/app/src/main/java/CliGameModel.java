@@ -32,6 +32,10 @@ public class CliGameModel extends helpers {
     private static String saveFileName;
 
     public static Scanner console = new Scanner(System.in);
+
+    private static String author = "";
+    
+    private static List<String> wordList;
     
     /**
      * @throws FileNotFoundException
@@ -85,6 +89,10 @@ public class CliGameModel extends helpers {
         return saveFileName;
     }
 
+    public static String author(){
+        return author;
+    }
+
     //SETTERS
     public static void setPossiblePoints(int possiblePoints) {
         CliGameModel.possiblePoints = possiblePoints;
@@ -128,6 +136,10 @@ public class CliGameModel extends helpers {
 
     public String getUserInput() {
         return console.nextLine();
+    }
+
+    public static void setAuthor(String author) {
+        CliGameModel.author = author;
     }
     /*
     * initGame
@@ -309,30 +321,120 @@ public class CliGameModel extends helpers {
     * param: N/A
     * returns: N/A
     * This function saves a puzzle that has no progress.
+     * @throws Exception
     */
-    public static void savePuzzle()
+    public static void savePuzzle() throws Exception
     {
         possiblePoints = possiblePoints(baseWord, acceptedWordList);
-        if(totalPoints != 0)
-        {
+        if (totalPoints != 0) {
             CliGameView.createPuzzleMessage();
             return;
         }
-        saveFile.saveGameData(getSaveFileName(), shuffleWord, foundWords, totalPoints, String.valueOf(reqLetter), possiblePoints);
+
+        //Ask the user to input save filename
+        while (true) {
+            System.out.print("Input your save file name (max 32 characters): ");
+            saveFileName = console.nextLine().trim(); // Read input and remove leading/trailing whitespace
+        
+            if (saveFileName.isEmpty()) {
+                System.out.println("Save file name cannot be empty. Please try again.");
+            } else if (saveFileName.length() > 32) {
+                System.out.println("Save file name too long. Please limit to 32 characters.");
+            }
+            else{
+                break;
+            }
+        }
+
+        //Ask the user to input a name:
+        while (author.isEmpty() || author.length() > 16) {
+            System.out.print("Input your username (max 16 characters): ");
+            author = console.nextLine().trim(); // Read input and remove leading/trailing whitespace
+        
+            if (author.isEmpty()) {
+                System.out.println("Username cannot be empty. Please try again.");
+            } else if (author.length() > 16) {
+                System.out.println("Username too long. Please limit to 16 characters.");
+            }
+        }
+
+
+        // Ask the user if they want to encrypt the save
+        boolean encrypt = false;
+        System.out.print("Do you want to encrypt your save? (y/n): ");
+        while (true) {
+            String encryptChoice = console.nextLine().trim().toLowerCase();
+            if (encryptChoice.equals("y")) {
+                encrypt = true;
+                break;
+            } else if (encryptChoice.equals("n")) {
+                break;
+            } else {
+                System.out.print("Invalid input. Please enter 'y' for yes or 'n' for no: ");
+            }
+        }
+
+        saveFile.saveGameData(getSaveFileName(), shuffleWord, foundWords, totalPoints, String.valueOf(reqLetter), possiblePoints, author, wordList, encrypt);
         CliGameView.successfulSaveMessage();
     }
+
 
     /**
     * saveCurr
     * param: N/A
     * returns: N/A
     * This function saves a puzzle that has progress.
+     * @throws Exception
     */
-    public static void saveCurr()
+    public static void saveCurr() throws Exception
     {
-        saveFile.saveGameData(getSaveFileName(), shuffleWord, foundWords, totalPoints, String.valueOf(reqLetter), possiblePoints(baseWord, acceptedWordList));
+   //Ask the user to input save filename
+        while (true) {
+            System.out.print("Input your save file name (max 32 characters): ");
+            saveFileName = console.nextLine().trim(); // Read input and remove leading/trailing whitespace
+        
+            if (saveFileName.isEmpty()) {
+                System.out.println("Save file name cannot be empty. Please try again.");
+            } else if (saveFileName.length() > 32) {
+                System.out.println("Save file name too long. Please limit to 32 characters.");
+            }
+            else{
+                break;
+            }
+        }
+
+        //Ask the user to input a name:
+        while (author.isEmpty() || author.length() > 16) {
+            System.out.print("Input your username (max 16 characters): ");
+            author = console.nextLine().trim(); // Read input and remove leading/trailing whitespace
+        
+            if (author.isEmpty()) {
+                System.out.println("Username cannot be empty. Please try again.");
+            } else if (author.length() > 16) {
+                System.out.println("Username too long. Please limit to 16 characters.");
+            }
+        }
+
+
+        // Ask the user if they want to encrypt the save
+        boolean encrypt = false;
+        System.out.print("Do you want to encrypt your save? (y/n): ");
+        while (true) {
+            String encryptChoice = console.nextLine().trim().toLowerCase();
+            if (encryptChoice.equals("y")) {
+                encrypt = true;
+                break;
+            } else if (encryptChoice.equals("n")) {
+                break;
+            } else {
+                System.out.print("Invalid input. Please enter 'y' for yes or 'n' for no: ");
+            }
+        }
+
+        saveFile.saveGameData(getSaveFileName(), shuffleWord, foundWords, totalPoints, String.valueOf(reqLetter), possiblePoints(baseWord, acceptedWordList), author, wordList, encrypt);
         CliGameView.successfulSaveMessage();
     }
+
 
     /**
     * loadPuzzle
