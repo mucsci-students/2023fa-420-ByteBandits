@@ -18,7 +18,7 @@ public class CliGameCompleter implements Completer {
 
         for (String command : new String[] {
             "/newpuzzle", "/basepuzzle", "/guess", "/viewpuzzle", "/foundwords",
-            "/shuffle", "/cleansave", "/advancedsave", "/loadpuzzle", "/observestatus", "/help", "/exit"
+            "/shuffle", "/cleansave", "/advancedsave", "/matrixhints", "/loadpuzzle", "/observestatus", "/help", "/exit"
         }) {
             if (command.startsWith(word)) {
                 matchingCommands.add(command);
