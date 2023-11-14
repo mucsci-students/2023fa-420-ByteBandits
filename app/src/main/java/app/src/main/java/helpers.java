@@ -366,14 +366,14 @@ public static String[][] getDynamicMatrixCLI(List<String> acceptedWordList, int 
         }
     }
 
-    matrix[numRows + 1][0] = yellowColor + "Σ" + resetColor + ":";
+    matrix[numRows + 1][0] = yellowColor + "SUM" + resetColor + ":";
     for (int i = 0; i < numRows; i++) {
-        matrix[i + 1][numCols + 1] = String.valueOf(rowSums[i]);
+        matrix[i + 1][numCols + 1] = yellowColor + String.valueOf(rowSums[i]) + resetColor;
     }
 
-    matrix[0][numCols + 1] = yellowColor + "Σ" + resetColor;
+    matrix[0][numCols + 1] = yellowColor + "SUM" + resetColor;
     for (int j = 0; j < numCols; j++) {
-        matrix[numRows + 1][j + 1] = String.valueOf(colSums[j]);
+        matrix[numRows + 1][j + 1] = yellowColor + String.valueOf(colSums[j]) + resetColor;
     }
 
     int totalSum = Arrays.stream(rowSums).sum();
