@@ -246,6 +246,33 @@ public class mainframe {
         }
         
     }
+    /*********************************************************
+     * ******************************************************/
+    //Opening and closing for the rank dialog
+    private void openRanksDialog() {
+        RanksDialogBuilder ranksDialogBuilder = new RanksDialogBuilder(secondFrame);
+        ranksDialogBuilder.setTitle("RANK BREAK DOWN")
+            .setRankNames(new String[]{"Beginner", "Good Start", "Moving Up", "Good", "Solid", "Nice", "Great", "Amazing", "Genius", "Queen Bee"})
+            .setAcceptedWordList(acceptedWordList)
+            .setBaseWord(baseWord);
+    
+        ranks = ranksDialogBuilder.build();
+        ranks.setVisible(true);
+        ranks.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        ranks.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                isRanksDialogOpen = false;
+            }
+        });
+    
+        isRanksDialogOpen = true;
+    }
+    
+    private void closeRanksDialog() {
+        ranks.dispose();
+        isRanksDialogOpen = false;
+    }
 
     /**********************************************************/
     /**********************************************************/
@@ -1670,32 +1697,13 @@ panel.add(outputLabel5);
     rankBreakDownButton.addActionListener(new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-    
-            if (!isRanksDialogOpen) {
-                RanksDialogBuilder ranksDialogBuilder = new RanksDialogBuilder(secondFrame);
-                ranksDialogBuilder.setTitle("RANK BREAK DOWN")
-                    .setRankNames(new String[]{"Beginner", "Good Start", "Moving Up", "Good", "Solid", "Nice", "Great", "Amazing", "Genius", "Queen Bee"})
-                    .setAcceptedWordList(acceptedWordList)
-                    .setBaseWord(baseWord);
-    
-                ranks = ranksDialogBuilder.build();
-                ranks.setVisible(true);
-    
-                isRanksDialogOpen = true;
-    
-                // Add a window listener to dispose of the dialog when it's closed
-                ranks.addWindowListener(new WindowAdapter() {
-                    @Override
-                    public void windowClosed(WindowEvent e) {
-                        isRanksDialogOpen = false;
-                    }
-                });
-            } else {
-                // Dispose of the dialog and set the flag to false
-                ranks.dispose();
-                isRanksDialogOpen = false;
-            }
-            textPane.requestFocusInWindow();
+
+                if (!isRanksDialogOpen) {
+                    openRanksDialog();
+                } else {
+                    closeRanksDialog();
+                }
+                textPane.requestFocusInWindow();
         }
     });
     

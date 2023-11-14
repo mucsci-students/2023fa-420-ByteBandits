@@ -204,6 +204,7 @@ public class CliGameModel extends helpers {
                 return;
             }
             shuffleWord = shuffle(baseWord, reqLetter);
+            console.nextLine();
             guess(baseWord, acceptedWordList, playerRank(baseWord, totalPoints, acceptedWordList));
     }
 

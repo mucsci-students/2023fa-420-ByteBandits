@@ -52,7 +52,7 @@ public class RanksDialogBuilder {
         ranksDialog.setLocationRelativeTo(parentFrame);
 
         JTextArea ranksArea = new JTextArea();
-        Color darkYellow = new Color(204, 153, 0);
+        Color darkYellow = new Color(166, 102, 22);
         ranksArea.setBackground(darkYellow);
         ranksArea.setEditable(false);
         ranksArea.setWrapStyleWord(true);
