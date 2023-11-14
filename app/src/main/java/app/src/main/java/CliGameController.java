@@ -129,6 +129,13 @@ public class CliGameController {
                 view.exitMessage();
                 System.exit(0);
                 break;
+            case "/matrixhints":
+                error = model.errorFirst();
+                if (error) {
+                    break;
+                }
+                view.showHints();
+                break;
             default:
                 view.invalidCommandMessage();
                 break;

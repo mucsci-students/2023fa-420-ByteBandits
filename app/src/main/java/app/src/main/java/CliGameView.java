@@ -68,6 +68,7 @@ public class CliGameView{
         System.out.println(yellowColor + "/advancedsave" + resetColor + ":   Save your progress in the current game.");
         System.out.println(yellowColor + "/loadpuzzle" + resetColor + ":     Load a previously saved puzzle.");
         System.out.println(yellowColor + "/observestatus" + resetColor + ":  Display your current game status.");
+        System.out.println(yellowColor + "/matrixhints" + resetColor + ":    Shows helpful hints for the given puzzle.");
         System.out.println(yellowColor + "/help" + resetColor + ":           Display help information.");
         System.out.println(yellowColor + "/exit" + resetColor + ":           Quit the game.");
         System.out.println();
@@ -268,6 +269,18 @@ public class CliGameView{
         }
 
         /*
+        * showHints
+        * param: N/A
+        * returns: N/A
+        * This function lets player know that they need to use /savecurr.
+        */
+        public static void showHints() throws FileNotFoundException
+        {
+            helpers.dynamicHintsCLI(CliGameModel.shuffle(model.getBaseWord(), CliGameModel.getReqLetter()), CliGameModel.getReqLetter());
+            return;
+        }
+
+        /*
         * successfulSaveMessage
         * param: N/A
         * returns: N/A
@@ -334,6 +347,8 @@ public class CliGameView{
         public static void help()
         {
             String yellowColor = "\u001B[33m";
+            String resetColor = "\u001B[0m";
+
             String [] commandLines = {
             "/newpuzzle",
             "/basepuzzle",
@@ -345,6 +360,7 @@ public class CliGameView{
             "/advancedsave",
             "/loadpuzzle",
             "/observestatus",
+            "/matrixhints",
             "/help",
             "/exit"
             };
@@ -359,6 +375,7 @@ public class CliGameView{
             "Lets the players save a puzzle that may have been partially played",
             "The player can load a saved game",
             "The player can see their rank and progress on a current puzzle",
+            "Shows helpful hints for the current puzzle.",
             "Displays help information",
             "Leave the application"
             };
@@ -368,10 +385,10 @@ public class CliGameView{
             System.out.println("- Words must include the required letter");
             System.out.println("- Letters can be used more than once");
             System.out.println("");
-            System.out.println(yellowColor + "Command Line    |   Explanation" + "\\u001B[0m");
-                System.out.println(yellowColor + "---------------------------------------");
+            System.out.println(yellowColor + "Command Line    |   Explanation" + resetColor);
+                System.out.println(yellowColor + "---------------------------------------" + resetColor);
                 for (int i = 0; i < commandLines.length; i++) {
-                    System.out.printf("%-15s |   %s%n", commandLines[i], explanations[i]);
+                    System.out.printf("%-15s " + yellowColor + "|" + resetColor + "   %s%n", commandLines[i], explanations[i]);
                 }
                 System.out.println("\u001B[0m");
         }
@@ -395,7 +412,7 @@ public class CliGameView{
         */
         public static void invalidCommandMessage()
         {
-            System.out.println("\u001B[33m" + "Invalid command! Type /help for a list of commands." + "\u001B[0m"); 
+            System.out.println("\u001B[33m" + "Invalid command! Type /help for a list of commands.\n" + "\u001B[0m"); 
         }
 
         /*
