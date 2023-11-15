@@ -55,19 +55,23 @@ public class wwModelTest {
 
 /**********************************************************************/
 /**********************************************************************/
+
 /** 
-//Tests for Saving
  @Test
     public void testSavePuzzle() {
         // Setup
         CliGameModel.setTotalPoints(0);
         CliGameModel.setAcceptedWordList(Arrays.asList("jack", "jackpot"));
+        CliGameModel.setBaseWord("jackpot");
+
+        CliGameModel.setShuffleWord("jackpot"); 
+        CliGameModel.setReqLetter('k'); 
         // Action
         CliGameModel.savePuzzle();
 
         // Assert
         // Verify the saveGameData method was called on mockSaveFile with the expected arguments
-        verify(mockSaveFile).saveGameData(anyString(), anyString(), anyList(), eq(0), eq("k"), anyInt());
+        verify(mockSaveFile).saveGameData(anyString(), eq("jackpot"), eq(Arrays.asList("jack", "jackpot")), eq(0), eq("k"), anyInt());
     }
 
     @Test
@@ -270,7 +274,6 @@ public void testGetSaveFileName() {
 
     assertEquals("FileName should match the set value", expectedFileName, actualFileName);
 }
-
 /**********************************************************************/
 /**********************************************************************/
 //Tests for basePuzzle

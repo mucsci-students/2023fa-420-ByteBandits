@@ -19,15 +19,17 @@ public class master extends helpers{
 
     public static List<String> foundWords = new ArrayList<>();
 
+    public static String author;
+    public static List<String> wordList; // TODO: WORK ON THESE LATER SPRINT 4
     
-    
-public static void cliMode() throws FileNotFoundException, InterruptedException{
+public static void cliMode() throws Exception{
     
     playerData saveFile = new playerData();
     String baseWord = "       ";
     char reqLetter = getReqLetter(baseWord);
     List<String> acceptedWordList = acceptedWords(baseWord, reqLetter);
     String shuffleWord = baseWord;
+    
     
     intro();
     
@@ -69,6 +71,7 @@ public static void cliMode() throws FileNotFoundException, InterruptedException{
             Scanner console = new Scanner(System.in);
             System.out.println("Please choose a baseword: ");
             baseWord = console.next();
+            
             
             if (baseWord.length() != 7) 
             {
@@ -163,6 +166,7 @@ public static void cliMode() throws FileNotFoundException, InterruptedException{
                 break;
 
             case "/savepuzzle":
+
                 int possiblePoints = possiblePoints(baseWord, acceptedWordList);
                 if(baseWord.charAt(1) == ' ')
                 {
@@ -179,6 +183,9 @@ public static void cliMode() throws FileNotFoundException, InterruptedException{
 
                 System.out.println("Game Status Saved!\n");
 
+                CliGameModel.savePuzzle();
+
+
                 break;
 
             case "/savecurr":
@@ -189,12 +196,16 @@ public static void cliMode() throws FileNotFoundException, InterruptedException{
                     break;
                 }
             
-                saveFile.saveGameData(CliGameModel.getSaveFileName(),baseWord, shuffleWord, foundWords, totalPoints, String.valueOf(reqLetter), possiblePoints(baseWord, acceptedWordList));
+                saveFile.saveGameData(CliGameModel.getSaveFileName(), baseWord, shuffleWord, foundWords, totalPoints, String.valueOf(reqLetter), possiblePoints(baseWord, acceptedWordList));
                 System.out.println("\nGame Status Saved!\n");
+
+                CliGameModel.saveCurr();
+
 
                 break;
 
             case "/loadpuzzle":
+
                 if(baseWord == saveFile.getFormat() && totalPoints == saveFile.getPlayerPoints()){
                     System.out.println("\u001B[33m" + "\nThis puzzle is already loaded!\n" + "\u001B[0m");
                     break;
@@ -216,6 +227,9 @@ public static void cliMode() throws FileNotFoundException, InterruptedException{
                 System.out.println("\nTotal Points: " + "\u001B[33m" + totalPoints + "\u001B[0m");
                 System.out.println("Rank: " + "\u001B[33m" + playerRank + "\u001B[0m" + "\n");
                 System.out.println("Game Status Loaded!\n");
+
+
+                CliGameModel.loadPuzzle();
 
                 break;
 

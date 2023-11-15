@@ -73,6 +73,7 @@ public class CliGameView {
         System.out.println(yellowColor + "/advancedsave" + resetColor + ":   Save your progress in the current game.");
         System.out.println(yellowColor + "/loadpuzzle" + resetColor + ":     Load a previously saved puzzle.");
         System.out.println(yellowColor + "/observestatus" + resetColor + ":  Display your current game status.");
+        System.out.println(yellowColor + "/matrixhints" + resetColor + ":    Shows helpful hints for the given puzzle.");
         System.out.println(yellowColor + "/help" + resetColor + ":           Display help information.");
         System.out.println(yellowColor + "/exit" + resetColor + ":           Quit the game.");
         System.out.println();
@@ -218,6 +219,85 @@ public class CliGameView {
 
     }
 
+        /*
+        * help
+        * param: N/A
+        * returns: String
+        * This function tells the player the rules of the game and shows
+        * a table of all the command lines the player can use and what 
+        * each command line does. 
+        */
+        public static void help()
+        {
+            String yellowColor = "\u001B[33m";
+            String resetColor = "\u001B[0m";
+
+            String [] commandLines = {
+            "/newpuzzle",
+            "/basepuzzle",
+            "/viewpuzzle",
+            "/foundwords",
+            "/guess",
+            "/shuffle",
+            "/cleansave",
+            "/advancedsave",
+            "/loadpuzzle",
+            "/observestatus",
+            "/matrixhints",
+            "/help",
+            "/exit"
+            };
+            String [] explanations = {
+            "Generates a new puzzle with 7 unique letters and a required letter",
+            "Generates a new puzzle with a word of the player's choice with 7 unique letters and a required letter",
+            "Shows the current puzzle the player is working on",
+            "Generates a list of words that the player has found ",
+            "Allows the player to guess their words",
+            "Allows the player to shuffle around the words",
+            "Lets the player save a blank puzzle",
+            "Lets the players save a puzzle that may have been partially played",
+            "The player can load a saved game",
+            "The player can see their rank and progress on a current puzzle",
+            "Shows helpful hints for the current puzzle.",
+            "Displays help information",
+            "Leave the application"
+            };
+            System.out.println();
+            System.out.println(yellowColor + "The WordyWasps game allows players to create words using 7 unique letters with a required letter. " +"\u001B[0m");
+            System.out.println("- Words must contain at least 4 letters");
+            System.out.println("- Words must include the required letter");
+            System.out.println("- Letters can be used more than once");
+            System.out.println("");
+            System.out.println(yellowColor + "Command Line    |   Explanation" + resetColor);
+                System.out.println(yellowColor + "---------------------------------------" + resetColor);
+                for (int i = 0; i < commandLines.length; i++) {
+                    System.out.printf("%-15s " + yellowColor + "|" + resetColor + "   %s%n", commandLines[i], explanations[i]);
+                }
+                System.out.println("\u001B[0m");
+
+         /*
+        * showHints
+        * param: N/A
+        * returns: N/A
+        * This function lets player know that they need to use /savecurr.
+        */
+        public static void showHints() throws FileNotFoundException
+        {
+            helpers.dynamicHintsCLI(CliGameModel.shuffle(model.getBaseWord(), CliGameModel.getReqLetter()), CliGameModel.getReqLetter());
+            return;
+        }
+
+        /*
+        * successfulSaveMessage
+        * param: N/A
+        * returns: N/A
+        * This function lets the player know their puzzle was saved.
+        */
+        public static void successfulSaveMessage()
+        {
+            System.out.println("Game Status Saved!\n");
+        }
+  
     /*
      * foundWordList
      * param: N/A
@@ -229,6 +309,7 @@ public class CliGameView {
 
         String yellowColor = "\u001B[33m";
         String resetColor = "\u001B[0m";
+
 
         System.out.println();
         System.out.printf("%-2sFOUND WORD LIST%n", "");
@@ -244,6 +325,7 @@ public class CliGameView {
             System.out.printf(yellowColor + "* " + resetColor + "%-16s" + yellowColor + "*%n", foundWords.get(j));
         }
 
+
         for (int k = 0; k <= 18; k++) {
             System.out.print(yellowColor + "*" + resetColor);
         }
@@ -251,6 +333,7 @@ public class CliGameView {
         System.out.println();
         System.out.println();
     }
+
 
     /*
      * displayMessagShuffle
@@ -267,6 +350,16 @@ public class CliGameView {
         Thread.sleep(500);
     }
 
+        /*
+        * invalidCommandMessage
+        * param: N/A
+        * returns: N/A
+        * This function lets the player know they did an invalid command.
+        */
+        public static void invalidCommandMessage()
+        {
+            System.out.println("\u001B[33m" + "Invalid command! Type /help for a list of commands.\n" + "\u001B[0m"); 
+        }
     /*
      * createPuzzleMessage
      * param: N/A
