@@ -895,6 +895,7 @@ panel.add(outputLabel5);
                     baseWord = baseWord.toLowerCase();
         
                     if (master.foundWords.contains(enteredWord)) {
+                        playSound("./src/main/resources/audio/wrong-47985.wav", 0.77f);
                         placePic(secondFrame, "./src/main/resources/visualcontent/angry.gif", 0.17, 0.5, true, false);
                         outputLabel.setText("You already guessed this word correctly. Try again!");
                         
@@ -1877,6 +1878,8 @@ panel.add(outputLabel5);
             baseWord = baseWord.toLowerCase();
         
             if (master.foundWords.contains(enteredWord)) {
+                playSound("./src/main/resources/audio/wrong-47985.wav", 0.77f);
+                placePic(secondFrame, "./src/main/resources/visualcontent/angry.gif", 0.17, 0.5, true, false);
                 outputLabel.setText("You already guessed this word correctly. Try again!");
             } else {
                 enteredWord = enteredWord.toUpperCase();
@@ -1920,6 +1923,7 @@ panel.add(outputLabel5);
                     String differenceText = "You need  <font color='#CC9900'>" + helpers.difference + "</font>" +  " points to reach next rank.";
                     outputLabel5.setText("<html>" + differenceText + "</html>");
                 } else {
+                    placePic(secondFrame, "./src/main/resources/visualcontent/angry.gif", 0.17, 0.5, true, false);
                     playSound("./src/main/resources/audio/wrong-47985.wav", 0.77f);
                     outputLabel.setText("Invalid word, try again!");
                 }
@@ -1970,7 +1974,7 @@ panel.add(outputLabel5);
         @Override
         public void actionPerformed(ActionEvent e) {
             if (highScores.isHighScore(key, master.totalPoints)) {
-                String userId = JOptionPane.showInputDialog(secondFrame, "New high score! Enter your name to join the leaderboard:" + key + "<-");
+                String userId = JOptionPane.showInputDialog(secondFrame, "New high score! Enter your name to join the leaderboard:");
                 if (userId == null) {
                     JOptionPane.showMessageDialog(null, "You did not provide a first name. High score was not saved.");
                 }
@@ -2058,7 +2062,7 @@ panel.add(outputLabel5);
         addResponsiveButton(backSpaceButton, 0.225, 0.22);
         addResponsiveButton(hintsButton, 0.8, 0.038);
         addResponsiveButton(enterGuessButton, 0.695, 0.22);
-        //addResponsiveButton(highScoreButton, 0.9, 0.038);
+        addResponsiveButton(highScoreButton, 0.9, 0.038);
         addResponsiveButton(shufflePuzzle, 0.463, 0.31);
 
 
