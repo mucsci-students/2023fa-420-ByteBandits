@@ -1345,9 +1345,9 @@ panel.add(outputLabel5);
                     boolean encrypt = (encryptOption == JOptionPane.YES_OPTION);
         
                     try {
-                        List<String> possibleWords = CliGameModel.acceptedWords(baseWord, reqLetter);
+                        List<String> possibleWords = master.acceptedWords(baseWord, reqLetter);
                         int maxPoints = helpers.possiblePoints(baseWord, possibleWords);
-                        //System.out.print("DEBUG: Possible words in save for mainframe: " + possibleWords);
+                        System.out.print("DEBUG: Possible words in save for mainframe: " + possibleWords + " baseword: " + baseWord + " reqLetter: " + reqLetter);
                         playerGameData.saveGameData(saveFileName, baseWord, master.foundWords, master.totalPoints, "" + reqLetter, maxPoints, author, possibleWords, encrypt);
                     }
                     catch (FileNotFoundException e1) {

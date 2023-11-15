@@ -35,8 +35,8 @@ public class CliGameModel extends helpers {
 
     private static String author = "";
     
-    private static List<String> wordList;
-    
+   
+
     /**
      * @throws FileNotFoundException
      */
@@ -156,6 +156,7 @@ public class CliGameModel extends helpers {
         reqLetter = getReqLetter1(baseWord);
         acceptedWordList = acceptedWords(baseWord, reqLetter);
         saveFile = new playerData();
+        author = "";
     }
 
     /**
@@ -177,6 +178,7 @@ public class CliGameModel extends helpers {
         CliGameView.newPuzzlePrint();
         shuffleWord = shuffle(baseWord, reqLetter);
         guess(baseWord, acceptedWordList, playerRank(baseWord, totalPoints, acceptedWordList));
+        author = "";
     }
 
     /**
@@ -375,7 +377,7 @@ public class CliGameModel extends helpers {
             }
         }
 
-        saveFile.saveGameData(getSaveFileName(), shuffleWord, foundWords, totalPoints, String.valueOf(reqLetter), possiblePoints, author, wordList, encrypt);
+        saveFile.saveGameData(getSaveFileName(), shuffleWord, foundWords, totalPoints, String.valueOf(reqLetter), possiblePoints, author, acceptedWordList, encrypt);
         CliGameView.successfulSaveMessage();
     }
 
@@ -431,7 +433,7 @@ public class CliGameModel extends helpers {
                 System.out.print("Invalid input. Please enter 'y' for yes or 'n' for no: ");
             }
         }
-        saveFile.saveGameData(getSaveFileName(), shuffleWord, foundWords, totalPoints, String.valueOf(reqLetter), possiblePoints, author, wordList, encrypt);
+        saveFile.saveGameData(getSaveFileName(), shuffleWord, foundWords, totalPoints, String.valueOf(reqLetter), possiblePoints, author, acceptedWordList, encrypt);
         CliGameView.successfulSaveMessage();
     }
 
