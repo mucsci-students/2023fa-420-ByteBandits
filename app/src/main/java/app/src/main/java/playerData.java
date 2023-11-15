@@ -19,8 +19,10 @@ public class playerData {
     private int playerPoints;
     private String requiredLetter;
     private int maxPoints;
+    private String format;
     private List<String> wordList = new ArrayList<>();
     private String author; 
+
 
     private static final String GAME_DATA_FILENAME = "game_data.json";
     private static final SecretKey SECRET_KEY = new SecretKeySpec("zbUe3kVDRm5aZeKO".getBytes(), "AES");
@@ -41,7 +43,7 @@ public class playerData {
         return new String(original);
     }
 
-    public void saveGameData(String saveName, String baseWord, List<String> foundWords, int playerPoints, String requiredLetter, int maxPoints, String author, List<String> wordList, boolean encrypt) throws Exception {
+    public void saveGameData(String saveName, String baseWord, String format, List<String> foundWords, int playerPoints, String requiredLetter, int maxPoints, String author, List<String> wordList, boolean encrypt) throws Exception {
         JSONObject allData;
         File file = new File(GAME_DATA_FILENAME);
     
@@ -56,8 +58,10 @@ public class playerData {
             allData = new JSONObject(); // Start with an empty JSONObject if the file doesn't exist
         }
 
+
             JSONObject gameData = new JSONObject();
             gameData.put("baseWord", baseWord);
+            gameData.put("format", format);
             gameData.put("foundWords", foundWords);
             gameData.put("playerPoints", playerPoints);
             gameData.put("requiredLetter", requiredLetter);
@@ -97,9 +101,9 @@ public class playerData {
             if (!allData.has(saveName)) {
                 throw new JSONException("Save not found: " + saveName);
             }
-    
+
             Object gameDataObj = allData.get(saveName);
-    
+
             if (gameDataObj instanceof String) {
                 // Data is encrypted, decrypt it
                 String decryptedData = decrypt((String) gameDataObj);
@@ -108,6 +112,7 @@ public class playerData {
     
             if (gameDataObj instanceof JSONObject) {
                 JSONObject gameData = (JSONObject) gameDataObj;
+                format = gameData.getString("format");
                 baseWord = gameData.getString("baseWord");
                 foundWords = new ArrayList<>();
                 JSONArray foundWordsArray = gameData.getJSONArray("foundWords");
@@ -143,6 +148,10 @@ public class playerData {
     public String getBaseWord() {
         return baseWord;
     }
+    
+    public String getFormat() {
+        return format;
+    }
 
     public List<String> getFoundWords() {
         return foundWords;
@@ -170,7 +179,7 @@ public class playerData {
 
     //Setter Functions
     public void setBaseWord(String baseWord) {
-        this.baseWord = baseWord;
+        this.format = baseWord;
     }
 
     public void setFoundWords(List<String> foundWords) {

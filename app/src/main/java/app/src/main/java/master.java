@@ -172,11 +172,12 @@ public static void cliMode() throws Exception{
 
             case "/savecurr":
                 CliGameModel.saveCurr();
-
                 break;
 
             case "/loadpuzzle":
+
                 CliGameModel.loadPuzzle();
+
                 break;
 
             case "/showstatus":

@@ -15,6 +15,14 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
+
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import javax.swing.*;
+
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import java.awt.*;
@@ -144,10 +152,13 @@ public class mainframe {
     
     private JDialog howToPlayDialog;
     private static JDialog foundwords;
+    private static JDialog highscores;
 
     private JDialog ranks;
     //private JProgressBar progressBar = new JProgressBar();
     private JDialog hints;
+
+    private String key;
 
     final private Font mainFont = new Font("SansSerif", Font.BOLD, 18);
     final private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -210,9 +221,59 @@ public class mainframe {
             ex.printStackTrace();
         }
     }
-    
-    
 
+    public static void updateHighScoresDialog(String word) {
+        if (highscores == null) {
+            highscores = new JDialog(mainFrame, "HIGH SCORES", true);
+            highscores.setModalityType(Dialog.ModalityType.MODELESS);
+            highscores.setAlwaysOnTop(true);
+            highscores.setFocusableWindowState(false);
+
+            highscores.setSize(400, 300);
+            highscores.setLocationRelativeTo(mainFrame);
+    
+            JTextArea highScoresArea = new JTextArea();
+            highScoresArea.setBackground(pastelYellow);
+            highScoresArea.setEditable(false);
+            highScoresArea.setWrapStyleWord(true);
+            highScoresArea.setLineWrap(true);
+            highScoresArea.setFont(new Font("SansSerif", Font.PLAIN, 16));
+            highScoresArea.setForeground(Color.BLACK);
+    
+            JSONObject jsonObject;
+            try (BufferedReader reader = new BufferedReader(new FileReader(highScores.GAME_DATA_FILENAME))) {
+                StringBuilder jsonData = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    jsonData.append(line).append("\n");
+                }
+    
+                if (jsonData.length() == 0) {
+                    jsonObject = new JSONObject();
+                } else {
+                    jsonObject = new JSONObject(jsonData.toString());
+                }
+    
+                if (jsonObject.has(word)) {
+                    JSONArray entries = jsonObject.getJSONArray(word);
+                    for (int i = 0; i < entries.length(); i++) {
+                        JSONObject entry = entries.getJSONObject(i);
+                        String name = entry.getString("userId");
+                        int score = entry.getInt("score");
+                        highScoresArea.append("Name: " + name + "\t\tScore: " + score + "\n");
+                    }
+                } else {
+                    highScoresArea.append("NO HIGH SCORES FOR THIS WORD");
+                }
+            } catch (IOException | JSONException e) {
+                e.printStackTrace();
+            }
+    
+            JScrollPane scrollPane = new JScrollPane(highScoresArea);
+            highscores.add(scrollPane);
+        }
+    }
+    
     /**********************************************************/
     /**********************************************************/
 
@@ -261,6 +322,7 @@ public class mainframe {
         if (clip != null && clip.isRunning()) {
             clip.stop();
             clip.close();
+
         }
     }
 
@@ -533,6 +595,7 @@ public class mainframe {
         CustomButton exitButton = new CustomButton("EXIT", false);
         CustomButton captureScreenshotButton = new CustomButton("CAPTURE", false);
         CustomButton hintsButton = new CustomButton("HINTS", false);
+        CustomButton highScoreButton = new CustomButton("HIGH SCORES", false);
         CustomButton letterbutton1 = new CustomButton(bW1, false);
         CustomButton letterbutton2 = new CustomButton(bW2, false);
         CustomButton letterbutton3 = new CustomButton(bW3, false);
@@ -556,6 +619,7 @@ public class mainframe {
         backSpaceButton.setEnabled(false);
         enterGuessButton.setEnabled(false);
         rankBreakDownButton.setEnabled(false);
+        highScoreButton.setEnabled(true);
 
 
         
@@ -574,6 +638,7 @@ public class mainframe {
         enterGuessButton.setBackground(pastelYellow);
         hintsButton.setBackground(pastelYellow);
         exitButton.setBackground(pastelYellow);
+        highScoreButton.setBackground(pastelYellow);
 
         letterbutton1.setBackground(pastelYellow);
         letterbutton2.setBackground(pastelYellow);
@@ -606,6 +671,7 @@ public class mainframe {
         enterGuessButton.setPreferredSize(buttonSize);
         hintsButton.setPreferredSize(buttonSize);
         exitButton.setPreferredSize(buttonSize);
+        highScoreButton.setPreferredSize(buttonSize);
 
         Font buttonFont = new Font("SansSerif", Font.BOLD, 12);
 
@@ -622,6 +688,7 @@ public class mainframe {
         enterGuessButton.setFont(buttonFont);
         hintsButton.setFont(buttonFont);
         exitButton.setFont(buttonFont);
+        highScoreButton.setFont(buttonFont);
 
         letterbutton1.setFont(buttonFont);
         letterbutton2.setFont(buttonFont);
@@ -1002,7 +1069,8 @@ panel.add(outputLabel5);
                 } catch (FileNotFoundException e1) {
                     e1.printStackTrace();
                 }
-
+                updateHighScoresDialog(baseWord);
+                key = baseWord;
                 master.foundWords = new ArrayList<>();
                 //progressBar.setMinimum(0);
                 //progressBar.setMaximum(helpers.possiblePoints(baseWord, acceptedWordList));
@@ -1110,6 +1178,7 @@ panel.add(outputLabel5);
                 }
 
             JTextField inputField = new JTextField();
+            
             inputField.setPreferredSize(new Dimension(200, 30));
     
             Object[] message = {
@@ -1136,11 +1205,15 @@ panel.add(outputLabel5);
     
             // Retrieve the result after the dialog is closed
             Object result = optionPane.getValue();
-    
             // Check if the user clicked "OK"
             if (result instanceof Integer && (Integer) result == JOptionPane.OK_OPTION) {
                 String userWord = inputField.getText().toLowerCase();
+                updateHighScoresDialog(userWord);
+                key = userWord;
+
+                System.out.println(key);
                 if (userWord.contains(" ")) {
+
                     JOptionPane.showMessageDialog(secondFrame, "Bzzt. Make sure there are no spaces in your word! Bzz.");
                     return;
                 }
@@ -1347,8 +1420,10 @@ panel.add(outputLabel5);
                     try {
                         List<String> possibleWords = CliGameModel.acceptedWords(baseWord, reqLetter);
                         int maxPoints = helpers.possiblePoints(baseWord, possibleWords);
+
                         //System.out.print("DEBUG: Possible words in save for mainframe: " + possibleWords);
-                        playerGameData.saveGameData(saveFileName, baseWord, master.foundWords, master.totalPoints, "" + reqLetter, maxPoints, author, possibleWords, encrypt);
+                        playerGameData.saveGameData(saveFileName, key, baseWord, master.foundWords, master.totalPoints, "" + reqLetter, maxPoints, author, possibleWords, encrypt);
+
                     }
                     catch (FileNotFoundException e1) {
                         System.err.println("File not found " + e1.getMessage());
@@ -1473,8 +1548,10 @@ panel.add(outputLabel5);
 
                 playerGameData.loadGameData(chosenSave); // Load selected game data 
                 // Load game variables from playerGameData
-                baseWord = playerGameData.getBaseWord();
-                shuffleWord = playerGameData.getBaseWord();
+                baseWord = playerGameData.getFormat();
+                updateHighScoresDialog(playerGameData.getBaseWord());
+                key = playerGameData.getBaseWord();
+                shuffleWord = playerGameData.getFormat();
                 List<String> foundWords = playerGameData.getFoundWords();
                 CliGameModel.setTotalPoints(playerGameData.getPlayerPoints());
                 reqLetter = playerGameData.getRequiredLetter().charAt(0);
@@ -1766,6 +1843,14 @@ panel.add(outputLabel5);
 
     /***********************************************************************/
 
+    highScoreButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            highscores.setVisible(true);
+            textPane.requestFocusInWindow();
+        }
+    });
+
     /*********************BACKSPACE BUTTON LOGIC****************************/
     
     backSpaceButton.addActionListener(new ActionListener() {
@@ -1883,13 +1968,60 @@ panel.add(outputLabel5);
 
     /**********************************************************************/
     /************************EXIT BUTTON LOGIC*****************************/
-    
-        exitButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.exit(0);
+    exitButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (highScores.isHighScore(key, master.totalPoints)) {
+                String userId = JOptionPane.showInputDialog(secondFrame, "New high score! Enter your name to join the leaderboard:" + key + "<-");
+                if (userId == null) {
+                    JOptionPane.showMessageDialog(null, "You did not provide a first name. High score was not saved.");
+                }
+                highScores.saveHighScores(key, master.totalPoints, userId);
+                savePuzzleButton.doClick();
+            } else {
+                JFrame frame = new JFrame();
+                JOptionPane.showMessageDialog(frame, "YOUR SCORE WAS NOT A HIGH SCORE :( ", "Information", JOptionPane.INFORMATION_MESSAGE);
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
             }
-        });
+
+            System.exit(0);
+        }
+    });
+    
+
+    /**********************************************************************/
+    /**********************************************************************/
+    
+    /**********************************************************************/
+    /**********************************************************************/  
+
+        // Add buttons to the button panel view
+        buttonPanel.add(shufflePuzzle);
+        buttonPanel.add(newUserPuzzleButton);
+        buttonPanel.add(newPuzzleButton);
+        buttonPanel.add(savePuzzleButton);
+        buttonPanel.add(loadPuzzleButton);
+        buttonPanel.add(howToPlayButton);
+        buttonPanel.add(foundWordsButton);
+        buttonPanel.add(captureScreenshotButton);
+
+        buttonPanel.add(rankBreakDownButton);
+        buttonPanel.add(backSpaceButton);
+        buttonPanel.add(enterGuessButton);
+
+        buttonPanel.add(highScoreButton);
+        buttonPanel.add(hintsButton);
+        buttonPanel.add(exitButton);
+
+        buttonPanel2.add(letterbutton1);
+        buttonPanel2.add(letterbutton2);
+        buttonPanel2.add(letterbutton3);
+        buttonPanel2.add(letterbutton4);
+        buttonPanel2.add(letterbutton5);
+        buttonPanel2.add(letterbutton6);
+        buttonPanel2.add(letterbutton7);
+        //rankPanel.add(progressBar);
+
     
     /**********************************************************************/
     /**********************************************************************/  
@@ -1996,6 +2128,7 @@ panel.add(outputLabel5);
             buttonPanel2.add(letterbutton5);
             buttonPanel2.add(letterbutton6);
             buttonPanel2.add(letterbutton7);
+
 
         secondFrame.add(buttonPanel, BorderLayout.SOUTH);
         secondFrame.add(buttonPanel2, BorderLayout.CENTER);
