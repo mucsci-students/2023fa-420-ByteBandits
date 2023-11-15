@@ -89,7 +89,7 @@ public class CliGameModel extends helpers {
         return saveFileName;
     }
 
-    public static String author(){
+    public static String getAuthor(){
         return author;
     }
 
@@ -430,8 +430,7 @@ public class CliGameModel extends helpers {
                 System.out.print("Invalid input. Please enter 'y' for yes or 'n' for no: ");
             }
         }
-
-        saveFile.saveGameData(getSaveFileName(), shuffleWord, foundWords, totalPoints, String.valueOf(reqLetter), possiblePoints(baseWord, acceptedWordList), author, wordList, encrypt);
+        saveFile.saveGameData(getSaveFileName(), shuffleWord, foundWords, totalPoints, String.valueOf(reqLetter), possiblePoints, author, wordList, encrypt);
         CliGameView.successfulSaveMessage();
     }
 

@@ -15,7 +15,6 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
-import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import java.awt.*;
@@ -721,11 +720,10 @@ panel.add(outputLabel5);
                         enteredWord = enteredWord.toUpperCase();
                         master.guessGUI(enteredWord, baseWord, acceptedWordList, master.playerRank(baseWord, master.totalPoints, acceptedWordList));
                         updateFoundWordsDialog();
-
-                        int possiblePoints = helpers.possiblePoints(baseWord, acceptedWordList);
                         
                         if (master.foundWords.size() > initialSize) {
                             if(master.isPangram(enteredWord, baseWord)){
+                                placePic(secondFrame, "./src/main/resources/visualcontent/wooyeah.gif", 0.10, 0.4, true, false);
                                 String enteredWordText = "<font color='#CC9900'>" + enteredWord + "</font> is a valid word, and a <font color='#CC9900'>PANGRAM</font>... Well Done!";
                                 outputLabel.setText("<html>" + enteredWordText + "</html>");
                             }
@@ -735,7 +733,7 @@ panel.add(outputLabel5);
 
 
                             // Show heart
-                            placePic(secondFrame, "./src/main/resources/visualcontent/correct.png", 0.17, 0.5, true, false);
+                            placePic(secondFrame, "./src/main/resources/visualcontent/pixelheart.gif", 0.17, 0.5, true, false);
                                 
                             }
                             master.playerRank = master.playerRank(baseWord, master.totalPoints, acceptedWordList);
@@ -751,6 +749,7 @@ panel.add(outputLabel5);
                             String differenceText = "You need  <font color='#CC9900'>" +  helpers.difference + "</font>" +  " points to reach next rank.";
                             outputLabel5.setText("<html>" + differenceText + "</html>");
                         } else {
+                            placePic(secondFrame, "./src/main/resources/visualcontent/angry.gif", 0.17, 0.5, true, false);
                             outputLabel.setText("Invalid word, try again!");
 
                         }
@@ -1032,9 +1031,10 @@ panel.add(outputLabel5);
                     boolean encrypt = (encryptOption == JOptionPane.YES_OPTION);
         
                     try {
-                        List<String> possibleWords = master.acceptedWords(baseWord, reqLetter);
+                        List<String> possibleWords = CliGameModel.acceptedWords(baseWord, reqLetter);
                         int maxPoints = helpers.possiblePoints(baseWord, possibleWords);
-                        playerGameData.saveGameData(saveFileName, baseWord, master.foundWords, master.totalPoints, "" + reqLetter, maxPoints, author, wordList, encrypt);
+                        System.out.print("DEBUG: Possible words in save for mainframe: " + possibleWords);
+                        playerGameData.saveGameData(saveFileName, baseWord, master.foundWords, master.totalPoints, "" + reqLetter, maxPoints, author, possibleWords, encrypt);
                     }
                     catch (FileNotFoundException e1) {
                         System.err.println("File not found " + e1.getMessage());
@@ -1591,7 +1591,7 @@ panel.add(outputLabel5);
     
         // If useTimer is true, use a Timer to hide the GIF after 4 seconds
         if (useTimer) {
-            Timer timer = new Timer(4000, new ActionListener() {
+            Timer timer = new Timer(2000, new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     gifLabel.setVisible(false);

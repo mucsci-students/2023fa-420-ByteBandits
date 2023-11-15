@@ -41,13 +41,6 @@ public class playerData {
         return new String(original);
     }
 
-    private boolean isDataEncrypted(String data) {
-        // Implement a way to determine if the data is encrypted
-        // For example, check if it's Base64 encoded
-        // This is a simplistic approach; adjust as needed for your application
-        return Base64.getEncoder().encodeToString(Base64.getDecoder().decode(data)).equals(data);
-    }
-
     public void saveGameData(String saveName, String baseWord, List<String> foundWords, int playerPoints, String requiredLetter, int maxPoints, String author, List<String> wordList, boolean encrypt) throws Exception {
         JSONObject allData;
         File file = new File(GAME_DATA_FILENAME);
@@ -71,6 +64,7 @@ public class playerData {
             gameData.put("maxPoints", maxPoints);
             gameData.put("author", author); 
             gameData.put("wordList", new JSONArray(wordList)); 
+            System.out.println("Debug: gameData content before saving - " + gameData.toString());
 
             if (encrypt) {
                 try {
@@ -84,6 +78,7 @@ public class playerData {
             }
             
             try (FileWriter fileWriter = new FileWriter(GAME_DATA_FILENAME)) {
+                System.out.println("Debug: allData content being written to file - " + allData.toString());
                 fileWriter.write(allData.toString());
             }
         } 
