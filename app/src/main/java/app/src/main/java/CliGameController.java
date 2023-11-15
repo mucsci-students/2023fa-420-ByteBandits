@@ -140,6 +140,7 @@ public class CliGameController {
                 System.out.println();
                 break;
             case "/exit":
+                System.out.println(model.getBaseWord());
                 model.highScore(model.getBaseWord(), model.getTotalPoints(), "");
                 highScores.displayEntriesForBaseWord(model.getBaseWord());
                 System.exit(0);

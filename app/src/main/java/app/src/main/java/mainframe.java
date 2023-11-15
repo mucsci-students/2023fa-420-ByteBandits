@@ -271,6 +271,8 @@ public class mainframe {
     
             JScrollPane scrollPane = new JScrollPane(highScoresArea);
             highscores.add(scrollPane);
+        }
+    }
     
     /**********************************************************/
     /**********************************************************/
@@ -1182,8 +1184,7 @@ panel.add(outputLabel5);
             Object[] message = {
                 "Enter a base word for the puzzle:", inputField
             };
-            updateHighScoresDialog(inputField);
-            key = inputField;
+    
             JOptionPane optionPane = new JOptionPane(
                 message,
                 JOptionPane.PLAIN_MESSAGE,
@@ -1204,10 +1205,13 @@ panel.add(outputLabel5);
     
             // Retrieve the result after the dialog is closed
             Object result = optionPane.getValue();
-    
             // Check if the user clicked "OK"
             if (result instanceof Integer && (Integer) result == JOptionPane.OK_OPTION) {
                 String userWord = inputField.getText().toLowerCase();
+                updateHighScoresDialog(userWord);
+                key = userWord;
+
+                System.out.println(key);
                 if (userWord.contains(" ")) {
 
                     JOptionPane.showMessageDialog(secondFrame, "Bzzt. Make sure there are no spaces in your word! Bzz.");
@@ -1968,7 +1972,7 @@ panel.add(outputLabel5);
         @Override
         public void actionPerformed(ActionEvent e) {
             if (highScores.isHighScore(key, master.totalPoints)) {
-                String userId = JOptionPane.showInputDialog(secondFrame, "New high score! Enter your name to join the leaderboard:");
+                String userId = JOptionPane.showInputDialog(secondFrame, "New high score! Enter your name to join the leaderboard:" + key + "<-");
                 if (userId == null) {
                     JOptionPane.showMessageDialog(null, "You did not provide a first name. High score was not saved.");
                 }
@@ -2018,7 +2022,6 @@ panel.add(outputLabel5);
         buttonPanel2.add(letterbutton7);
         //rankPanel.add(progressBar);
 
-        });
     
     /**********************************************************************/
     /**********************************************************************/  

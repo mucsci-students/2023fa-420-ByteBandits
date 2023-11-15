@@ -274,6 +274,7 @@ public class CliGameView {
                     System.out.printf("%-15s " + yellowColor + "|" + resetColor + "   %s%n", commandLines[i], explanations[i]);
                 }
                 System.out.println("\u001B[0m");
+        }
 
          /*
         * showHints
@@ -350,16 +351,17 @@ public class CliGameView {
         Thread.sleep(500);
     }
 
-        /*
-        * invalidCommandMessage
-        * param: N/A
-        * returns: N/A
-        * This function lets the player know they did an invalid command.
-        */
-        public static void invalidCommandMessage()
-        {
-            System.out.println("\u001B[33m" + "Invalid command! Type /help for a list of commands.\n" + "\u001B[0m"); 
-        }
+    /*
+    * invalidCommandMessage
+    * param: N/A
+    * returns: N/A
+    * This function lets the player know they did an invalid command.
+    */
+    public static void invalidCommandMessage()
+    {
+        System.out.println("\u001B[33m" + "Invalid command! Type /help for a list of commands.\n" + "\u001B[0m"); 
+    }
+
     /*
      * createPuzzleMessage
      * param: N/A
@@ -371,16 +373,6 @@ public class CliGameView {
                 + "\nBuzz. There's already progress on this puzzle! Please use /savecurr to save instead!\n"
                 + "\u001B[0m");
         return;
-    }
-
-    /*
-     * successfulSaveMessage
-     * param: N/A
-     * returns: N/A
-     * This function lets the player know their puzzle was saved.
-     */
-    public static void successfulSaveMessage() {
-        System.out.println("Game Status Saved!\n");
     }
 
     /*
@@ -426,60 +418,7 @@ public class CliGameView {
         System.out.println();
     }
 
-    /*
-     * help
-     * param: N/A
-     * returns: String
-     * This function tells the player the rules of the game and shows
-     * a table of all the command lines the player can use and what
-     * each command line does.
-     */
-    public static void help() {
-        String yellowColor = "\u001B[33m";
-        String[] commandLines = {
-                "/newpuzzle",
-                "/basepuzzle",
-                "/viewpuzzle",
-                "/foundwords",
-                "/guess",
-                "/shuffle",
-                "/cleansave",
-                "/advancedsave",
-                "/loadpuzzle",
-                "/observestatus",
-                "/help",
-                "/exit"
-        };
-        String[] explanations = {
-                "Generates a new puzzle with 7 unique letters and a required letter",
-                "Generates a new puzzle with a word of the player's choice with 7 unique letters and a required letter",
-                "Shows the current puzzle the player is working on",
-                "Generates a list of words that the player has found ",
-                "Allows the player to guess their words",
-                "Allows the player to shuffle around the words",
-                "Lets the player save a blank puzzle",
-                "Lets the players save a puzzle that may have been partially played",
-                "The player can load a saved game",
-                "The player can see their rank and progress on a current puzzle",
-                "Displays help information",
-                "Leave the application"
-        };
-        System.out.println();
-        System.out.println(yellowColor
-                + "The WordyWasps game allows players to create words using 7 unique letters with a required letter. "
-                + "\u001B[0m");
-        System.out.println("- Words must contain at least 4 letters");
-        System.out.println("- Words must include the required letter");
-        System.out.println("- Letters can be used more than once");
-        System.out.println("");
-        System.out.println(yellowColor + "Command Line    |   Explanation" + "\\u001B[0m");
-        System.out.println(yellowColor + "---------------------------------------");
-        for (int i = 0; i < commandLines.length; i++) {
-            System.out.printf("%-15s |   %s%n", commandLines[i], explanations[i]);
-        }
-        System.out.println("\u001B[0m");
-    }
-
+    
     /*
      * exitMessage
      * param: N/A
@@ -488,16 +427,6 @@ public class CliGameView {
      */
     public static void exitMessage() {
         System.out.println("\u001B[33m" + "\nThanks for playing! :)" + "\u001B[0m");
-    }
-
-    /*
-     * invalidCommandMessage
-     * param: N/A
-     * returns: N/A
-     * This function lets the player know they did an invalid command.
-     */
-    public static void invalidCommandMessage() {
-        System.out.println("\u001B[33m" + "Invalid command! Type /help for a list of commands." + "\u001B[0m");
     }
 
     /*

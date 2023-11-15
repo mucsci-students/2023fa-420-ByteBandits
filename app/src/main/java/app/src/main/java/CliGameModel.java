@@ -449,7 +449,7 @@ public class CliGameModel extends helpers {
                 System.out.print("Invalid input. Please enter 'y' for yes or 'n' for no: ");
             }
         }
-        saveFile.saveGameData(getSaveFileName(), baseWord, shuffleWord, foundWords, totalPoints, String.valueOf(reqLetter), possiblePoints(baseWord, acceptedWordList));
+        saveFile.saveGameData(getSaveFileName(), baseWord, shuffleWord, foundWords, totalPoints, String.valueOf(reqLetter), possiblePoints, author, wordList, encrypt);
         CliGameView.successfulSaveMessage();
     }
 

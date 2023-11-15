@@ -166,68 +166,15 @@ public static void cliMode() throws Exception{
                 break;
 
             case "/savepuzzle":
-
-                int possiblePoints = possiblePoints(baseWord, acceptedWordList);
-                if(baseWord.charAt(1) == ' ')
-                {
-                    System.out.println("\u001B[33m" + "\nYou haven't created a new puzzle! Do /loadpuzzle, /newpuzzle, or /basepuzzle to get one up! BUZZ!\n" + "\u001B[0m");
-                    break;
-                }
-                if(totalPoints != 0)
-                {
-                    System.out.println("\u001B[33m" + "\nBuzz. There's already progress on this puzzle! Please use /savecurr to save instead!\n" + "\u001B[0m");
-                    break;
-                }
-
-                saveFile.saveGameData(CliGameModel.getSaveFileName(), baseWord, shuffleWord, foundWords, totalPoints, String.valueOf(reqLetter), possiblePoints);
-
-                System.out.println("Game Status Saved!\n");
-
                 CliGameModel.savePuzzle();
-
 
                 break;
 
             case "/savecurr":
-                
-                if(baseWord.charAt(1) == ' ')
-                {
-                    System.out.println("\u001B[33m" + "\nYou haven't created a new puzzle! Do /loadpuzzle, /newpuzzle, or /basepuzzle to get one up! BUZZ!\n" + "\u001B[0m");
-                    break;
-                }
-            
-                saveFile.saveGameData(CliGameModel.getSaveFileName(), baseWord, shuffleWord, foundWords, totalPoints, String.valueOf(reqLetter), possiblePoints(baseWord, acceptedWordList));
-                System.out.println("\nGame Status Saved!\n");
-
                 CliGameModel.saveCurr();
-
-
                 break;
 
             case "/loadpuzzle":
-
-                if(baseWord == saveFile.getFormat() && totalPoints == saveFile.getPlayerPoints()){
-                    System.out.println("\u001B[33m" + "\nThis puzzle is already loaded!\n" + "\u001B[0m");
-                    break;
-                }    
-
-                saveFile.loadGameData(CliGameModel.getSaveFileName());
-                
-                baseWord = saveFile.getFormat();
-                foundWords = saveFile.getFoundWords();
-                totalPoints = saveFile.getPlayerPoints();
-                reqLetter = saveFile.getRequiredLetter().charAt(0);
-                possiblePoints = saveFile.getMaxPoints();
-
-                
-                
-                acceptedWordList = acceptedWords(baseWord, reqLetter);
-                shuffleWord = display(baseWord, reqLetter);
-
-                System.out.println("\nTotal Points: " + "\u001B[33m" + totalPoints + "\u001B[0m");
-                System.out.println("Rank: " + "\u001B[33m" + playerRank + "\u001B[0m" + "\n");
-                System.out.println("Game Status Loaded!\n");
-
 
                 CliGameModel.loadPuzzle();
 
