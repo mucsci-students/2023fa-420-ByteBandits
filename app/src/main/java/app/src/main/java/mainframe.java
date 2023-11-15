@@ -895,7 +895,7 @@ panel.add(outputLabel5);
                     baseWord = baseWord.toLowerCase();
         
                     if (master.foundWords.contains(enteredWord)) {
-                        playSound("./src/main/resources/audio/wrong-47985.wav", 0.77f);
+                        playSound("./src/main/resources/audio/Joblox Angry Sound Effect.wav", 0.77f);
                         placePic(secondFrame, "./src/main/resources/visualcontent/angry.gif", 0.17, 0.5, true, false);
                         outputLabel.setText("You already guessed this word correctly. Try again!");
                         
@@ -936,13 +936,10 @@ panel.add(outputLabel5);
                                 }
                                 String enteredWordText = "<font color='#CC9900'>" + enteredWord + "</font> is a valid word!";
                                 outputLabel.setText("<html>" + enteredWordText + "</html>");
-
+                            }
 
                             // Show heart
                             placePic(secondFrame, "./src/main/resources/visualcontent/pixelheart.gif", 0.17, 0.5, true, false);
-                                
-                            }
-                            
                             master.playerRank = master.playerRank(baseWord, master.totalPoints, acceptedWordList);
 
                             
@@ -958,7 +955,7 @@ panel.add(outputLabel5);
                             outputLabel5.setText("<html>" + differenceText + "</html>");
                         } else {
                             placePic(secondFrame, "./src/main/resources/visualcontent/angry.gif", 0.17, 0.5, true, false);
-                            playSound("./src/main/resources/audio/wrong-47985.wav", 0.77f);
+                            playSound("./src/main/resources/audio/Joblox Angry Sound Effect.wav", 0.77f);
                             outputLabel.setText("Invalid word, try again!");
 
                         }
@@ -1878,7 +1875,7 @@ panel.add(outputLabel5);
             baseWord = baseWord.toLowerCase();
         
             if (master.foundWords.contains(enteredWord)) {
-                playSound("./src/main/resources/audio/wrong-47985.wav", 0.77f);
+                playSound("./src/main/resources/audio/Joblox Angry Sound Effect.wav", 0.77f);
                 placePic(secondFrame, "./src/main/resources/visualcontent/angry.gif", 0.17, 0.5, true, false);
                 outputLabel.setText("You already guessed this word correctly. Try again!");
             } else {
@@ -1924,7 +1921,7 @@ panel.add(outputLabel5);
                     outputLabel5.setText("<html>" + differenceText + "</html>");
                 } else {
                     placePic(secondFrame, "./src/main/resources/visualcontent/angry.gif", 0.17, 0.5, true, false);
-                    playSound("./src/main/resources/audio/wrong-47985.wav", 0.77f);
+                    playSound("./src/main/resources/audio/Joblox Angry Sound Effect.wav", 0.77f);
                     outputLabel.setText("Invalid word, try again!");
                 }
                 enteredWord = enteredWord.toLowerCase();
