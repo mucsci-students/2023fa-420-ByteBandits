@@ -6,12 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
-import java.io.IOException;
-
+import java.io.IOException; 
 import app.src.main.java.CliGameController;
 
 public class CliGameModel extends helpers {
-    public static int possiblePoints;
+    private static int possiblePoints;
     
     private static String baseWord;
     
@@ -30,12 +29,6 @@ public class CliGameModel extends helpers {
     private static List<String> acceptedWordList;
 
     private static String saveFileName;
-
-    public static Scanner console = new Scanner(System.in);
-
-    private static String author = "";
-    
-    private static List<String> wordList;
     
     /**
      * @throws FileNotFoundException
@@ -50,47 +43,43 @@ public class CliGameModel extends helpers {
         return baseWord;
     }
 
-    public static String getShuffleWord()
+    public String getShuffleWord()
     {
         return shuffleWord;
     }
 
-    public static char getReqLetter()
+    public char getReqLetter()
     {
         return reqLetter;
     }
 
-    public static List<String> getFoundWords()
+    public List<String> getFoundWords()
     {
         return foundWords;
     }
 
-    public static List<String> getAcceptedWordList()
+    public List<String> getAcceptedWordList()
     {
         return acceptedWordList;
     }
 
-    public static int getTotalPoints()
+    public int getTotalPoints()
     {
         return totalPoints;
     }
 
-    public static String getPlayerRank()
+    public String getPlayerRank()
     {
         return playerRank;
     }
 
-    public static playerData getSaveFile()
+    public playerData getSaveFile()
     {
         return saveFile;
     }
 
     public static String getSaveFileName() {
         return saveFileName;
-    }
-
-    public static String getAuthor(){
-        return author;
     }
 
     //SETTERS
@@ -123,24 +112,18 @@ public class CliGameModel extends helpers {
     }
 
     public static void setSaveFile(playerData saveFile) {
-        CliGameModel.saveFile = saveFile;
+        GUIGameModel.saveFile = saveFile;
     }
 
     public static void setAcceptedWordList(List<String> acceptedWordList) {
-        CliGameModel.acceptedWordList = acceptedWordList;
+        GUIGameModel.acceptedWordList = acceptedWordList;
     }
 
-    public void setScanner(Scanner scanner) {
-        this.console = scanner;
+    public static void setbwLetters(char[] bwLetters)
+    {
+        GUIGameModel.bwLetters = bwLetters;
     }
 
-    public String getUserInput() {
-        return console.nextLine();
-    }
-
-    public static void setAuthor(String author) {
-        CliGameModel.author = author;
-    }
     /*
     * initGame
     * param: N/A
@@ -156,6 +139,7 @@ public class CliGameModel extends helpers {
         reqLetter = getReqLetter1(baseWord);
         acceptedWordList = acceptedWords(baseWord, reqLetter);
         saveFile = new playerData();
+        char[] bwLetters = baseWord.toCharArray();
     }
 
     /**
@@ -167,7 +151,7 @@ public class CliGameModel extends helpers {
      * @throws InterruptedException
      * 
      */
-    public static void newPuzzle() throws FileNotFoundException, InterruptedException
+    public void newPuzzle() throws FileNotFoundException, InterruptedException
     {
         totalPoints = 0;
         foundWords = new ArrayList<>();
@@ -194,6 +178,7 @@ public class CliGameModel extends helpers {
         playerRank = "";
         foundWords = new ArrayList<>();
         
+        Scanner console = new Scanner(System.in);
         CliGameView.basePuzzleChooseMessage();
         baseWord = console.next();
     
@@ -216,7 +201,6 @@ public class CliGameModel extends helpers {
                 return;
             }
             shuffleWord = shuffle(baseWord, reqLetter);
-            console.nextLine();
             guess(baseWord, acceptedWordList, playerRank(baseWord, totalPoints, acceptedWordList));
     }
 
@@ -242,11 +226,12 @@ public class CliGameModel extends helpers {
     * returns: N/A
     * This function lets the player guess words for a puzzle.
     */
-    public static void guess(String baseWord, List<String> acceptedWords, String playerRank) {
+    public void guess(String baseWord, List<String> acceptedWords, String playerRank) {
+        Scanner guessedWord = new Scanner(System.in);
         CliGameView.displayGuessIntro();
         while (true) {
             CliGameView.displayGuessInstructions();
-            String validWord = console.nextLine();
+            String validWord = guessedWord.nextLine();
     
             if (validWord.equals("/q")) {
                 CliGameView.displayGuessExit();
@@ -322,119 +307,30 @@ public class CliGameModel extends helpers {
     * param: N/A
     * returns: N/A
     * This function saves a puzzle that has no progress.
-     * @throws Exception
     */
-    public static void savePuzzle() throws Exception
+    public static void savePuzzle()
     {
         possiblePoints = possiblePoints(baseWord, acceptedWordList);
-        if (totalPoints != 0) {
+        if(totalPoints != 0)
+        {
             CliGameView.createPuzzleMessage();
             return;
         }
-
-        //Ask the user to input save filename
-        while (true) {
-            System.out.print("Input your save file name (max 32 characters): ");
-            saveFileName = console.nextLine().trim(); // Read input and remove leading/trailing whitespace
-        
-            if (saveFileName.isEmpty()) {
-                System.out.println("Save file name cannot be empty. Please try again.");
-            } else if (saveFileName.length() > 32) {
-                System.out.println("Save file name too long. Please limit to 32 characters.");
-            }
-            else{
-                break;
-            }
-        }
-
-        //Ask the user to input a name:
-        while (author.isEmpty() || author.length() > 16) {
-            System.out.print("Input your username (max 16 characters): ");
-            author = console.nextLine().trim(); // Read input and remove leading/trailing whitespace
-        
-            if (author.isEmpty()) {
-                System.out.println("Username cannot be empty. Please try again.");
-            } else if (author.length() > 16) {
-                System.out.println("Username too long. Please limit to 16 characters.");
-            }
-        }
-
-
-        // Ask the user if they want to encrypt the save
-        boolean encrypt = false;
-        System.out.print("Do you want to encrypt your save? (y/n): ");
-        while (true) {
-            String encryptChoice = console.nextLine().trim().toLowerCase();
-            if (encryptChoice.equals("y")) {
-                encrypt = true;
-                break;
-            } else if (encryptChoice.equals("n")) {
-                break;
-            } else {
-                System.out.print("Invalid input. Please enter 'y' for yes or 'n' for no: ");
-            }
-        }
-
-        saveFile.saveGameData(getSaveFileName(), shuffleWord, foundWords, totalPoints, String.valueOf(reqLetter), possiblePoints, author, wordList, encrypt);
+        saveFile.saveGameData(getSaveFileName(), shuffleWord, foundWords, totalPoints, String.valueOf(reqLetter), possiblePoints);
         CliGameView.successfulSaveMessage();
     }
-
 
     /**
     * saveCurr
     * param: N/A
     * returns: N/A
     * This function saves a puzzle that has progress.
-     * @throws Exception
     */
-    public static void saveCurr() throws Exception
+    public static void saveCurr()
     {
-   //Ask the user to input save filename
-        while (true) {
-            System.out.print("Input your save file name (max 32 characters): ");
-            saveFileName = console.nextLine().trim(); // Read input and remove leading/trailing whitespace
-        
-            if (saveFileName.isEmpty()) {
-                System.out.println("Save file name cannot be empty. Please try again.");
-            } else if (saveFileName.length() > 32) {
-                System.out.println("Save file name too long. Please limit to 32 characters.");
-            }
-            else{
-                break;
-            }
-        }
-
-        //Ask the user to input a name:
-        while (author.isEmpty() || author.length() > 16) {
-            System.out.print("Input your username (max 16 characters): ");
-            author = console.nextLine().trim(); // Read input and remove leading/trailing whitespace
-        
-            if (author.isEmpty()) {
-                System.out.println("Username cannot be empty. Please try again.");
-            } else if (author.length() > 16) {
-                System.out.println("Username too long. Please limit to 16 characters.");
-            }
-        }
-
-
-        // Ask the user if they want to encrypt the save
-        boolean encrypt = false;
-        System.out.print("Do you want to encrypt your save? (y/n): ");
-        while (true) {
-            String encryptChoice = console.nextLine().trim().toLowerCase();
-            if (encryptChoice.equals("y")) {
-                encrypt = true;
-                break;
-            } else if (encryptChoice.equals("n")) {
-                break;
-            } else {
-                System.out.print("Invalid input. Please enter 'y' for yes or 'n' for no: ");
-            }
-        }
-        saveFile.saveGameData(getSaveFileName(), shuffleWord, foundWords, totalPoints, String.valueOf(reqLetter), possiblePoints, author, wordList, encrypt);
+        saveFile.saveGameData(getSaveFileName(), shuffleWord, foundWords, totalPoints, String.valueOf(reqLetter), possiblePoints(baseWord, acceptedWordList));
         CliGameView.successfulSaveMessage();
     }
-
 
     /**
     * loadPuzzle
@@ -505,7 +401,7 @@ public class CliGameModel extends helpers {
             playerRank = "Nice";
         }
         if(isBetween(playerPoints, great, amazing)){
-            playerRank = "Great";
+            playerRank = "great";
         }
         if(isBetween(playerPoints, amazing, genuis)){
             playerRank = "Amazing";
@@ -529,20 +425,17 @@ public class CliGameModel extends helpers {
     * of all the words on the file that have all unique letters.
     */
     public static List<String> dictionaryFile() throws FileNotFoundException{
-        ResourceFactory resourceFactory = new FileResourceFactory(); //Access Factory Design Pattern
-        Scanner oldConsole = console;
-        console = resourceFactory.getDictionaryResource();
+        Scanner scanner = new Scanner(new File("./src/main/resources/7-letter-words.txt"));
         List<String> sevenLetterWords = new ArrayList<>();
 
-        while(console.hasNextLine()){
-            String a = console.nextLine();
+        while(scanner.hasNextLine()){
+            String a = scanner.nextLine();
 
             if(isUnique(a)){
                 sevenLetterWords.add(a);
             }
         } 
 
-        console = oldConsole;
         return sevenLetterWords;
     }
 
@@ -634,23 +527,20 @@ public class CliGameModel extends helpers {
     * and then finally returns it. 
     */
     public static List<String> acceptedWords(String baseWord, char reqLetter) throws FileNotFoundException{
-        ResourceFactory resourceFactory = new FileResourceFactory(); //Access Factory Design Pattern
-        Scanner oldConsole= console;
-
-        console = resourceFactory.getGameDataResource();
+        Scanner scanner = new Scanner(CliGameModel.class.getResourceAsStream("/4-15_Dictionary.txt"));
 
         List<String> acceptedWordList = new ArrayList<>();
         String reqLetter2 = Character.toString(reqLetter);
     
-        String sNL = console.nextLine();
-        while(console.hasNextLine()){
+        String sNL = scanner.nextLine();
+        while(scanner.hasNextLine()){
             if(sameChars(baseWord, sNL) && sNL.contains(reqLetter2)){
                 acceptedWordList.add(sNL);
             }
 
-            sNL = console.nextLine();  
+            sNL = scanner.nextLine();  
         }
-        console = oldConsole;
+
         return acceptedWordList;
     }
 }

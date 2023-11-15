@@ -160,8 +160,6 @@ public static boolean isUnique(String s)
     return matrixStr.toString();
 }
 
-
-
 /*********************************************************/
 /*********************************************************/
 
@@ -266,6 +264,170 @@ public static String getDynamicTwoLetterList(List<String> acceptedWords, String 
     return html.toString();
 }
 
+/*********************************************************/
+/*********************************************************/
+
+/*
+ * dynamicHintsCLI
+ * param: String baseWord, char reqLetter
+ * returns: void
+ * This function prints the hints to the CLI instead of returning HTML.
+ */
+public static void dynamicHintsCLI(String baseWord, char reqLetter) throws FileNotFoundException {
+    String yellowColor = "\u001B[33m";
+    
+    String resetColor = "\u001B[0m";
+    
+    List<String> acceptedWordList = acceptedWords(baseWord, reqLetter);
+    int longestWordLength = getLongestWordLength(acceptedWordList);
+    String[][] hintsMatrix = getDynamicMatrixCLI(acceptedWordList, longestWordLength, baseWord, reqLetter);
+
+    int totalWords = getTotalWords(baseWord, acceptedWordList);
+    int possiblePoints = possiblePoints(baseWord, acceptedWordList);
+    int[] totalPangrams = getTotalPangrams(baseWord, acceptedWordList);
+
+    boolean isBingoPuzzle = isBingoPuzzle(hintsMatrix);
+    String bingo = "";
+    if(isBingoPuzzle){
+       bingo = ", " + yellowColor + "BINGO" + resetColor;
+    }
+
+    System.out.println("\n\n" + "*****************");
+    System.out.println(yellowColor + "Wordy Wasps Grid" + resetColor);
+    System.out.println("*****************" + "\n");
+    
+    System.out.printf("Center letter is yellow: %s\n\n", goldenLetter(baseWord, reqLetter));
+
+    System.out.printf("WORDS: " + yellowColor + "%d" + resetColor + ", POINTS: " + yellowColor + "%d" + resetColor + ", PANGRAMS: " + yellowColor + "%d" + resetColor + " (%d Perfect)%s\n\n",
+            totalWords, possiblePoints, totalPangrams[0], totalPangrams[1], bingo);
+
+    System.out.println("\n\n");
+
+    for (int i = 0; i < hintsMatrix.length; i++) {
+        for (int j = 0; j < hintsMatrix[i].length; j++) {
+            System.out.print(hintsMatrix[i][j] + "\t");
+        }
+        System.out.println();
+    }
+
+    System.out.println("\n");
+    getDynamicTwoLetterListCLI(acceptedWordList, baseWord);
+}
+
+/*********************************************************/
+/*********************************************************/
+
+/*
+ * getDynamicMatrixCLI
+ * param: List<String> acceptedWordList, int longestWordLength, String baseWord, char reqLetter
+ * returns: String[][]
+ * This function creates the matrix of numbers representing
+ * the amount of words in the accepted word list based on the
+ * letter it starts with as well as the count of how
+ * many letters in that word including the sums total.
+ */
+
+public static String[][] getDynamicMatrixCLI(List<String> acceptedWordList, int longestWordLength, String baseWord, char reqLetter) {
+    String yellowColor = "\u001B[33m";
+    
+    String resetColor = "\u001B[0m";
+
+    int numRows = baseWord.length();
+    int numCols = longestWordLength - 3;
+
+    String[][] matrix = new String[numRows + 2][numCols + 2];
+
+    String upperBwString = baseWord.toUpperCase();
+
+    char[] upperBwLetters = upperBwString.toCharArray();
+    char[] baseWordLetters = baseWord.toCharArray();
+
+    matrix[0][0] = " ";
+    for (int j = 1; j <= numCols; j++) {
+        matrix[0][j] = yellowColor + String.valueOf(j + 3) + resetColor;
+    }
+
+    int[] rowSums = new int[numRows];
+    int[] colSums = new int[numCols];
+
+    for (int i = 0; i < numRows; i++) {
+        matrix[i + 1][0] = String.valueOf(yellowColor + upperBwLetters[i]) + resetColor + ":";
+        for (int j = 1; j <= numCols; j++) {
+            int count = 0;
+            for (String word : acceptedWordList) {
+                if (word.startsWith(String.valueOf(baseWordLetters[i])) && word.length() == j + 3) {
+                    count++;
+                }
+            }
+            matrix[i + 1][j] = (count == 0) ? "-" : String.valueOf(count);
+
+            rowSums[i] += count;
+            colSums[j - 1] += count;
+        }
+    }
+
+    matrix[numRows + 1][0] = yellowColor + "SUM" + resetColor + ":";
+    for (int i = 0; i < numRows; i++) {
+        matrix[i + 1][numCols + 1] = yellowColor + String.valueOf(rowSums[i]) + resetColor;
+    }
+
+    matrix[0][numCols + 1] = yellowColor + "SUM" + resetColor;
+    for (int j = 0; j < numCols; j++) {
+        matrix[numRows + 1][j + 1] = yellowColor + String.valueOf(colSums[j]) + resetColor;
+    }
+
+    int totalSum = Arrays.stream(rowSums).sum();
+    matrix[numRows + 1][numCols + 1] = String.valueOf(yellowColor + totalSum + resetColor);
+
+    return matrix;
+}
+
+/*********************************************************/
+/*********************************************************/
+
+/*
+ * getDynamicTwoLetterListCLI
+ * param: String baseWord, char reqLetter
+ * returns: void
+ * This function looks at every possible accepted word 
+ * and gets the first two letters of each. It categorizes them 
+ * and counts their appearances in the acceptedWords List, then prints to CLI.
+ */
+public static void getDynamicTwoLetterListCLI(List<String> acceptedWords, String baseWord) {
+    Map<String, Integer> pairCountMap = new HashMap<>();
+    
+    String yellowColor = "\u001B[33m";
+    
+    String resetColor = "\u001B[0m";
+
+    for (String str : acceptedWords) {
+        if (str.length() >= 2) {
+            String pair = str.substring(0, 2);
+            pairCountMap.put(pair, pairCountMap.getOrDefault(pair, 0) + 1);
+        }
+    }
+    System.out.println("\n" + "****************");
+    System.out.println(yellowColor + "Two letter list" + resetColor);
+    System.out.println("****************" + "\n");
+
+    char prevBaseChar = 0; 
+    for (int i = 0; i < baseWord.length(); i++) {
+        char baseChar = baseWord.charAt(i);
+        if (prevBaseChar != baseChar) {
+            System.out.println();
+        }
+
+        for (Map.Entry<String, Integer> entry : pairCountMap.entrySet()) {
+            if (entry.getKey().charAt(0) == baseChar) {
+                System.out.printf("%s-" + yellowColor + "%d\t" + resetColor, entry.getKey().toUpperCase(), entry.getValue());
+            }
+        }
+        prevBaseChar = baseChar;
+    }
+    System.out.println();
+    System.out.println();
+    System.out.println();
+}
 
 /*********************************************************/
 /*********************************************************/
@@ -484,6 +646,42 @@ public static boolean sameChars(String baseWord, String dicString) {
 /*********************************************************/
 
 /*
+ * goldenLetter
+ * param: String baseWord, char reqLetter
+ * returns: String
+ * This function takes the base word and the reqLetter and will replace
+ * the reqLetter as a golkd  version of it and return that string.
+ */
+
+public static String goldenLetter(String baseWord, char reqLetter) {
+    String yellowColor = "\u001B[33m";
+    
+    String resetColor = "\u001B[0m";
+
+    String upperBwString = baseWord.toUpperCase();
+    char upperReqChar = Character.toUpperCase(reqLetter);
+
+    char[] baseWordChars = upperBwString.toCharArray();
+
+    String finalString = "";
+    for (char c : baseWordChars){
+        if (c == upperReqChar){
+            finalString += yellowColor + c + resetColor;
+        }else{
+            finalString += c;
+        }
+        
+    }
+
+
+    return finalString;
+    
+}
+
+/*********************************************************/
+/*********************************************************/
+
+/*
  * possiblePoints
  * param: String baseWord, List<String> possibleWords
  * returns: int
@@ -525,16 +723,16 @@ public static boolean sameChars(String baseWord, String dicString) {
 
  public static String removeChar(String current, char remove)
  {
-     StringBuilder builder = new StringBuilder();
+    StringBuilder builder = new StringBuilder();
 
-     for (char c : current.toCharArray())
-     {
-         if (c != remove)
-         {
-             builder.append(c);
-         }
-     }
-     return builder.toString();
+    for (char c : current.toCharArray())
+    {
+        if (c != remove)
+        {
+            builder.append(c);
+        }
+    }
+    return builder.toString();
  }
 
 /*********************************************************/
