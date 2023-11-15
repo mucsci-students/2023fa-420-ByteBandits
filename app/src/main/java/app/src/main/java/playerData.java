@@ -26,7 +26,7 @@ public class playerData {
     private static final SecretKey SECRET_KEY = new SecretKeySpec("zbUe3kVDRm5aZeKO".getBytes(), "AES");
 
     private String encrypt(String data) throws Exception {
-        System.out.println("Debug: Starting encryption");
+        //System.out.println("Debug: Starting encryption");
 
             Cipher cipher = Cipher.getInstance("AES");
             cipher.init(Cipher.ENCRYPT_MODE, SECRET_KEY);
@@ -64,7 +64,7 @@ public class playerData {
             gameData.put("maxPoints", maxPoints);
             gameData.put("author", author); 
             gameData.put("wordList", new JSONArray(wordList)); 
-            System.out.println("Debug: gameData content before saving - " + gameData.toString());
+            //System.out.println("Debug: gameData content before saving - " + gameData.toString());
 
             if (encrypt) {
                 try {
@@ -78,7 +78,7 @@ public class playerData {
             }
             
             try (FileWriter fileWriter = new FileWriter(GAME_DATA_FILENAME)) {
-                System.out.println("Debug: allData content being written to file - " + allData.toString());
+                //System.out.println("Debug: allData content being written to file - " + allData.toString());
                 fileWriter.write(allData.toString());
             }
         } 
