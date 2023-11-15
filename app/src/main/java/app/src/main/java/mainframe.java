@@ -494,11 +494,11 @@ public class mainframe {
     
         // "PLAY" button
        
-        CustomButton playButton = new CustomButton("PLAY", false);
+        CustomButton playButton = new CustomButton("ENTER THE HIVE", false);
         playButton.setBackground(new Color(255, 160, 96));
         playButton.setOpaque(true); // Make the button opaque
         playButton.setFont(new Font("SansSerif", Font.BOLD, 24));
-        playButton.setPreferredSize(new Dimension(200, 60)); // Increase the width
+        playButton.setPreferredSize(new Dimension(250, 60)); // Increase the width
     playButton.addActionListener(new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -567,9 +567,7 @@ public class mainframe {
         buttonPanel2.setOpaque(false);
         buttonPanel2.setBounds(120, 80, 100, 100);
 
-         // Create a panel for the buttons at the top
-         JPanel buttonPanel3 = new JPanel(new GridBagLayout());
-         buttonPanel3.setOpaque(false);
+        
 
         //progressBar.setPreferredSize(new Dimension(350, 50));
         // Create buttons for the second screen
@@ -2049,76 +2047,20 @@ panel.add(outputLabel5);
             buttonPanel.add(exitButton);
 
 
+        // Create a panel for the buttons at the top
+         JPanel buttonPanel3 = new JPanel(new GridBagLayout());
+         buttonPanel3.setOpaque(false);
+
+
         // BP3
-            Insets buttonInsets1 = new Insets(-500, 300, 0, 300);
-            Insets buttonInsets2 = new Insets(-300, 0, 0, 0);
+        addResponsiveButton(foundWordsButton, 0.04, 0.038);
+        addResponsiveButton(rankBreakDownButton, 0.14, 0.038);
+        addResponsiveButton(backSpaceButton, 0.225, 0.22);
+        addResponsiveButton(hintsButton, 0.8, 0.038);
+        addResponsiveButton(enterGuessButton, 0.695, 0.22);
+        //addResponsiveButton(highScoreButton, 0.9, 0.038);
+        addResponsiveButton(shufflePuzzle, 0.463, 0.31);
 
-            Insets buttonInsets3 = new Insets(-900, -700, 0, 0);
-            Insets buttonInsets4 = new Insets(-900, -1200, 0, 0);
-
-            Insets buttonInsets5 = new Insets(-900, 0, 0, -700);
-            Insets buttonInsets6 = new Insets(-900, 0, 0, -1200);
-        
-        
-            GridBagConstraints gbcBackSpace = new GridBagConstraints();
-            gbcBackSpace.gridx = 0;  
-            gbcBackSpace.gridy = 0;  
-        
-            gbcBackSpace.insets = buttonInsets1;
-            buttonPanel3.add(backSpaceButton, gbcBackSpace);
-        
-        
-            GridBagConstraints gbcEnterGuess = new GridBagConstraints();
-            gbcEnterGuess.gridx = 2;  
-            gbcEnterGuess.gridy = 0;  
-
-            gbcEnterGuess.insets = buttonInsets1;
-            buttonPanel3.add(enterGuessButton, gbcEnterGuess);
-
-
-            GridBagConstraints gbcShufflePuzzle = new GridBagConstraints();
-            gbcShufflePuzzle.gridx = 1;  
-            gbcShufflePuzzle.gridy = 2;  
-
-            gbcShufflePuzzle.insets = buttonInsets2;
-            buttonPanel3.add(shufflePuzzle, gbcShufflePuzzle);
-
-
-            GridBagConstraints gbcFoundWords = new GridBagConstraints();
-            gbcFoundWords.gridx = 0;  
-            gbcFoundWords.gridy = 1;  
-
-            gbcFoundWords.insets = buttonInsets3;
-            buttonPanel3.add(foundWordsButton, gbcFoundWords);
-
-
-            GridBagConstraints gbcRanks = new GridBagConstraints();
-            gbcRanks.gridx = 1;  
-            gbcRanks.gridy = 1;  
-
-            gbcRanks.insets = buttonInsets4;
-            buttonPanel3.add(rankBreakDownButton, gbcRanks);
-
-
-            GridBagConstraints gbcHints = new GridBagConstraints();
-            gbcHints.gridx = 1;  
-            gbcHints.gridy = 1;  
-
-            gbcHints.insets = buttonInsets6;
-            buttonPanel3.add(hintsButton, gbcHints);
-
-            /* 
-            GridBagConstraints gbcHighScore = new GridBagConstraints();
-            gbcHighScore.gridx = 0;  
-            gbcHighScore.gridy = 1;  
-
-            gbcHighScore.insets = buttonInsets6;
-            buttonPanel3.add(highScoreButton, gbcHighScore);
-            */
-            
-
-        
-        
 
         // Letter Buttons (BP2)
             buttonPanel2.add(letterbutton1);
@@ -2137,8 +2079,21 @@ panel.add(outputLabel5);
 
         secondFrame.add(buttonPanel3);
         
+        
     }
-    
+
+     private void addResponsiveButton(JButton button, double xPercentage, double yPercentage) {
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int screenWidth = screenSize.width;
+        int screenHeight = screenSize.height;
+
+        int x = (int) (screenWidth * xPercentage);
+        int y = (int) (screenHeight * yPercentage);
+
+        button.setBounds(x, y, 125, 50); 
+        secondFrame.add(button);
+    }
+
     public static void main(String[] args) throws FileNotFoundException {
         if (args.length > 0 && args[0].equals("--cli")) {
             CliGameModel model = new CliGameModel();

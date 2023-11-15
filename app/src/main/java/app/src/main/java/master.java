@@ -310,7 +310,7 @@ public static int pointsPWord(String baseWord, String userGuess){
         }
         else{
             
-            if (isPangram(baseWord, userGuess)){
+            if (isPangram(userGuess, baseWord)){
                 points += 7;
 
                 System.out.println();
