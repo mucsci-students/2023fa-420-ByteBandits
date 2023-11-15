@@ -830,6 +830,7 @@ panel.add(outputLabel5);
                     baseWord = baseWord.toLowerCase();
         
                     if (master.foundWords.contains(enteredWord)) {
+                        placePic(secondFrame, "./src/main/resources/visualcontent/angry.gif", 0.17, 0.5, true, false);
                         outputLabel.setText("You already guessed this word correctly. Try again!");
                         
                     } else {
@@ -845,12 +846,16 @@ panel.add(outputLabel5);
                                 if(master.playerRank != currentRank){
                                     // leveled up and is a pangram
                                     playSound("./src/main/resources/audio/notification-1-126509.wav", 0.77f);
+                                    playSound("./src/main/resources/audio/WOO.wav", 0.66f);
+                                    placePic(secondFrame, "./src/main/resources/visualcontent/wooyeah.gif", 0.10, 0.4, true, false);
                                     currentRank = master.playerRank;
                                 }else{
                                     // is a pangram and did not level up
                                     playSound("./src/main/resources/audio/new-level-142995.wav", 0.77f); 
+                                    playSound("./src/main/resources/audio/WOO.wav", 0.66f);
+                                    placePic(secondFrame, "./src/main/resources/visualcontent/wooyeah.gif", 0.10, 0.4, true, false);
                                 }
-                                
+            
                                 String enteredWordText = "<font color='#CC9900'>" + enteredWord + "</font> is a valid word, and a <font color='#CC9900'>PANGRAM</font>... Well Done!";
                                 outputLabel.setText("<html>" + enteredWordText + "</html>");
                             }
@@ -868,7 +873,7 @@ panel.add(outputLabel5);
 
 
                             // Show heart
-                            placePic(secondFrame, "./src/main/resources/visualcontent/correct.png", 0.17, 0.5, true, false);
+                            placePic(secondFrame, "./src/main/resources/visualcontent/pixelheart.gif", 0.17, 0.5, true, false);
                                 
                             }
                             
@@ -886,6 +891,7 @@ panel.add(outputLabel5);
                             String differenceText = "You need  <font color='#CC9900'>" +  helpers.difference + "</font>" +  " points to reach next rank.";
                             outputLabel5.setText("<html>" + differenceText + "</html>");
                         } else {
+                            placePic(secondFrame, "./src/main/resources/visualcontent/angry.gif", 0.17, 0.5, true, false);
                             playSound("./src/main/resources/audio/wrong-47985.wav", 0.77f);
                             outputLabel.setText("Invalid word, try again!");
 
@@ -1285,9 +1291,10 @@ panel.add(outputLabel5);
 
     /**********************************************************************/
     /*********************SAVE PUZZLE LOGIC********************************/
-        savePuzzleButton.addActionListener(new ActionListener() 
+    savePuzzleButton.addActionListener(new ActionListener() 
         {
             @Override
+
             public void actionPerformed(ActionEvent e)
             {
                 boolean hintsBool = false;
@@ -1313,22 +1320,43 @@ panel.add(outputLabel5);
                     howToPlayBool = true;
                 }
                 
-                String saveFileName = JOptionPane.showInputDialog("Would you like to save this puzzle?  Enter a name for the save:");
-                CliGameModel.setSaveFileName(saveFileName);
-                if (saveFileName != null && !saveFileName.trim().isEmpty())
-                {
-                    try
-                    {
-                        List<String> possibleWords = master.acceptedWords(baseWord, reqLetter);
+                String saveFileName = JOptionPane.showInputDialog("Enter a name for your saved game:");
+        
+                // Check if the user closed the dialog
+                if (saveFileName == null) {
+                    JOptionPane.showMessageDialog(null, "Game save cancelled.");
+                    return;
+                }
+        
+                String author = JOptionPane.showInputDialog("Enter your username:");
+        
+                CliGameModel.setSaveFileName(saveFileName.trim());
+                CliGameModel.setAuthor(author != null ? author.trim() : "");
+        
+                if (!saveFileName.trim().isEmpty() && author != null && !author.trim().isEmpty()) {
+                    // Prompt for encryption choice
+                    int encryptOption = JOptionPane.showConfirmDialog(null, "Do you want to encrypt your save data?", "Encrypt Save", JOptionPane.YES_NO_OPTION);
+        
+                    if (encryptOption == JOptionPane.CLOSED_OPTION || encryptOption == JOptionPane.CANCEL_OPTION) {
+                        JOptionPane.showMessageDialog(null, "You did not complete game save. Game was not saved.");
+                        return;
+                    }
+        
+                    boolean encrypt = (encryptOption == JOptionPane.YES_OPTION);
+        
+                    try {
+                        List<String> possibleWords = CliGameModel.acceptedWords(baseWord, reqLetter);
                         int maxPoints = helpers.possiblePoints(baseWord, possibleWords);
-
-                        // Call the saveGameData method with the appropriate parameters
-                        playerGameData.saveGameData(saveFileName, baseWord, master.foundWords, master.totalPoints, "" + reqLetter, maxPoints);
+                        //System.out.print("DEBUG: Possible words in save for mainframe: " + possibleWords);
+                        playerGameData.saveGameData(saveFileName, baseWord, master.foundWords, master.totalPoints, "" + reqLetter, maxPoints, author, possibleWords, encrypt);
                     }
-                    catch (FileNotFoundException e1)
-                    {
+                    catch (FileNotFoundException e1) {
                         System.err.println("File not found " + e1.getMessage());
+                    } catch (Exception e2) {
+                        System.out.print("Could not encrypt save.");
+                        e2.printStackTrace();
                     }
+
                     if(hintsBool){
                         hintsButton.doClick();
                     }
@@ -1359,12 +1387,11 @@ panel.add(outputLabel5);
                     if(howToPlayBool){
                         howToPlayButton.doClick();
                     }
+
                 }
                 textPane.requestFocusInWindow();
             }
-        }
-        );
-
+        });
     /**********************************************************************/
     /**********************************************************************/
 
@@ -2040,7 +2067,7 @@ panel.add(outputLabel5);
     
         // If useTimer is true, use a Timer to hide the GIF after 4 seconds
         if (useTimer) {
-            Timer timer = new Timer(4000, new ActionListener() {
+            Timer timer = new Timer(2000, new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     gifLabel.setVisible(false);
