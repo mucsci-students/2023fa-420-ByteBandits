@@ -175,7 +175,7 @@ public static void cliMode() throws FileNotFoundException, InterruptedException{
                     break;
                 }
 
-                saveFile.saveGameData(CliGameModel.getSaveFileName(), shuffleWord, foundWords, totalPoints, String.valueOf(reqLetter), possiblePoints);
+                saveFile.saveGameData(CliGameModel.getSaveFileName(), baseWord, shuffleWord, foundWords, totalPoints, String.valueOf(reqLetter), possiblePoints);
 
                 System.out.println("Game Status Saved!\n");
 
@@ -189,20 +189,20 @@ public static void cliMode() throws FileNotFoundException, InterruptedException{
                     break;
                 }
             
-                saveFile.saveGameData(CliGameModel.getSaveFileName(),shuffleWord, foundWords, totalPoints, String.valueOf(reqLetter), possiblePoints(baseWord, acceptedWordList));
+                saveFile.saveGameData(CliGameModel.getSaveFileName(),baseWord, shuffleWord, foundWords, totalPoints, String.valueOf(reqLetter), possiblePoints(baseWord, acceptedWordList));
                 System.out.println("\nGame Status Saved!\n");
 
                 break;
 
             case "/loadpuzzle":
-                if(baseWord == saveFile.getBaseWord() && totalPoints == saveFile.getPlayerPoints()){
+                if(baseWord == saveFile.getFormat() && totalPoints == saveFile.getPlayerPoints()){
                     System.out.println("\u001B[33m" + "\nThis puzzle is already loaded!\n" + "\u001B[0m");
                     break;
                 }    
 
                 saveFile.loadGameData(CliGameModel.getSaveFileName());
                 
-                baseWord = saveFile.getBaseWord();
+                baseWord = saveFile.getFormat();
                 foundWords = saveFile.getFoundWords();
                 totalPoints = saveFile.getPlayerPoints();
                 reqLetter = saveFile.getRequiredLetter().charAt(0);

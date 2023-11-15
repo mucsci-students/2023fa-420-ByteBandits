@@ -14,10 +14,11 @@ public class playerData {
     private int playerPoints;
     private String requiredLetter;
     private int maxPoints;
+    private String format;
 
     private static final String GAME_DATA_FILENAME = "game_data.json";
 
-    public void saveGameData(String saveName, String baseWord, List<String> foundWords, int playerPoints, String requiredLetter, int maxPoints) {
+    public void saveGameData(String saveName, String baseWord, String format, List<String> foundWords, int playerPoints, String requiredLetter, int maxPoints) {
         try {
             JSONObject allData = new JSONObject();
             try (BufferedReader reader = new BufferedReader(new FileReader(GAME_DATA_FILENAME))) {
@@ -26,6 +27,7 @@ public class playerData {
 
             JSONObject gameData = new JSONObject();
             gameData.put("baseWord", baseWord);
+            gameData.put("format", format);
             gameData.put("foundWords", foundWords);
             gameData.put("playerPoints", playerPoints);
             gameData.put("requiredLetter", requiredLetter);
@@ -54,6 +56,7 @@ public class playerData {
 
             JSONObject gameData = allData.getJSONObject(saveName);
             
+            format = gameData.getString("format");
             baseWord = gameData.getString("baseWord");
             foundWords = new ArrayList<>();
             JSONArray foundWordsArray = gameData.getJSONArray("foundWords");
@@ -86,6 +89,10 @@ public class playerData {
     public String getBaseWord() {
         return baseWord;
     }
+    
+    public String getFormat() {
+        return format;
+    }
 
     public List<String> getFoundWords() {
         return foundWords;
@@ -105,7 +112,7 @@ public class playerData {
 
     //Setter Functions
     public void setBaseWord(String baseWord) {
-        this.baseWord = baseWord;
+        this.format = baseWord;
     }
 
     public void setFoundWords(List<String> foundWords) {

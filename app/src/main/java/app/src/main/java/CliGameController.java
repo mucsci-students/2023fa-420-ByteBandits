@@ -121,12 +121,16 @@ public class CliGameController {
                 }
                 view.puzzleStatus(model.playerRank(model.getBaseWord(), model.getTotalPoints(), model.getAcceptedWordList()), model.getTotalPoints());
                 break;
+            case "/topscores":
+                highScores.displayEntriesForBaseWord(model.getBaseWord());
+                break;
             case "/help":
                 view.help();
                 System.out.println();
                 break;
             case "/exit":
-                view.exitMessage();
+                model.highScore(model.getBaseWord(), model.getTotalPoints(), "");
+                highScores.displayEntriesForBaseWord(model.getBaseWord());
                 System.exit(0);
                 break;
             default:

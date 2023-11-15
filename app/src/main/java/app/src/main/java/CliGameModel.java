@@ -24,6 +24,8 @@ public class CliGameModel extends helpers {
     private static List<String> foundWords;
     
     private static char reqLetter;
+
+    private static highScores saveHighScores;
     
     private static playerData saveFile;
     
@@ -144,6 +146,7 @@ public class CliGameModel extends helpers {
         reqLetter = getReqLetter1(baseWord);
         acceptedWordList = acceptedWords(baseWord, reqLetter);
         saveFile = new playerData();
+        saveHighScores = new highScores();
     }
 
     /**
@@ -318,9 +321,26 @@ public class CliGameModel extends helpers {
             CliGameView.createPuzzleMessage();
             return;
         }
-        saveFile.saveGameData(getSaveFileName(), shuffleWord, foundWords, totalPoints, String.valueOf(reqLetter), possiblePoints);
+        saveFile.saveGameData(getSaveFileName(),baseWord, shuffleWord, foundWords, totalPoints, String.valueOf(reqLetter), possiblePoints);
         CliGameView.successfulSaveMessage();
     }
+
+    public static void highScore(String baseWord, int totalPoints, String userId) {
+    
+        if (highScores.isHighScore(baseWord, totalPoints)) {
+            CliGameView.highScore();
+            CliGameView.enterUserId();
+            userId = console.next();
+    
+            highScores.saveHighScores(baseWord, totalPoints, userId);
+    
+            CliGameView.exitMessage();
+        } else {
+            CliGameView.exitMessage();
+        }
+    }
+    
+    
 
     /**
     * saveCurr
@@ -330,7 +350,7 @@ public class CliGameModel extends helpers {
     */
     public static void saveCurr()
     {
-        saveFile.saveGameData(getSaveFileName(), shuffleWord, foundWords, totalPoints, String.valueOf(reqLetter), possiblePoints(baseWord, acceptedWordList));
+        saveFile.saveGameData(getSaveFileName(), baseWord, shuffleWord, foundWords, totalPoints, String.valueOf(reqLetter), possiblePoints(baseWord, acceptedWordList));
         CliGameView.successfulSaveMessage();
     }
 
@@ -342,12 +362,12 @@ public class CliGameModel extends helpers {
     */
     public static void loadPuzzle() throws FileNotFoundException
     {
-        if(baseWord == saveFile.getBaseWord() && totalPoints == saveFile.getPlayerPoints()){
+        if(baseWord == saveFile.getFormat() && totalPoints == saveFile.getPlayerPoints()){
             CliGameView.duplicateLoadMessage();
         }
         saveFile.loadGameData(saveFileName);
                 
-        baseWord = saveFile.getBaseWord();
+        baseWord = saveFile.getFormat();
         foundWords = saveFile.getFoundWords();
         totalPoints = saveFile.getPlayerPoints();
         reqLetter = saveFile.getRequiredLetter().charAt(0);
