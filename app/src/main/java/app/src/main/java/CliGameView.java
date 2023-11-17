@@ -198,24 +198,10 @@ public class CliGameView {
      * This function displays the look of the puzzle.
      */
     public static void display(char[] charArray, char required) {
-        System.out.println("   -----");
-        System.out.print(" / ");
-        int maxIndex = Math.min(charArray.length, 3);
-        for (int i = 0; i < maxIndex; i++) {
-            System.out.print(charArray[i] + " ");
-        }
+        CharacterDisplay basicDisplay = new BasicCharacterArrayDisplay();
+        CharacterDisplay decoratedDisplay = new DecoratedCharacterArrayDisplay(basicDisplay);
 
-        System.out.print("\\");
-        System.out.println();
-        System.out.println("||   " + "\u001B[33m" + required + "\u001B[0m" + "   ||");
-        System.out.print(" \\ ");
-        maxIndex = Math.min(charArray.length, 6);
-        for (int i = 3; i < maxIndex; i++) {
-            System.out.print(charArray[i] + " ");
-        }
-
-        System.out.println("/");
-        System.out.println("   -----");
+        decoratedDisplay.display(charArray, required);
 
     }
 
