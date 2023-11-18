@@ -102,6 +102,8 @@ To conclude your game session, simply utilize the /exit command.
 - MVC- This design pattern is used to implement the CLI version of this game.
 - Strategy- This design pattern is used to implement the building of the New Puzzle button and building of the Custom Puzzle button in the GUI.
 - Factory- This design pattern is used to provide method declarations for obtaining resources, specifically dictionary and game data.
+- Singleton - This design pattern is used to have only one instance in our CLI MVC Controller
+- Decorator - This design pattern is used to do our creation of what our puzzle looks like in our CLI
 
 
 ## Authors
