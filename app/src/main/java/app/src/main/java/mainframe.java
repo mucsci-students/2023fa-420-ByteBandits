@@ -15,15 +15,11 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
-
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import javax.swing.*;
-
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -34,6 +30,7 @@ import javax.sound.sampled.*;
 import java.net.URL;
 
 import java.io.*;
+
 import java.util.Comparator;
 import java.util.List;
 import java.util.ArrayList;
@@ -87,7 +84,7 @@ public class mainframe {
             addMouseListener(new MouseAdapter(){
                 @Override
                 public void mouseEntered(MouseEvent e){
-                    playSound("./src/main/resources/audio/loud-thud-45719.wav", 0.75f);
+                    playSound("./src/main/resources/audio/loud-thud-45719.wav", 0.78f);
                     if(isLetterButton4){
                         setBorder(BorderFactory.createLineBorder(pastelYellow, 4)); 
                     }else{
@@ -103,7 +100,7 @@ public class mainframe {
     
                 @Override
                 public void mousePressed(MouseEvent e) {
-                    playSound("./src/main/resources/audio/select-sound-121244.wav", 0.77f);
+                    playSound("./src/main/resources/audio/select-sound-121244.wav", 0.78f);
                     if (isLetterButton4) {
                         setBackground(new Color(255, 215, 0));
                         setForeground(Color.BLACK);
@@ -187,10 +184,12 @@ public class mainframe {
         try {
             Robot robot = new Robot();
     
-            int x = secondFrame.getX() + secondFrame.getWidth() / 4;
-            int y = secondFrame.getY() + secondFrame.getHeight() / 25;
-            int width = secondFrame.getWidth() / 2;
-            int height = secondFrame.getHeight() / 3;
+            int x = secondFrame.getX() + secondFrame.getWidth() / 3;        
+            int y = secondFrame.getY();                                     
+            int width = secondFrame.getWidth() / 3;                         
+            int height = secondFrame.getHeight() * 3 / 11;                   
+
+
     
             BufferedImage screenImage = robot.createScreenCapture(new Rectangle(x, y, width, height));
     
@@ -374,7 +373,7 @@ public class mainframe {
      * ******************************************************/
     //Opening and closing for the rank dialog
     private void openRanksDialog() {
-        RanksDialogBuilder ranksDialogBuilder = new RanksDialogBuilder(secondFrame);
+        RanksDialogBuilder ranksDialogBuilder = new RanksDialogBuilder(mainFrame);
         ranksDialogBuilder.setTitle("RANK BREAK DOWN")
             .setRankNames(new String[]{"Beginner", "Good Start", "Moving Up", "Good", "Solid", "Nice", "Great", "Amazing", "Genius", "Queen Bee"})
             .setAcceptedWordList(acceptedWordList)
@@ -383,6 +382,8 @@ public class mainframe {
         ranks = ranksDialogBuilder.build();
         ranks.setVisible(true);
         ranks.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+    
+        // Set a listener for when the ranks dialog is closed
         ranks.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosed(WindowEvent e) {
@@ -392,6 +393,7 @@ public class mainframe {
     
         isRanksDialogOpen = true;
     }
+    
     
     private void closeRanksDialog() {
         ranks.dispose();
@@ -445,11 +447,24 @@ public class mainframe {
     /**********************************************************/
 
     public mainframe() {
+        
         playBackgroundMusic("./src/main/resources/audio/nature-ambience-field-bees-156704.wav");
-            adjustVolume(-10.0f);
+            adjustVolume(-5.0f);
 
         //System.out.println("mainframe() constructor called"); // Debugging statement
         mainFrame = new JFrame("Welcome to Wordy Wasps");
+        GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+            if (device.isFullScreenSupported()) {
+                mainFrame.setUndecorated(true); 
+                device.setFullScreenWindow(mainFrame);
+            } else {
+                System.out.println("Fullscreen mode is not supported on this system.");
+                mainFrame.setSize(400, 300); 
+                mainFrame.setLocationRelativeTo(null); 
+            }
+
+        
+
         mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.setMinimumSize(screenSize);
@@ -503,8 +518,9 @@ public class mainframe {
         @Override
         public void actionPerformed(ActionEvent e) {
             System.out.println("playButton ActionListener called"); // Debugging statement
-
             showSecondScreen();
+            mainFrame.dispose();
+            
         }
     });
     
@@ -513,9 +529,12 @@ public class mainframe {
         //buttonPanel.add(guiToCliButton);
     
         backgroundPanel.add(buttonPanel, BorderLayout.SOUTH);
-    
+        mainFrame.setAlwaysOnTop(true);
         mainFrame.setContentPane(backgroundPanel);
         mainFrame.setVisible(true);
+
+        
+            
     }
     
     /************************************************************/
@@ -524,7 +543,7 @@ public class mainframe {
     public void showSecondScreen() {
         
         stopBackgroundMusic();
-        mainFrame.setVisible(false);
+        
         ImageIcon backgroundIcon = new ImageIcon("./src/main/resources/visualcontent/waspnest.gif");
         
 
@@ -539,6 +558,17 @@ public class mainframe {
         
         // Create the second frame
         secondFrame = new JFrame("Wordy Wasps - Main Menu");
+        secondFrame.setAlwaysOnTop(false);
+        GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+            if (device.isFullScreenSupported()) {
+                secondFrame.setUndecorated(true); 
+                device.setFullScreenWindow(secondFrame);
+                
+            } else {
+                System.out.println("Fullscreen mode is not supported on this system.");
+                secondFrame.setSize(400, 300); 
+                secondFrame.setLocationRelativeTo(null); 
+            }
         
         secondFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         secondFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -568,8 +598,6 @@ public class mainframe {
         buttonPanel2.setBounds(120, 80, 100, 100);
 
         
-
-        //progressBar.setPreferredSize(new Dimension(350, 50));
         // Create buttons for the second screen
 
         String bW1 = Character.toString(bWLetters[0]);
@@ -617,7 +645,7 @@ public class mainframe {
         backSpaceButton.setEnabled(false);
         enterGuessButton.setEnabled(false);
         rankBreakDownButton.setEnabled(false);
-        highScoreButton.setEnabled(true);
+        highScoreButton.setEnabled(false);
 
 
         
@@ -895,7 +923,7 @@ panel.add(outputLabel5);
                     baseWord = baseWord.toLowerCase();
         
                     if (master.foundWords.contains(enteredWord)) {
-                        playSound("./src/main/resources/audio/Joblox Angry Sound Effect.wav", 0.77f);
+                        playSound("./src/main/resources/audio/Joblox Angry Sound Effect.wav", 0.78f);
                         placePic(secondFrame, "./src/main/resources/visualcontent/angry.gif", 0.17, 0.5, true, false);
                         outputLabel.setText("You already guessed this word correctly. Try again!");
                         
@@ -911,13 +939,13 @@ panel.add(outputLabel5);
 
                                 if(master.playerRank != currentRank){
                                     // leveled up and is a pangram
-                                    playSound("./src/main/resources/audio/notification-1-126509.wav", 0.77f);
+                                    playSound("./src/main/resources/audio/notification-1-126509.wav", 0.78f);
                                     playSound("./src/main/resources/audio/WOO.wav", 0.66f);
                                     placePic(secondFrame, "./src/main/resources/visualcontent/wooyeah.gif", 0.10, 0.4, true, false);
                                     currentRank = master.playerRank;
                                 }else{
                                     // is a pangram and did not level up
-                                    playSound("./src/main/resources/audio/new-level-142995.wav", 0.77f); 
+                                    playSound("./src/main/resources/audio/new-level-142995.wav", 0.78f); 
                                     playSound("./src/main/resources/audio/WOO.wav", 0.66f);
                                     placePic(secondFrame, "./src/main/resources/visualcontent/wooyeah.gif", 0.10, 0.4, true, false);
                                 }
@@ -926,20 +954,21 @@ panel.add(outputLabel5);
                                 outputLabel.setText("<html>" + enteredWordText + "</html>");
                             }
                             else{
+                                // Show heart
+                                placePic(secondFrame, "./src/main/resources/visualcontent/pixelheart.gif", 0.17, 0.5, true, false);
                                 master.playerRank = master.playerRank(baseWord, master.totalPoints, acceptedWordList);
 
                                 if(master.playerRank != currentRank){
-                                    playSound("./src/main/resources/audio/notification-1-126509.wav", 0.77f);
+                                    playSound("./src/main/resources/audio/notification-1-126509.wav", 0.78f);
                                     currentRank = master.playerRank;
                                 }else{
-                                    playSound("./src/main/resources/audio/ding-36029.wav", 0.77f);
+                                    playSound("./src/main/resources/audio/ding-36029.wav", 0.78f);
                                 }
                                 String enteredWordText = "<font color='#CC9900'>" + enteredWord + "</font> is a valid word!";
                                 outputLabel.setText("<html>" + enteredWordText + "</html>");
                             }
 
-                            // Show heart
-                            placePic(secondFrame, "./src/main/resources/visualcontent/pixelheart.gif", 0.17, 0.5, true, false);
+                            
                             master.playerRank = master.playerRank(baseWord, master.totalPoints, acceptedWordList);
 
                             
@@ -955,7 +984,7 @@ panel.add(outputLabel5);
                             outputLabel5.setText("<html>" + differenceText + "</html>");
                         } else {
                             placePic(secondFrame, "./src/main/resources/visualcontent/angry.gif", 0.17, 0.5, true, false);
-                            playSound("./src/main/resources/audio/Joblox Angry Sound Effect.wav", 0.77f);
+                            playSound("./src/main/resources/audio/Joblox Angry Sound Effect.wav", 0.78f);
                             outputLabel.setText("Invalid word, try again!");
 
                         }
@@ -993,7 +1022,7 @@ panel.add(outputLabel5);
     
     secondFrame.setVisible(true);
     playBackgroundMusic("./src/main/resources/audio/busy-bees-158999.wav");
-        adjustVolume(-25.0f);
+        adjustVolume(-15.0f);
 
     
 
@@ -1123,6 +1152,7 @@ panel.add(outputLabel5);
                 backSpaceButton.setEnabled(true);
                 enterGuessButton.setEnabled(true);
                 rankBreakDownButton.setEnabled(true);
+                highScoreButton.setEnabled(true);
 
                 strategyNewPuzzle.execute(mainframe.this);
                 
@@ -1140,6 +1170,9 @@ panel.add(outputLabel5);
                 if(foundwords != null && foundwords.isVisible()){
                     foundwords.dispose();
                 }
+                if(highscores != null && highscores.isVisible()){
+                    highscores.dispose();
+                }
                 
             }
         });
@@ -1154,6 +1187,7 @@ panel.add(outputLabel5);
                 boolean ranksBool = false;
                 boolean foundWordsBool = false;
                 boolean howToPlayBool = false;
+                boolean highScoresBool = false;
 
                 if (hints != null && hints.isVisible()) {
                     hints.dispose();
@@ -1172,6 +1206,10 @@ panel.add(outputLabel5);
                     howToPlayDialog.dispose();
                     howToPlayBool = true;
                 }
+                if (highscores != null && highscores.isVisible()){
+                    highscores.dispose();
+                    highScoresBool = true;
+                }
 
             JTextField inputField = new JTextField();
             
@@ -1186,6 +1224,7 @@ panel.add(outputLabel5);
                 JOptionPane.PLAIN_MESSAGE,
                 JOptionPane.OK_CANCEL_OPTION
             );
+            
     
             JDialog dialog = optionPane.createDialog("New User Puzzle");
             dialog.setAlwaysOnTop(true); // Set the dialog to always be on top
@@ -1227,6 +1266,9 @@ panel.add(outputLabel5);
                     if(howToPlayBool){
                         howToPlayButton.doClick();
                     }
+                    if(highScoresBool){
+                        highScoreButton.doClick();
+                    }
                     textPane.requestFocusInWindow();
                     return;
                     
@@ -1236,19 +1278,22 @@ panel.add(outputLabel5);
                     if (!master.isUnique(userWord)) {
                         JOptionPane.showMessageDialog(secondFrame, "Bzzt. Oops, all letters have to be unique! Bzz.");
                         if(hintsBool){
-                        hintsButton.doClick();
-                    }
-                    if(ranksBool){
-                        rankBreakDownButton.doClick();
-                    }
-                    if(foundWordsBool){
-                        foundWordsButton.doClick();
-                    }
-                    if(howToPlayBool){
-                        howToPlayButton.doClick();
-                    }
-                    textPane.requestFocusInWindow();
-                    return;
+                            hintsButton.doClick();
+                        }
+                        if(ranksBool){
+                            rankBreakDownButton.doClick();
+                        }
+                        if(foundWordsBool){
+                            foundWordsButton.doClick();
+                        }
+                        if(howToPlayBool){
+                            howToPlayButton.doClick();
+                        }
+                        if(highScoresBool){
+                            highScoreButton.doClick();
+                        }
+                        textPane.requestFocusInWindow();
+                        return;
                     }
     
                     baseWord = userWord;
@@ -1263,19 +1308,22 @@ panel.add(outputLabel5);
                     if (!acceptedWordList.contains(baseWord)) {
                         JOptionPane.showMessageDialog(secondFrame, "Buzz. Are you making stuff up now!  Make sure you type a valid word! Buzz.");
                         if(hintsBool){
-                        hintsButton.doClick();
-                    }
-                    if(ranksBool){
-                        rankBreakDownButton.doClick();
-                    }
-                    if(foundWordsBool){
-                        foundWordsButton.doClick();
-                    }
-                    if(howToPlayBool){
-                        howToPlayButton.doClick();
-                    }
-                    textPane.requestFocusInWindow();
-                    return;
+                            hintsButton.doClick();
+                        }
+                        if(ranksBool){
+                            rankBreakDownButton.doClick();
+                        }   
+                        if(foundWordsBool){
+                            foundWordsButton.doClick();
+                        }
+                        if(howToPlayBool){
+                            howToPlayButton.doClick();
+                        }
+                        if(highScoresBool){
+                            highScoreButton.doClick();
+                        }
+                        textPane.requestFocusInWindow();
+                        return;
                     }
     
                     outputLabel.setText("");
@@ -1303,6 +1351,9 @@ panel.add(outputLabel5);
                     if(howToPlayBool){
                         howToPlayButton.doClick();
                     }
+                    if(highScoresBool){
+                        highScoreButton.doClick();
+                    }
                     textPane.requestFocusInWindow();
                     return;
                 }
@@ -1315,6 +1366,7 @@ panel.add(outputLabel5);
                 backSpaceButton.setEnabled(true);
                 enterGuessButton.setEnabled(true);
                 rankBreakDownButton.setEnabled(true);
+                highScoreButton.setEnabled(true);
     
                 strategyNewPuzzle.execute(mainframe.this);
     
@@ -1334,8 +1386,11 @@ panel.add(outputLabel5);
                 if(foundwords != null && foundwords.isVisible()){
                     foundwords.dispose();
                 }
+                if(highscores != null && highscores.isVisible()){
+                    highscores.dispose();
+                }
             }else{
-                if(hintsBool){
+                    if(hintsBool){
                         hintsButton.doClick();
                     }
                     if(ranksBool){
@@ -1346,6 +1401,9 @@ panel.add(outputLabel5);
                     }
                     if(howToPlayBool){
                         howToPlayButton.doClick();
+                    }
+                    if(highScoresBool){
+                        highScoreButton.doClick();
                     }
                     textPane.requestFocusInWindow();
             }
@@ -1370,6 +1428,7 @@ panel.add(outputLabel5);
                 boolean ranksBool = false;
                 boolean foundWordsBool = false;
                 boolean howToPlayBool = false;
+                boolean highScoresBool = false;
 
                 if (hints != null && hints.isVisible()) {
                     hints.dispose();
@@ -1388,26 +1447,79 @@ panel.add(outputLabel5);
                     howToPlayDialog.dispose();
                     howToPlayBool = true;
                 }
+                if (highscores != null && highscores.isVisible()){
+                    highscores.dispose();
+                    highScoresBool = true;
+                }
                 
-                String saveFileName = JOptionPane.showInputDialog("Enter a name for your saved game:");
+                String saveFileName = JOptionPane.showInputDialog(secondFrame, "Enter a name for your saved game:");
         
                 // Check if the user closed the dialog
                 if (saveFileName == null) {
-                    JOptionPane.showMessageDialog(null, "Game save cancelled.");
+                    JOptionPane.showMessageDialog(secondFrame, "Game save cancelled.");
+                    if(hintsBool){
+                        hintsButton.doClick();
+                    }
+                    if(ranksBool){
+                        rankBreakDownButton.doClick();
+                    }
+                    if(foundWordsBool){
+                        foundWordsButton.doClick();
+                    }
+                    if(howToPlayBool){
+                        howToPlayButton.doClick();
+                    }
+                    if(highScoresBool){
+                        highScoreButton.doClick();
+                    }
+                    return;
+                }
+                if (saveFileName.trim().isEmpty()){
+                    JOptionPane.showMessageDialog(secondFrame, "Save name cannot be empty. Game save cancelled.");
+                    if(hintsBool){
+                        hintsButton.doClick();
+                    }
+                    if(ranksBool){
+                        rankBreakDownButton.doClick();
+                    }
+                    if(foundWordsBool){
+                        foundWordsButton.doClick();
+                    }
+                    if(howToPlayBool){
+                        howToPlayButton.doClick();
+                    }
+                    if(highScoresBool){
+                        highScoreButton.doClick();
+                    }
                     return;
                 }
         
-                String author = JOptionPane.showInputDialog("Enter your username:");
+                String author = JOptionPane.showInputDialog(secondFrame, "Enter your username:");
         
                 CliGameModel.setSaveFileName(saveFileName.trim());
                 CliGameModel.setAuthor(author != null ? author.trim() : "");
         
                 if (!saveFileName.trim().isEmpty() && author != null && !author.trim().isEmpty()) {
                     // Prompt for encryption choice
-                    int encryptOption = JOptionPane.showConfirmDialog(null, "Do you want to encrypt your save data?", "Encrypt Save", JOptionPane.YES_NO_OPTION);
+                    int encryptOption = JOptionPane.showConfirmDialog(secondFrame, "Do you want to encrypt your save data?", "Encrypt Save", JOptionPane.YES_NO_OPTION);
         
                     if (encryptOption == JOptionPane.CLOSED_OPTION || encryptOption == JOptionPane.CANCEL_OPTION) {
-                        JOptionPane.showMessageDialog(null, "You did not complete game save. Game was not saved.");
+                        JOptionPane.showMessageDialog(secondFrame, "You did not complete game save. Game was not saved.");
+                        if(hintsBool){
+                            hintsButton.doClick();
+                        }
+                        if(ranksBool){
+                            rankBreakDownButton.doClick();
+                        }
+                        if(foundWordsBool){
+                            foundWordsButton.doClick();
+                        }
+                        if(howToPlayBool){
+                            howToPlayButton.doClick();
+                        }
+                        if(highScoresBool){
+                            highScoreButton.doClick();
+                        }
                         return;
                     }
         
@@ -1440,12 +1552,15 @@ panel.add(outputLabel5);
                     if(howToPlayBool){
                         howToPlayButton.doClick();
                     }
+                    if(highScoresBool){
+                        highScoreButton.doClick();
+                    }
                     
                 }
 
                 else 
                 {
-                    JOptionPane.showMessageDialog(null, "You did not provide a valid save name. Game was not saved.");
+                    JOptionPane.showMessageDialog(secondFrame, "You did not provide a valid save name. Game was not saved.");
                     if(hintsBool){
                         hintsButton.doClick();
                     }
@@ -1457,6 +1572,9 @@ panel.add(outputLabel5);
                     }
                     if(howToPlayBool){
                         howToPlayButton.doClick();
+                    }
+                    if(highScoresBool){
+                        highScoreButton.doClick();
                     }
 
                 }
@@ -1477,6 +1595,7 @@ panel.add(outputLabel5);
                 boolean ranksBool = false;
                 boolean foundWordsBool = false;
                 boolean howToPlayBool = false;
+                boolean highScoresBool = false;
 
                 if (hints != null && hints.isVisible()) {
                     hints.dispose();
@@ -1494,6 +1613,10 @@ panel.add(outputLabel5);
                 if (howToPlayDialog != null && howToPlayDialog.isVisible()){
                     howToPlayDialog.dispose();
                     howToPlayBool = true;
+                }
+                if (highscores != null && highscores.isVisible()){
+                    highscores.dispose();
+                    highScoresBool = true;
                 }
 
                 outputLabel.setText("");
@@ -1515,7 +1638,7 @@ panel.add(outputLabel5);
 
                 // Show the names in a JOptionPane
                 String chosenSave = (String) JOptionPane.showInputDialog(
-                null, 
+                secondFrame, 
                 "Select a saved game:", 
                 "Load Game",
                 JOptionPane.QUESTION_MESSAGE, 
@@ -1537,6 +1660,9 @@ panel.add(outputLabel5);
                     }
                     if(howToPlayBool){
                         howToPlayButton.doClick();
+                    }
+                    if(highScoresBool){
+                        highScoreButton.doClick();
                     }
                     textPane.requestFocusInWindow();
                     return;
@@ -1597,6 +1723,7 @@ panel.add(outputLabel5);
                 backSpaceButton.setEnabled(true);
                 enterGuessButton.setEnabled(true);
                 rankBreakDownButton.setEnabled(true);
+                highScoreButton.setEnabled(true);
                 
                 textPane.setEnabled(true);
                 
@@ -1619,6 +1746,9 @@ panel.add(outputLabel5);
                 }
                 if(foundwords != null && foundwords.isVisible()){
                     foundwords.dispose();
+                }
+                if(highscores != null && highscores.isVisible()){
+                    highscores.dispose();
                 }
             }
             
@@ -1763,7 +1893,7 @@ panel.add(outputLabel5);
                 howToPlayDialog.setFocusableWindowState(false);
 
                 howToPlayDialog.setSize(950, 400);
-                howToPlayDialog.setLocationRelativeTo(mainFrame);
+                howToPlayDialog.setLocationRelativeTo(secondFrame);
                 
                 JTextArea helpTextArea = new JTextArea();
                 helpTextArea.setEditable(false);
@@ -1790,7 +1920,8 @@ panel.add(outputLabel5);
                 + "10. HINTS: This button will display a pop-up containing helpful information to assist your guesses.\n"
                 + "11. ENTER: Use this button to submit your current guess.\n"
                 + "12. CAPTURE: Capture your game progress and save it to your PC.\n"
-                + "13. EXIT: Leave the application."
+                + "13. HIGH SCORES: View any highscores for the current puzzle.\n"
+                + "14. EXIT: Leave the application."
         );
 
                 // Wrap the text area in a JScrollPane
@@ -1842,7 +1973,11 @@ panel.add(outputLabel5);
     highScoreButton.addActionListener(new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-            highscores.setVisible(true);
+            if (!highscores.isVisible()) {
+                highscores.setVisible(true);
+            } else {
+                highscores.setVisible(false);
+            }
             textPane.requestFocusInWindow();
         }
     });
@@ -1875,7 +2010,7 @@ panel.add(outputLabel5);
             baseWord = baseWord.toLowerCase();
         
             if (master.foundWords.contains(enteredWord)) {
-                playSound("./src/main/resources/audio/Joblox Angry Sound Effect.wav", 0.77f);
+                playSound("./src/main/resources/audio/Joblox Angry Sound Effect.wav", 0.78f);
                 placePic(secondFrame, "./src/main/resources/visualcontent/angry.gif", 0.17, 0.5, true, false);
                 outputLabel.setText("You already guessed this word correctly. Try again!");
             } else {
@@ -1885,32 +2020,38 @@ panel.add(outputLabel5);
 
                 if (master.foundWords.size() > initialSize) {
                     if (master.isPangram(enteredWord, baseWord)) {
+                        playSound("./src/main/resources/audio/WOO.wav", 0.78f);
+                        placePic(secondFrame, "./src/main/resources/visualcontent/wooyeah.gif", 0.10, 0.4, true, false);
                         master.playerRank = master.playerRank(baseWord, master.totalPoints, acceptedWordList);
 
                         if(master.playerRank != currentRank){
                             // leveled up and is a pangram
-                            playSound("./src/main/resources/audio/notification-1-126509.wav", 0.77f);
+                            playSound("./src/main/resources/audio/notification-1-126509.wav", 0.78f);
                             currentRank = master.playerRank;
                         }else{
                             // is a pangram and did not level up
-                            playSound("./src/main/resources/audio/new-level-142995.wav", 0.77f); 
+                            playSound("./src/main/resources/audio/new-level-142995.wav", 0.78f); 
                         }
                         
                         String enteredWordText = "<font color='#CC9900'>" + enteredWord + "</font> is a valid word, and a <font color='#CC9900'>PANGRAM</font>... Well Done!";
                         outputLabel.setText("<html>" + enteredWordText + "</html>");
                     } else {
+                        placePic(secondFrame, "./src/main/resources/visualcontent/pixelHeart.gif", 0.17, 0.5, true, false);
                         master.playerRank = master.playerRank(baseWord, master.totalPoints, acceptedWordList);
 
                         if(master.playerRank != currentRank){
-                            playSound("./src/main/resources/audio/notification-1-126509.wav", 0.77f);
+                            playSound("./src/main/resources/audio/notification-1-126509.wav", 0.78f);
                             currentRank = master.playerRank;
                         }else{
-                            playSound("./src/main/resources/audio/ding-36029.wav", 0.77f);
+                            playSound("./src/main/resources/audio/ding-36029.wav", 0.78f);
                         }
 
                         String enteredWordText = "<font color='#CC9900'>" + enteredWord + "</font> is a valid word!";
                         outputLabel.setText("<html>" + enteredWordText + "</html>");
                     }
+                    
+                    
+                    
                     master.playerRank = master.playerRank(baseWord, master.totalPoints, acceptedWordList);
                     
                     String labelText = "|  Your current rank is: <font color=#CC9900>" + master.playerRank + "</font>  |  ";
@@ -1921,7 +2062,7 @@ panel.add(outputLabel5);
                     outputLabel5.setText("<html>" + differenceText + "</html>");
                 } else {
                     placePic(secondFrame, "./src/main/resources/visualcontent/angry.gif", 0.17, 0.5, true, false);
-                    playSound("./src/main/resources/audio/Joblox Angry Sound Effect.wav", 0.77f);
+                    playSound("./src/main/resources/audio/Joblox Angry Sound Effect.wav", 0.78f);
                     outputLabel.setText("Invalid word, try again!");
                 }
                 enteredWord = enteredWord.toLowerCase();
@@ -1973,14 +2114,14 @@ panel.add(outputLabel5);
             if (highScores.isHighScore(key, master.totalPoints)) {
                 String userId = JOptionPane.showInputDialog(secondFrame, "New high score! Enter your name to join the leaderboard:");
                 if (userId == null) {
-                    JOptionPane.showMessageDialog(null, "You did not provide a first name. High score was not saved.");
+                    JOptionPane.showMessageDialog(secondFrame, "You did not provide a first name. High score was not saved.");
                 }
                 highScores.saveHighScores(key, master.totalPoints, userId);
                 savePuzzleButton.doClick();
             } else {
-                JFrame frame = new JFrame();
-                JOptionPane.showMessageDialog(frame, "YOUR SCORE WAS NOT A HIGH SCORE :( ", "Information", JOptionPane.INFORMATION_MESSAGE);
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
+                
+                JOptionPane.showMessageDialog(secondFrame, "YOUR SCORE WAS NOT A HIGH SCORE :( ", "Information", JOptionPane.INFORMATION_MESSAGE);
+                secondFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
             }
 
             System.exit(0);
