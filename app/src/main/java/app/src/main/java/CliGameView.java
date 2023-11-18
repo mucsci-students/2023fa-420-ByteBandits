@@ -75,7 +75,7 @@ public class CliGameView {
         System.out.println(yellowColor + "/observestatus" + resetColor + ":  Display your current game status.");
         System.out.println(yellowColor + "/matrixhints" + resetColor + ":    Shows helpful hints for the given puzzle.");
         System.out.println(yellowColor + "/help" + resetColor + ":           Display help information.");
-        System.out.println(yellowColor + "/topscores" + resetColor + ":           Shows the top scores for a puzzle you are currently playing");
+        System.out.println(yellowColor + "/topscores" + resetColor + ":      Shows the top scores for a puzzle you are currently playing");
         System.out.println(yellowColor + "/exit" + resetColor + ":           Quit the game.");
         System.out.println();
         System.out.println(yellowColor + "You can also use tab completion!" + resetColor + "\nSimply press the "
