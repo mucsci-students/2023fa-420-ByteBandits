@@ -445,10 +445,33 @@ public class CliGameModel extends helpers {
      * This function loads up a puzzle from the past.
      */
     public static void loadPuzzle() throws FileNotFoundException {
-        if (baseWord == saveFile.getFormat() && totalPoints == saveFile.getPlayerPoints()) {
-            CliGameView.duplicateLoadMessage();
+        List<String> saveNames = saveFile.getAllSaveNames();
+
+        if (saveNames.isEmpty()) {
+            System.out.println("No saved games found.");
+            return;
         }
-        saveFile.loadGameData(saveFileName);
+
+        System.out.println("Available saved games:");
+        for (int i = 0; i < saveNames.size(); i++) {
+            System.out.println((i + 1) + ". " + saveNames.get(i));
+        }
+
+        System.out.print("Please enter the number of the save file to load: ");
+        int choice = -1;
+        while (choice < 1 || choice > saveNames.size()) {
+            try {
+                choice = Integer.parseInt(console.nextLine());
+                if (choice < 1 || choice > saveNames.size()) {
+                    System.out.println("Invalid selection. Please enter a number between 1 and " + saveNames.size());
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Please enter a valid number.");
+            }
+        }
+
+        String selectedSave = saveNames.get(choice - 1);
+        saveFile.loadGameData(selectedSave);
 
         baseWord = saveFile.getFormat();
         foundWords = saveFile.getFoundWords();
