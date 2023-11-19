@@ -61,10 +61,12 @@ public class CliGameController {
         
         switch (input.toLowerCase()) {
             case "/newpuzzle":
+                model.highScore(model.getBaseWord(), model.getTotalPoints(), "");
                 model.newPuzzle();
                 System.out.println();
                 break;
             case "/basepuzzle":
+                model.highScore(model.getBaseWord(), model.getTotalPoints(), "");
                 model.basePuzzle();
                 System.out.println();
                 break;
@@ -123,6 +125,7 @@ public class CliGameController {
                 }
                 break;
             case "/loadpuzzle":
+                model.highScore(model.getBaseWord(), model.getTotalPoints(), "");
                 model.loadPuzzle();
                 break;
             case "/observestatus":
@@ -144,9 +147,9 @@ public class CliGameController {
                 System.out.println();
                 break;
             case "/exit":
-                System.out.println(model.getBaseWord());
                 model.highScore(model.getBaseWord(), model.getTotalPoints(), "");
                 highScores.displayEntriesForBaseWord(model.getBaseWord());
+                view.exitMessage();
                 System.exit(0);
                 break;
             case "/matrixhints":

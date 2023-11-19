@@ -6,6 +6,9 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -101,37 +104,51 @@ public class highScores {
         return false;
     }
 
-    public static void displayEntriesForBaseWord(String baseWord) {
-        try (BufferedReader reader = new BufferedReader(new FileReader(GAME_DATA_FILENAME))) {
-            StringBuilder jsonData = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                jsonData.append(line).append("\n");
-            }
-    
-            JSONObject jsonObject = new JSONObject(jsonData.toString());
-    
-            String yellowColor = "\u001B[33m";
-            String resetColor = "\u001B[0m";
-    
-            if (jsonObject.has(baseWord)) {
-                JSONArray entries = jsonObject.getJSONArray(baseWord);
-                System.out.println();
-                System.out.println("Name:\t\tScore:");
-    
-                for (int i = 0; i < entries.length(); i++) {
-                    JSONObject entry = entries.getJSONObject(i);
-                    String name = entry.getString("userId");
-                    int score = entry.getInt("score");
-                    System.out.println((i + 1) + ". " + name + "\t" + score);
-                }
-            } else {
-                System.out.println("NO HIGH SCORES FOR THIS WORD");
-            }
-        } catch (IOException | JSONException e) {
-            e.printStackTrace();
+public static void displayEntriesForBaseWord(String baseWord) {
+    try (BufferedReader reader = new BufferedReader(new FileReader(GAME_DATA_FILENAME))) {
+        StringBuilder jsonData = new StringBuilder();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            jsonData.append(line).append("\n");
         }
+
+        JSONObject jsonObject = new JSONObject(jsonData.toString());
+
+        String yellowColor = "\u001B[33m";
+        String resetColor = "\u001B[0m";
+
+        if (baseWord.equals("       ")) {
+            return;
+        }
+
+        if (jsonObject.has(baseWord)) {
+            JSONArray entries = jsonObject.getJSONArray(baseWord);
+            List<JSONObject> entryList = new ArrayList<>();
+
+            for (int i = 0; i < entries.length(); i++) {
+                entryList.add(entries.getJSONObject(i));
+            }
+
+            Collections.sort(entryList, Comparator.comparingInt(o -> o.getInt("score")));
+            Collections.reverse(entryList);
+
+            System.out.println();
+            System.out.printf("%18s\n", "HIGH SCORES");
+            System.out.printf("%-10s%16s\n","Name:", "Score:");
+
+            for (int i = 0; i < entryList.size(); i++) {
+                JSONObject entry = entryList.get(i);
+                String name = entry.getString("userId");
+                int score = entry.getInt("score");
+                System.out.printf("%d%-10s%12s%s\n", (i + 1), "." + name, score, " pts");
+            }
+        } else {
+            System.out.println("NO HIGH SCORES FOR THIS WORD");
+        }
+    } catch (IOException | JSONException e) {
+        e.printStackTrace();
     }
+}
 
     public static boolean isHighScore(String baseWord, int totalPoints) {
         try (BufferedReader reader = new BufferedReader(new FileReader(GAME_DATA_FILENAME))) {
@@ -140,7 +157,7 @@ public class highScores {
             while ((line = reader.readLine()) != null) {
                 jsonData.append(line).append("\n");
             }
-    
+            
             JSONObject allData = new JSONObject(jsonData.toString());
             
             if(totalPoints == 0){

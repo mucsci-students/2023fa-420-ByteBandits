@@ -384,7 +384,11 @@ public class CliGameModel extends helpers {
     }
 
       public static void highScore(String baseWord, int totalPoints, String userId) {
-    
+        
+        if (baseWord == "       ") {
+            return;
+        }
+
         if (highScores.isHighScore(baseWord, totalPoints)) {
             CliGameView.highScore();
             CliGameView.enterUserId();
@@ -392,8 +396,6 @@ public class CliGameModel extends helpers {
     
             highScores.saveHighScores(baseWord, totalPoints, userId);
     
-            CliGameView.exitMessage();
-        } else {
             CliGameView.exitMessage();
         }
     }
