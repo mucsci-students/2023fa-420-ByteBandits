@@ -42,10 +42,12 @@ public class playerData {
         return new String(original);
     }
 
-    public void saveGameData(String saveName, String baseWord, String format, List<String> foundWords, int playerPoints, String requiredLetter, int maxPoints, String author, List<String> wordList, boolean encrypt) throws Exception {
+    public void saveGameData(String saveName, String baseWord, String format, List<String> foundWords, int playerPoints,
+            String requiredLetter, int maxPoints, String author, List<String> wordList, boolean encrypt)
+            throws Exception {
         JSONObject allData;
         File file = new File(GAME_DATA_FILENAME);
-        
+
         if (file.exists()) {
             try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
                 String content = reader.readLine();
@@ -56,7 +58,7 @@ public class playerData {
         } else {
             allData = new JSONObject(); // Start with an empty JSONObject if the file doesn't exist
         }
-    
+
         JSONObject gameData = new JSONObject();
         gameData.put("baseWord", baseWord);
         gameData.put("format", format);
@@ -64,17 +66,17 @@ public class playerData {
         gameData.put("playerPoints", playerPoints);
         gameData.put("requiredLetter", requiredLetter);
         gameData.put("maxPoints", maxPoints);
-        gameData.put("author", author); 
-    
+        gameData.put("author", author);
+
         if (encrypt) {
             String encryptedWordList = encrypt(new JSONArray(wordList).toString());
             gameData.put("secretWordList", encryptedWordList);
         } else {
             gameData.put("wordList", new JSONArray(wordList));
         }
-    
+
         allData.put(saveName, gameData);
-    
+
         try (FileWriter fileWriter = new FileWriter(GAME_DATA_FILENAME)) {
             fileWriter.write(allData.toString());
         }

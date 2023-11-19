@@ -8,7 +8,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class CustomButtonBuilder extends mainframe{
+public class CustomButtonBuilder extends mainframe {
     private String text;
     private boolean isEnabled;
     private Color background;
@@ -69,4 +69,3 @@ public class CustomButtonBuilder extends mainframe{
         return button;
     }
 }
-

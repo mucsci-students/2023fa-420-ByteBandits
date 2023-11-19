@@ -12,13 +12,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 public class highScores {
-    
+
     public static final String GAME_DATA_FILENAME = "high_scores.json";
     private static final int MAX_ENTRIES_PER_WORD = 10;
     private static boolean newHighScore = false;
     public static List<String> highScores;
 
-    public static boolean saveHighScores (String baseWord, int totalPoints, String userId) {
+    public static boolean saveHighScores(String baseWord, int totalPoints, String userId) {
         try {
 
             JSONObject allData;
@@ -108,17 +108,17 @@ public class highScores {
             while ((line = reader.readLine()) != null) {
                 jsonData.append(line).append("\n");
             }
-    
+
             JSONObject jsonObject = new JSONObject(jsonData.toString());
-    
+
             String yellowColor = "\u001B[33m";
             String resetColor = "\u001B[0m";
-    
+
             if (jsonObject.has(baseWord)) {
                 JSONArray entries = jsonObject.getJSONArray(baseWord);
                 System.out.println();
                 System.out.println("Name:\t\tScore:");
-    
+
                 for (int i = 0; i < entries.length(); i++) {
                     JSONObject entry = entries.getJSONObject(i);
                     String name = entry.getString("userId");
@@ -140,23 +140,24 @@ public class highScores {
             while ((line = reader.readLine()) != null) {
                 jsonData.append(line).append("\n");
             }
-    
+
             JSONObject allData = new JSONObject(jsonData.toString());
-            
-            if(totalPoints == 0){
+
+            if (totalPoints == 0) {
                 System.out.println("\nYour score was not a high score :(");
                 return false;
             }
 
             if (allData.has(baseWord)) {
                 JSONArray scoresArray = allData.getJSONArray(baseWord);
-    
+
                 for (int i = 0; i < scoresArray.length(); i++) {
                     JSONObject scoreObj = scoresArray.getJSONObject(i);
                     int score = scoreObj.getInt("score");
-    
-                    if (totalPoints > score || (totalPoints == score &&  scoresArray.length() != MAX_ENTRIES_PER_WORD) || totalPoints < score) {
-                        return true; 
+
+                    if (totalPoints > score || (totalPoints == score && scoresArray.length() != MAX_ENTRIES_PER_WORD)
+                            || totalPoints < score) {
+                        return true;
                     }
                 }
                 return false;
@@ -166,7 +167,7 @@ public class highScores {
         } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
-    
+
         return false;
     }
 }
