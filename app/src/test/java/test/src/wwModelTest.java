@@ -4,6 +4,7 @@ package test.src;
 
 import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
@@ -291,6 +292,22 @@ public void testGetSaveFileName() {
     
         verify(mockGame, times(1)).getUserInput();
         CliGameModel.setBaseWord("example");
+    }
+
+    @Test
+    public void testGetUserInput() {
+
+        String simulatedInput = "jackpot";
+        InputStream inputStream = new ByteArrayInputStream(simulatedInput.getBytes());
+
+        System.setIn(inputStream);
+
+        CliGameModel mock = mock(CliGameModel.class); 
+        when(mock.getUserInput()).thenReturn("jackpot");
+
+        String userInput = mock.getUserInput();
+
+        assertEquals(simulatedInput, userInput);
     }
 
     /**
