@@ -1084,7 +1084,7 @@ public class mainframe {
                         savePuzzleButton.doClick();
                     } else {
 
-                        JOptionPane.showMessageDialog(secondFrame, "YOUR SCORE FOR THIS GAME WAS NOT A HIGH SCORE :( ", "Information",
+                        JOptionPane.showMessageDialog(secondFrame, "YOUR SCORE FOR THIS GAME WAS NOT A HIGH SCORE :( ", "High Scores",
                                 JOptionPane.INFORMATION_MESSAGE);
                         secondFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                     }
@@ -1210,7 +1210,7 @@ public class mainframe {
                     savePuzzleButton.doClick();
                 } else {
 
-                    JOptionPane.showMessageDialog(secondFrame, "YOUR SCORE FOR THIS GAME WAS NOT A HIGH SCORE :( ", "Information",
+                    JOptionPane.showMessageDialog(secondFrame, "YOUR SCORE FOR THIS GAME WAS NOT A HIGH SCORE :( ", "High Scores",
                             JOptionPane.INFORMATION_MESSAGE);
                     secondFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 }
@@ -1632,7 +1632,7 @@ public class mainframe {
                         savePuzzleButton.doClick();
                     } else {
 
-                        JOptionPane.showMessageDialog(secondFrame, "YOUR SCORE FOR THIS GAME WAS NOT A HIGH SCORE :( ", "Information",
+                        JOptionPane.showMessageDialog(secondFrame, "YOUR SCORE FOR THIS GAME WAS NOT A HIGH SCORE :( ", "High Scores",
                                 JOptionPane.INFORMATION_MESSAGE);
                         secondFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                     }
@@ -2147,22 +2147,6 @@ public class mainframe {
             }
         });
 
-        /**********************************************************************/
-        /************************ EXIT BUTTON LOGIC *****************************/
-        exitButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (highScores.isHighScore(key, master.totalPoints)) {
-                    String userId = JOptionPane.showInputDialog(secondFrame,
-                            "New high score! Enter your name to join the leaderboard:");
-                    if (userId == null) {
-                        JOptionPane.showMessageDialog(secondFrame,
-                                "You did not provide a first name. High score was not saved.");
-                    }
-                    highScores.saveHighScores(key, master.totalPoints, userId);
-                    savePuzzleButton.doClick();
-                } else {
-
 
     /**********************************************************************/
     /************************EXIT BUTTON LOGIC*****************************/
@@ -2182,7 +2166,8 @@ public class mainframe {
                 savePuzzleButton.doClick();
             } else {
                 
-                JOptionPane.showMessageDialog(secondFrame, "YOUR SCORE FOR THIS GAME WAS NOT A HIGH SCORE :( ", "Information", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(secondFrame, "YOUR SCORE FOR THIS GAME WAS NOT A HIGH SCORE :( ", "High Scores",
+                        JOptionPane.INFORMATION_MESSAGE);
                 secondFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
             }
 
