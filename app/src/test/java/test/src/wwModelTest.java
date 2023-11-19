@@ -282,16 +282,16 @@ public void testGetSaveFileName() {
     * Test to verify that if the user inputs a valid 7-letter word for baseWord, 
     * the baseWord in the game model should be set to that word.
     */
-/**     @Test
+    @Test
     public void testBasePuzzleForCorrectWordLength() throws FileNotFoundException, InterruptedException {
         CliGameModel mockGame = mock(CliGameModel.class);
         when(mockGame.getUserInput()).thenReturn("example");
     
-        mockGame.basePuzzle();
+        mockGame.getUserInput();
     
         verify(mockGame, times(1)).getUserInput();
         CliGameModel.setBaseWord("example");
-    // /
+    }
 
     /**
     * Test to verify that if the user inputs a word that is not 7 letters in length, 
