@@ -9,6 +9,8 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import java.awt.Dialog;
+import java.awt.Dimension;
+
 
 public class RanksDialogBuilder {
     private JDialog ranksDialog;
@@ -47,7 +49,6 @@ public class RanksDialogBuilder {
         ranksDialog.setModalityType(Dialog.ModalityType.MODELESS);
         ranksDialog.setAlwaysOnTop(true);
         ranksDialog.setFocusableWindowState(false);
-
         ranksDialog.setSize(400, 630);
         ranksDialog.setLocationRelativeTo(parentFrame);
 
@@ -69,7 +70,10 @@ public class RanksDialogBuilder {
             }
         }
 
-        ranksDialog.add(new JScrollPane(ranksArea));
+        // Wrap the text area in a JScrollPane
+        JScrollPane scrollPane = new JScrollPane(ranksArea);
+        scrollPane.setPreferredSize(new Dimension(380, 250)); // Set the preferred size of the scroll pane
+        ranksDialog.setContentPane(scrollPane);
         return ranksDialog;
     }
 }

@@ -133,6 +133,10 @@ public class CliGameController {
                 view.puzzleStatus(model.playerRank(model.getBaseWord(), model.getTotalPoints(), model.getAcceptedWordList()), model.getTotalPoints());
                 break;
             case "/topscores":
+                error = model.errorFirst();
+                if (error) {
+                    break;
+                }
                 highScores.displayEntriesForBaseWord(model.getBaseWord());
                 break;
             case "/help":
