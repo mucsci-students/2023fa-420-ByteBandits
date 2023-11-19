@@ -941,13 +941,13 @@ panel.add(outputLabel5);
                                     // leveled up and is a pangram
                                     playSound("./src/main/resources/audio/notification-1-126509.wav", 0.78f);
                                     playSound("./src/main/resources/audio/WOO.wav", 0.66f);
-                                    placePic(secondFrame, "./src/main/resources/visualcontent/wooyeah.gif", 0.10, 0.4, true, false);
+                                    placePic(secondFrame, "./src/main/resources/visualcontent/wooyeah.gif", 0.40, 0.50, true, false);
                                     currentRank = master.playerRank;
                                 }else{
                                     // is a pangram and did not level up
                                     playSound("./src/main/resources/audio/new-level-142995.wav", 0.78f); 
                                     playSound("./src/main/resources/audio/WOO.wav", 0.66f);
-                                    placePic(secondFrame, "./src/main/resources/visualcontent/wooyeah.gif", 0.10, 0.4, true, false);
+                                    placePic(secondFrame, "./src/main/resources/visualcontent/wooyeah.gif", 0.40, 0.50, true, false);
                                 }
             
                                 String enteredWordText = "<font color='#CC9900'>" + enteredWord + "</font> is a valid word, and a <font color='#CC9900'>PANGRAM</font>... Well Done!";
@@ -1526,12 +1526,10 @@ panel.add(outputLabel5);
                     boolean encrypt = (encryptOption == JOptionPane.YES_OPTION);
         
                     try {
-                        List<String> possibleWords = CliGameModel.acceptedWords(baseWord, reqLetter);
+                        List<String> possibleWords = master.acceptedWords(key, reqLetter);
                         int maxPoints = helpers.possiblePoints(baseWord, possibleWords);
-
-                        //System.out.print("DEBUG: Possible words in save for mainframe: " + possibleWords);
+                        //System.out.print("DEBUG: Possible words in save for mainframe: " + possibleWords + " baseword: " + baseWord + " reqLetter: " + reqLetter);
                         playerGameData.saveGameData(saveFileName, key, baseWord, master.foundWords, master.totalPoints, "" + reqLetter, maxPoints, author, possibleWords, encrypt);
-
                     }
                     catch (FileNotFoundException e1) {
                         System.err.println("File not found " + e1.getMessage());
