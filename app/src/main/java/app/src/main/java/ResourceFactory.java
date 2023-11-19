@@ -11,7 +11,7 @@ import java.util.Scanner;
  * for these methods.
  */
 public interface ResourceFactory {
-    
+
     /**
      * Retrieves a scanner instance for reading the dictionary resource.
      * 
@@ -19,7 +19,7 @@ public interface ResourceFactory {
      * @throws FileNotFoundException if the dictionary resource is not found.
      */
     Scanner getDictionaryResource() throws FileNotFoundException;
-    
+
     /**
      * Retrieves a scanner instance for reading the game data resource.
      * 
@@ -30,8 +30,10 @@ public interface ResourceFactory {
 }
 
 /**
- * FileResourceFactory is a concrete implementation of the ResourceFactory interface.
- * This class is responsible for creating Scanner instances for specific file resources.
+ * FileResourceFactory is a concrete implementation of the ResourceFactory
+ * interface.
+ * This class is responsible for creating Scanner instances for specific file
+ * resources.
  */
 class FileResourceFactory implements ResourceFactory {
 
@@ -47,10 +49,12 @@ class FileResourceFactory implements ResourceFactory {
     }
 
     /**
-     * Returns a Scanner instance that reads from the game data resource within the CliGameModel class.
+     * Returns a Scanner instance that reads from the game data resource within the
+     * CliGameModel class.
      * 
      * @return A Scanner instance for reading the game data resource.
-     * @throws FileNotFoundException if the /4-15_Dictionary.txt resource is not found within CliGameModel.
+     * @throws FileNotFoundException if the /4-15_Dictionary.txt resource is not
+     *                               found within CliGameModel.
      */
     @Override
     public Scanner getGameDataResource() throws FileNotFoundException {

@@ -23,6 +23,7 @@ public class CliGameController {
         this.model = model;
         this.view = view;
     }
+
     public static CliGameController getInstance(CliGameModel model, CliGameView view) {
         if (instance == null) {
             instance = new CliGameController(model, view);
@@ -36,29 +37,29 @@ public class CliGameController {
 
         model.initGame();
         view.displayIntro();
-   
+
         try {
             Terminal terminal = TerminalBuilder.builder().dumb(true).system(true).build();
             lineReader = LineReaderBuilder.builder()
                     .terminal(terminal)
-                    .completer(new CliGameCompleter()) 
+                    .completer(new CliGameCompleter())
                     .build();
 
             while (true) {
                 System.out.print("\u001B[33m" + ">" + "\u001B[0m");
                 String input = lineReader.readLine();
-                
+
                 input = input.trim();
                 processInput(input);
-                
+
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void processInput(String input) throws FileNotFoundException, InterruptedException{
-        
+    private void processInput(String input) throws FileNotFoundException, InterruptedException {
+
         switch (input.toLowerCase()) {
             case "/newpuzzle":
                 model.highScore(model.getBaseWord(), model.getTotalPoints(), "");
@@ -75,7 +76,8 @@ public class CliGameController {
                 if (error) {
                     break;
                 }
-                model.guess(model.getBaseWord(), model.getAcceptedWordList(), model.playerRank(model.getBaseWord(), model.getTotalPoints(), model.getAcceptedWordList()));
+                model.guess(model.getBaseWord(), model.getAcceptedWordList(),
+                        model.playerRank(model.getBaseWord(), model.getTotalPoints(), model.getAcceptedWordList()));
                 break;
             case "/viewpuzzle":
                 error = model.errorFirst();
@@ -99,7 +101,7 @@ public class CliGameController {
                 CliGameView.displaMessageShuffle();
                 model.shuffle(model.getBaseWord(), model.getReqLetter());
                 break;
-                case "/cleansave":
+            case "/cleansave":
                 error = model.errorFirst();
                 if (error) {
                     break;
@@ -111,7 +113,7 @@ public class CliGameController {
                     System.err.println("An error occurred while saving the puzzle: " + e.getMessage());
                 }
                 break;
-            
+
             case "/advancedsave":
                 error = model.errorFirst();
                 if (error) {
@@ -133,7 +135,9 @@ public class CliGameController {
                 if (error) {
                     break;
                 }
-                view.puzzleStatus(model.playerRank(model.getBaseWord(), model.getTotalPoints(), model.getAcceptedWordList()), model.getTotalPoints());
+                view.puzzleStatus(
+                        model.playerRank(model.getBaseWord(), model.getTotalPoints(), model.getAcceptedWordList()),
+                        model.getTotalPoints());
                 break;
             case "/topscores":
                 error = model.errorFirst();
