@@ -15,6 +15,14 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
+
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import javax.swing.*;
+
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import java.awt.*;
@@ -144,10 +152,13 @@ public class mainframe {
     
     private JDialog howToPlayDialog;
     private static JDialog foundwords;
+    private static JDialog highscores;
 
     private JDialog ranks;
     //private JProgressBar progressBar = new JProgressBar();
     private JDialog hints;
+
+    private String key;
 
     final private Font mainFont = new Font("SansSerif", Font.BOLD, 18);
     final private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -210,9 +221,59 @@ public class mainframe {
             ex.printStackTrace();
         }
     }
-    
-    
 
+    public static void updateHighScoresDialog(String word) {
+        if (highscores == null) {
+            highscores = new JDialog(mainFrame, "HIGH SCORES", true);
+            highscores.setModalityType(Dialog.ModalityType.MODELESS);
+            highscores.setAlwaysOnTop(true);
+            highscores.setFocusableWindowState(false);
+
+            highscores.setSize(400, 300);
+            highscores.setLocationRelativeTo(mainFrame);
+    
+            JTextArea highScoresArea = new JTextArea();
+            highScoresArea.setBackground(pastelYellow);
+            highScoresArea.setEditable(false);
+            highScoresArea.setWrapStyleWord(true);
+            highScoresArea.setLineWrap(true);
+            highScoresArea.setFont(new Font("SansSerif", Font.PLAIN, 16));
+            highScoresArea.setForeground(Color.BLACK);
+    
+            JSONObject jsonObject;
+            try (BufferedReader reader = new BufferedReader(new FileReader(highScores.GAME_DATA_FILENAME))) {
+                StringBuilder jsonData = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    jsonData.append(line).append("\n");
+                }
+    
+                if (jsonData.length() == 0) {
+                    jsonObject = new JSONObject();
+                } else {
+                    jsonObject = new JSONObject(jsonData.toString());
+                }
+    
+                if (jsonObject.has(word)) {
+                    JSONArray entries = jsonObject.getJSONArray(word);
+                    for (int i = 0; i < entries.length(); i++) {
+                        JSONObject entry = entries.getJSONObject(i);
+                        String name = entry.getString("userId");
+                        int score = entry.getInt("score");
+                        highScoresArea.append("Name: " + name + "\t\tScore: " + score + "\n");
+                    }
+                } else {
+                    highScoresArea.append("NO HIGH SCORES FOR THIS WORD");
+                }
+            } catch (IOException | JSONException e) {
+                e.printStackTrace();
+            }
+    
+            JScrollPane scrollPane = new JScrollPane(highScoresArea);
+            highscores.add(scrollPane);
+        }
+    }
+    
     /**********************************************************/
     /**********************************************************/
 
@@ -261,6 +322,7 @@ public class mainframe {
         if (clip != null && clip.isRunning()) {
             clip.stop();
             clip.close();
+
         }
     }
 
@@ -432,11 +494,11 @@ public class mainframe {
     
         // "PLAY" button
        
-        CustomButton playButton = new CustomButton("PLAY", false);
+        CustomButton playButton = new CustomButton("ENTER THE HIVE", false);
         playButton.setBackground(new Color(255, 160, 96));
         playButton.setOpaque(true); // Make the button opaque
         playButton.setFont(new Font("SansSerif", Font.BOLD, 24));
-        playButton.setPreferredSize(new Dimension(200, 60)); // Increase the width
+        playButton.setPreferredSize(new Dimension(250, 60)); // Increase the width
     playButton.addActionListener(new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -505,9 +567,7 @@ public class mainframe {
         buttonPanel2.setOpaque(false);
         buttonPanel2.setBounds(120, 80, 100, 100);
 
-         // Create a panel for the buttons at the top
-         JPanel buttonPanel3 = new JPanel(new GridBagLayout());
-         buttonPanel3.setOpaque(false);
+        
 
         //progressBar.setPreferredSize(new Dimension(350, 50));
         // Create buttons for the second screen
@@ -533,6 +593,7 @@ public class mainframe {
         CustomButton exitButton = new CustomButton("EXIT", false);
         CustomButton captureScreenshotButton = new CustomButton("CAPTURE", false);
         CustomButton hintsButton = new CustomButton("HINTS", false);
+        CustomButton highScoreButton = new CustomButton("HIGH SCORES", false);
         CustomButton letterbutton1 = new CustomButton(bW1, false);
         CustomButton letterbutton2 = new CustomButton(bW2, false);
         CustomButton letterbutton3 = new CustomButton(bW3, false);
@@ -556,6 +617,7 @@ public class mainframe {
         backSpaceButton.setEnabled(false);
         enterGuessButton.setEnabled(false);
         rankBreakDownButton.setEnabled(false);
+        highScoreButton.setEnabled(true);
 
 
         
@@ -574,6 +636,7 @@ public class mainframe {
         enterGuessButton.setBackground(pastelYellow);
         hintsButton.setBackground(pastelYellow);
         exitButton.setBackground(pastelYellow);
+        highScoreButton.setBackground(pastelYellow);
 
         letterbutton1.setBackground(pastelYellow);
         letterbutton2.setBackground(pastelYellow);
@@ -606,6 +669,7 @@ public class mainframe {
         enterGuessButton.setPreferredSize(buttonSize);
         hintsButton.setPreferredSize(buttonSize);
         exitButton.setPreferredSize(buttonSize);
+        highScoreButton.setPreferredSize(buttonSize);
 
         Font buttonFont = new Font("SansSerif", Font.BOLD, 12);
 
@@ -622,6 +686,7 @@ public class mainframe {
         enterGuessButton.setFont(buttonFont);
         hintsButton.setFont(buttonFont);
         exitButton.setFont(buttonFont);
+        highScoreButton.setFont(buttonFont);
 
         letterbutton1.setFont(buttonFont);
         letterbutton2.setFont(buttonFont);
@@ -830,6 +895,7 @@ panel.add(outputLabel5);
                     baseWord = baseWord.toLowerCase();
         
                     if (master.foundWords.contains(enteredWord)) {
+                        playSound("./src/main/resources/audio/Joblox Angry Sound Effect.wav", 0.77f);
                         placePic(secondFrame, "./src/main/resources/visualcontent/angry.gif", 0.17, 0.5, true, false);
                         outputLabel.setText("You already guessed this word correctly. Try again!");
                         
@@ -847,13 +913,13 @@ panel.add(outputLabel5);
                                     // leveled up and is a pangram
                                     playSound("./src/main/resources/audio/notification-1-126509.wav", 0.77f);
                                     playSound("./src/main/resources/audio/WOO.wav", 0.66f);
-                                    placePic(secondFrame, "./src/main/resources/visualcontent/wooyeah.gif", 0.10, 0.4, true, false);
+                                    placePic(secondFrame, "./src/main/resources/visualcontent/wooyeah.gif", 0.40, 0.50, true, false);
                                     currentRank = master.playerRank;
                                 }else{
                                     // is a pangram and did not level up
                                     playSound("./src/main/resources/audio/new-level-142995.wav", 0.77f); 
                                     playSound("./src/main/resources/audio/WOO.wav", 0.66f);
-                                    placePic(secondFrame, "./src/main/resources/visualcontent/wooyeah.gif", 0.10, 0.4, true, false);
+                                    placePic(secondFrame, "./src/main/resources/visualcontent/wooyeah.gif", 0.40, 0.50, true, false);
                                 }
             
                                 String enteredWordText = "<font color='#CC9900'>" + enteredWord + "</font> is a valid word, and a <font color='#CC9900'>PANGRAM</font>... Well Done!";
@@ -870,13 +936,10 @@ panel.add(outputLabel5);
                                 }
                                 String enteredWordText = "<font color='#CC9900'>" + enteredWord + "</font> is a valid word!";
                                 outputLabel.setText("<html>" + enteredWordText + "</html>");
-
+                            }
 
                             // Show heart
                             placePic(secondFrame, "./src/main/resources/visualcontent/pixelheart.gif", 0.17, 0.5, true, false);
-                                
-                            }
-                            
                             master.playerRank = master.playerRank(baseWord, master.totalPoints, acceptedWordList);
 
                             
@@ -892,7 +955,7 @@ panel.add(outputLabel5);
                             outputLabel5.setText("<html>" + differenceText + "</html>");
                         } else {
                             placePic(secondFrame, "./src/main/resources/visualcontent/angry.gif", 0.17, 0.5, true, false);
-                            playSound("./src/main/resources/audio/wrong-47985.wav", 0.77f);
+                            playSound("./src/main/resources/audio/Joblox Angry Sound Effect.wav", 0.77f);
                             outputLabel.setText("Invalid word, try again!");
 
                         }
@@ -1002,7 +1065,8 @@ panel.add(outputLabel5);
                 } catch (FileNotFoundException e1) {
                     e1.printStackTrace();
                 }
-
+                updateHighScoresDialog(baseWord);
+                key = baseWord;
                 master.foundWords = new ArrayList<>();
                 //progressBar.setMinimum(0);
                 //progressBar.setMaximum(helpers.possiblePoints(baseWord, acceptedWordList));
@@ -1110,6 +1174,7 @@ panel.add(outputLabel5);
                 }
 
             JTextField inputField = new JTextField();
+            
             inputField.setPreferredSize(new Dimension(200, 30));
     
             Object[] message = {
@@ -1136,11 +1201,15 @@ panel.add(outputLabel5);
     
             // Retrieve the result after the dialog is closed
             Object result = optionPane.getValue();
-    
             // Check if the user clicked "OK"
             if (result instanceof Integer && (Integer) result == JOptionPane.OK_OPTION) {
                 String userWord = inputField.getText().toLowerCase();
+                updateHighScoresDialog(userWord);
+                key = userWord;
+
+                System.out.println(key);
                 if (userWord.contains(" ")) {
+
                     JOptionPane.showMessageDialog(secondFrame, "Bzzt. Make sure there are no spaces in your word! Bzz.");
                     return;
                 }
@@ -1345,10 +1414,10 @@ panel.add(outputLabel5);
                     boolean encrypt = (encryptOption == JOptionPane.YES_OPTION);
         
                     try {
-                        List<String> possibleWords = master.acceptedWords(baseWord, reqLetter);
+                        List<String> possibleWords = master.acceptedWords(key, reqLetter);
                         int maxPoints = helpers.possiblePoints(baseWord, possibleWords);
                         //System.out.print("DEBUG: Possible words in save for mainframe: " + possibleWords + " baseword: " + baseWord + " reqLetter: " + reqLetter);
-                        playerGameData.saveGameData(saveFileName, baseWord, master.foundWords, master.totalPoints, "" + reqLetter, maxPoints, author, possibleWords, encrypt);
+                        playerGameData.saveGameData(saveFileName, key, baseWord, master.foundWords, master.totalPoints, "" + reqLetter, maxPoints, author, possibleWords, encrypt);
                     }
                     catch (FileNotFoundException e1) {
                         System.err.println("File not found " + e1.getMessage());
@@ -1473,8 +1542,10 @@ panel.add(outputLabel5);
 
                 playerGameData.loadGameData(chosenSave); // Load selected game data 
                 // Load game variables from playerGameData
-                baseWord = playerGameData.getBaseWord();
-                shuffleWord = playerGameData.getBaseWord();
+                baseWord = playerGameData.getFormat();
+                updateHighScoresDialog(playerGameData.getBaseWord());
+                key = playerGameData.getBaseWord();
+                shuffleWord = playerGameData.getFormat();
                 List<String> foundWords = playerGameData.getFoundWords();
                 CliGameModel.setTotalPoints(playerGameData.getPlayerPoints());
                 reqLetter = playerGameData.getRequiredLetter().charAt(0);
@@ -1766,6 +1837,14 @@ panel.add(outputLabel5);
 
     /***********************************************************************/
 
+    highScoreButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            highscores.setVisible(true);
+            textPane.requestFocusInWindow();
+        }
+    });
+
     /*********************BACKSPACE BUTTON LOGIC****************************/
     
     backSpaceButton.addActionListener(new ActionListener() {
@@ -1794,6 +1873,8 @@ panel.add(outputLabel5);
             baseWord = baseWord.toLowerCase();
         
             if (master.foundWords.contains(enteredWord)) {
+                playSound("./src/main/resources/audio/Joblox Angry Sound Effect.wav", 0.77f);
+                placePic(secondFrame, "./src/main/resources/visualcontent/angry.gif", 0.17, 0.5, true, false);
                 outputLabel.setText("You already guessed this word correctly. Try again!");
             } else {
                 enteredWord = enteredWord.toUpperCase();
@@ -1837,7 +1918,8 @@ panel.add(outputLabel5);
                     String differenceText = "You need  <font color='#CC9900'>" + helpers.difference + "</font>" +  " points to reach next rank.";
                     outputLabel5.setText("<html>" + differenceText + "</html>");
                 } else {
-                    playSound("./src/main/resources/audio/wrong-47985.wav", 0.77f);
+                    placePic(secondFrame, "./src/main/resources/visualcontent/angry.gif", 0.17, 0.5, true, false);
+                    playSound("./src/main/resources/audio/Joblox Angry Sound Effect.wav", 0.77f);
                     outputLabel.setText("Invalid word, try again!");
                 }
                 enteredWord = enteredWord.toLowerCase();
@@ -1883,13 +1965,60 @@ panel.add(outputLabel5);
 
     /**********************************************************************/
     /************************EXIT BUTTON LOGIC*****************************/
-    
-        exitButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.exit(0);
+    exitButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (highScores.isHighScore(key, master.totalPoints)) {
+                String userId = JOptionPane.showInputDialog(secondFrame, "New high score! Enter your name to join the leaderboard:");
+                if (userId == null) {
+                    JOptionPane.showMessageDialog(null, "You did not provide a first name. High score was not saved.");
+                }
+                highScores.saveHighScores(key, master.totalPoints, userId);
+                savePuzzleButton.doClick();
+            } else {
+                JFrame frame = new JFrame();
+                JOptionPane.showMessageDialog(frame, "YOUR SCORE WAS NOT A HIGH SCORE :( ", "Information", JOptionPane.INFORMATION_MESSAGE);
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
             }
-        });
+
+            System.exit(0);
+        }
+    });
+    
+
+    /**********************************************************************/
+    /**********************************************************************/
+    
+    /**********************************************************************/
+    /**********************************************************************/  
+
+        // Add buttons to the button panel view
+        buttonPanel.add(shufflePuzzle);
+        buttonPanel.add(newUserPuzzleButton);
+        buttonPanel.add(newPuzzleButton);
+        buttonPanel.add(savePuzzleButton);
+        buttonPanel.add(loadPuzzleButton);
+        buttonPanel.add(howToPlayButton);
+        buttonPanel.add(foundWordsButton);
+        buttonPanel.add(captureScreenshotButton);
+
+        buttonPanel.add(rankBreakDownButton);
+        buttonPanel.add(backSpaceButton);
+        buttonPanel.add(enterGuessButton);
+
+        buttonPanel.add(highScoreButton);
+        buttonPanel.add(hintsButton);
+        buttonPanel.add(exitButton);
+
+        buttonPanel2.add(letterbutton1);
+        buttonPanel2.add(letterbutton2);
+        buttonPanel2.add(letterbutton3);
+        buttonPanel2.add(letterbutton4);
+        buttonPanel2.add(letterbutton5);
+        buttonPanel2.add(letterbutton6);
+        buttonPanel2.add(letterbutton7);
+        //rankPanel.add(progressBar);
+
     
     /**********************************************************************/
     /**********************************************************************/  
@@ -1917,76 +2046,20 @@ panel.add(outputLabel5);
             buttonPanel.add(exitButton);
 
 
+        // Create a panel for the buttons at the top
+         JPanel buttonPanel3 = new JPanel(new GridBagLayout());
+         buttonPanel3.setOpaque(false);
+
+
         // BP3
-            Insets buttonInsets1 = new Insets(-500, 300, 0, 300);
-            Insets buttonInsets2 = new Insets(-300, 0, 0, 0);
+        addResponsiveButton(foundWordsButton, 0.04, 0.038);
+        addResponsiveButton(rankBreakDownButton, 0.14, 0.038);
+        addResponsiveButton(backSpaceButton, 0.225, 0.22);
+        addResponsiveButton(hintsButton, 0.8, 0.038);
+        addResponsiveButton(enterGuessButton, 0.695, 0.22);
+        addResponsiveButton(highScoreButton, 0.9, 0.038);
+        addResponsiveButton(shufflePuzzle, 0.463, 0.31);
 
-            Insets buttonInsets3 = new Insets(-900, -700, 0, 0);
-            Insets buttonInsets4 = new Insets(-900, -1200, 0, 0);
-
-            Insets buttonInsets5 = new Insets(-900, 0, 0, -700);
-            Insets buttonInsets6 = new Insets(-900, 0, 0, -1200);
-        
-        
-            GridBagConstraints gbcBackSpace = new GridBagConstraints();
-            gbcBackSpace.gridx = 0;  
-            gbcBackSpace.gridy = 0;  
-        
-            gbcBackSpace.insets = buttonInsets1;
-            buttonPanel3.add(backSpaceButton, gbcBackSpace);
-        
-        
-            GridBagConstraints gbcEnterGuess = new GridBagConstraints();
-            gbcEnterGuess.gridx = 2;  
-            gbcEnterGuess.gridy = 0;  
-
-            gbcEnterGuess.insets = buttonInsets1;
-            buttonPanel3.add(enterGuessButton, gbcEnterGuess);
-
-
-            GridBagConstraints gbcShufflePuzzle = new GridBagConstraints();
-            gbcShufflePuzzle.gridx = 1;  
-            gbcShufflePuzzle.gridy = 2;  
-
-            gbcShufflePuzzle.insets = buttonInsets2;
-            buttonPanel3.add(shufflePuzzle, gbcShufflePuzzle);
-
-
-            GridBagConstraints gbcFoundWords = new GridBagConstraints();
-            gbcFoundWords.gridx = 0;  
-            gbcFoundWords.gridy = 1;  
-
-            gbcFoundWords.insets = buttonInsets3;
-            buttonPanel3.add(foundWordsButton, gbcFoundWords);
-
-
-            GridBagConstraints gbcRanks = new GridBagConstraints();
-            gbcRanks.gridx = 1;  
-            gbcRanks.gridy = 1;  
-
-            gbcRanks.insets = buttonInsets4;
-            buttonPanel3.add(rankBreakDownButton, gbcRanks);
-
-
-            GridBagConstraints gbcHints = new GridBagConstraints();
-            gbcHints.gridx = 1;  
-            gbcHints.gridy = 1;  
-
-            gbcHints.insets = buttonInsets6;
-            buttonPanel3.add(hintsButton, gbcHints);
-
-            /* 
-            GridBagConstraints gbcHighScore = new GridBagConstraints();
-            gbcHighScore.gridx = 0;  
-            gbcHighScore.gridy = 1;  
-
-            gbcHighScore.insets = buttonInsets6;
-            buttonPanel3.add(highScoreButton, gbcHighScore);
-            */
-            
-
-        
-        
 
         // Letter Buttons (BP2)
             buttonPanel2.add(letterbutton1);
@@ -1997,6 +2070,7 @@ panel.add(outputLabel5);
             buttonPanel2.add(letterbutton6);
             buttonPanel2.add(letterbutton7);
 
+
         secondFrame.add(buttonPanel, BorderLayout.SOUTH);
         secondFrame.add(buttonPanel2, BorderLayout.CENTER);
         secondFrame.add(rankPanel, BorderLayout.NORTH);
@@ -2004,8 +2078,21 @@ panel.add(outputLabel5);
 
         secondFrame.add(buttonPanel3);
         
+        
     }
-    
+
+     private void addResponsiveButton(JButton button, double xPercentage, double yPercentage) {
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int screenWidth = screenSize.width;
+        int screenHeight = screenSize.height;
+
+        int x = (int) (screenWidth * xPercentage);
+        int y = (int) (screenHeight * yPercentage);
+
+        button.setBounds(x, y, 125, 50); 
+        secondFrame.add(button);
+    }
+
     public static void main(String[] args) throws FileNotFoundException {
         if (args.length > 0 && args[0].equals("--cli")) {
             CliGameModel model = new CliGameModel();

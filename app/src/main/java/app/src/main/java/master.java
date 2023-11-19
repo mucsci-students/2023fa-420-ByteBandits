@@ -173,11 +173,12 @@ public static void cliMode() throws Exception{
 
             case "/savecurr":
                 CliGameModel.saveCurr();
-
                 break;
 
             case "/loadpuzzle":
+
                 CliGameModel.loadPuzzle();
+
                 break;
 
             case "/showstatus":
@@ -310,7 +311,7 @@ public static int pointsPWord(String baseWord, String userGuess){
         }
         else{
             
-            if (isPangram(baseWord, userGuess)){
+            if (isPangram(userGuess, baseWord)){
                 points += 7;
 
                 System.out.println();
