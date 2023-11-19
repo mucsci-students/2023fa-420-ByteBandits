@@ -11,6 +11,11 @@ import java.io.IOException;
 import app.src.main.java.CliGameController;
 
 public class CliGameModel extends helpers {
+
+    public CliGameModel(Scanner console) {
+        this.console = console;
+    }
+
     public static int possiblePoints;
 
     private static String baseWord;

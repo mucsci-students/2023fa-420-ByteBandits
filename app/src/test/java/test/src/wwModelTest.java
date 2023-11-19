@@ -296,18 +296,23 @@ public void testGetSaveFileName() {
 
     @Test
     public void testGetUserInput() {
-
-        String simulatedInput = "jackpot";
+        String simulatedInput = "Test Input";
         InputStream inputStream = new ByteArrayInputStream(simulatedInput.getBytes());
+        Scanner scanner = new Scanner(inputStream);
 
-        System.setIn(inputStream);
+        CliGameModel cliGameModel = new CliGameModel(scanner);
 
-        CliGameModel mock = mock(CliGameModel.class); 
-        when(mock.getUserInput()).thenReturn("jackpot");
-
-        String userInput = mock.getUserInput();
+        String userInput = cliGameModel.getUserInput();
 
         assertEquals(simulatedInput, userInput);
+    }
+
+    @Test
+    public void testSetAuthor() {
+        String testAuthor = "John Doe";
+        CliGameModel.setAuthor(testAuthor);
+
+        assertEquals(testAuthor, CliGameModel.getAuthor());
     }
 
     /**
