@@ -21,20 +21,19 @@ public class playerData {
     private int maxPoints;
     private String format;
     private List<String> wordList = new ArrayList<>();
-    private String author; 
-
+    private String author;
 
     private static final String GAME_DATA_FILENAME = "game_data.json";
     private static final SecretKey SECRET_KEY = new SecretKeySpec("zbUe3kVDRm5aZeKO".getBytes(), "AES");
 
     private String encrypt(String data) throws Exception {
-        //System.out.println("Debug: Starting encryption");
+        // System.out.println("Debug: Starting encryption");
 
-            Cipher cipher = Cipher.getInstance("AES");
-            cipher.init(Cipher.ENCRYPT_MODE, SECRET_KEY);
-            byte[] encrypted = cipher.doFinal(data.getBytes());
-            return Base64.getEncoder().encodeToString(encrypted);
-        }
+        Cipher cipher = Cipher.getInstance("AES");
+        cipher.init(Cipher.ENCRYPT_MODE, SECRET_KEY);
+        byte[] encrypted = cipher.doFinal(data.getBytes());
+        return Base64.getEncoder().encodeToString(encrypted);
+    }
 
     private String decrypt(String encryptedData) throws Exception {
         Cipher cipher = Cipher.getInstance("AES");
@@ -46,7 +45,7 @@ public class playerData {
     public void saveGameData(String saveName, String baseWord, String format, List<String> foundWords, int playerPoints, String requiredLetter, int maxPoints, String author, List<String> wordList, boolean encrypt) throws Exception {
         JSONObject allData;
         File file = new File(GAME_DATA_FILENAME);
-    
+        
         if (file.exists()) {
             try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
                 String content = reader.readLine();
@@ -57,36 +56,29 @@ public class playerData {
         } else {
             allData = new JSONObject(); // Start with an empty JSONObject if the file doesn't exist
         }
-
-
-            JSONObject gameData = new JSONObject();
-            gameData.put("baseWord", baseWord);
-            gameData.put("format", format);
-            gameData.put("foundWords", foundWords);
-            gameData.put("playerPoints", playerPoints);
-            gameData.put("requiredLetter", requiredLetter);
-            gameData.put("maxPoints", maxPoints);
-            gameData.put("author", author); 
-            gameData.put("wordList", new JSONArray(wordList)); 
-            //System.out.println("Debug: gameData content before saving - " + gameData.toString());
-
-            if (encrypt) {
-                try {
-                    String encryptedData = encrypt(gameData.toString());
-                    allData.put(saveName, encryptedData);
-                } catch (Exception e) {
-                    e.printStackTrace(); // Print the full stack trace
-                }
-            } else {
-                allData.put(saveName, gameData);
-            }
-            
-            try (FileWriter fileWriter = new FileWriter(GAME_DATA_FILENAME)) {
-                //System.out.println("Debug: allData content being written to file - " + allData.toString());
-                fileWriter.write(allData.toString());
-            }
-        } 
-
+    
+        JSONObject gameData = new JSONObject();
+        gameData.put("baseWord", baseWord);
+        gameData.put("format", format);
+        gameData.put("foundWords", foundWords);
+        gameData.put("playerPoints", playerPoints);
+        gameData.put("requiredLetter", requiredLetter);
+        gameData.put("maxPoints", maxPoints);
+        gameData.put("author", author); 
+    
+        if (encrypt) {
+            String encryptedWordList = encrypt(new JSONArray(wordList).toString());
+            gameData.put("secretWordList", encryptedWordList);
+        } else {
+            gameData.put("wordList", new JSONArray(wordList));
+        }
+    
+        allData.put(saveName, gameData);
+    
+        try (FileWriter fileWriter = new FileWriter(GAME_DATA_FILENAME)) {
+            fileWriter.write(allData.toString());
+        }
+    }
 
     public void loadGameData(String saveName) {
         try {
@@ -97,7 +89,7 @@ public class playerData {
                     allData = new JSONObject(line);
                 }
             }
-    
+
             if (!allData.has(saveName)) {
                 throw new JSONException("Save not found: " + saveName);
             }
@@ -109,11 +101,11 @@ public class playerData {
                 String decryptedData = decrypt((String) gameDataObj);
                 gameDataObj = new JSONObject(decryptedData);
             }
-    
+
             if (gameDataObj instanceof JSONObject) {
                 JSONObject gameData = (JSONObject) gameDataObj;
-                format = gameData.getString("format");
                 baseWord = gameData.getString("baseWord");
+                format = gameData.getString("format");
                 foundWords = new ArrayList<>();
                 JSONArray foundWordsArray = gameData.getJSONArray("foundWords");
                 for (int i = 0; i < foundWordsArray.length(); ++i) {
@@ -122,8 +114,23 @@ public class playerData {
                 playerPoints = gameData.getInt("playerPoints");
                 requiredLetter = gameData.getString("requiredLetter");
                 maxPoints = gameData.getInt("maxPoints");
+
+                // Check for encrypted or plain word list
+                if (gameData.has("secretWordList")) {
+                    String encryptedWordList = gameData.getString("secretWordList");
+                    String decryptedWordList = decrypt(encryptedWordList);
+                    JSONArray wordListArray = new JSONArray(decryptedWordList);
+                    for (int i = 0; i < wordListArray.length(); ++i) {
+                        wordList.add(wordListArray.getString(i));
+                    }
+                } else if (gameData.has("wordList")) {
+                    JSONArray wordListArray = gameData.getJSONArray("wordList");
+                    for (int i = 0; i < wordListArray.length(); ++i) {
+                        wordList.add(wordListArray.getString(i));
+                    }
+                }
             }
-    
+
         } catch (IOException | JSONException e) {
             e.printStackTrace();
         } catch (Exception e) {
@@ -148,7 +155,7 @@ public class playerData {
     public String getBaseWord() {
         return baseWord;
     }
-    
+
     public String getFormat() {
         return format;
     }
@@ -166,18 +173,18 @@ public class playerData {
     }
 
     public int getMaxPoints() {
-        return maxPoints; 
+        return maxPoints;
     }
 
-    public String getAuthor(){
+    public String getAuthor() {
         return author;
     }
 
-    public List<String> getWordList(){
+    public List<String> getWordList() {
         return wordList;
     }
 
-    //Setter Functions
+    // Setter Functions
     public void setBaseWord(String baseWord) {
         this.format = baseWord;
     }
@@ -202,7 +209,7 @@ public class playerData {
         this.author = author;
     }
 
-    public void setWordList(List<String> wordList){
+    public void setWordList(List<String> wordList) {
         this.wordList = wordList;
     }
 }
