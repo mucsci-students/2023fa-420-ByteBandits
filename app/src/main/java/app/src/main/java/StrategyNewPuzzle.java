@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import app.src.main.java.mainframe.CustomButton;
 
-public class StrategyNewPuzzle{
+public class StrategyNewPuzzle {
     private CustomButton letterbutton1;
     private CustomButton letterbutton2;
     private CustomButton letterbutton3;
@@ -13,7 +13,9 @@ public class StrategyNewPuzzle{
     private CustomButton letterbutton6;
     private CustomButton letterbutton7;
 
-    public StrategyNewPuzzle(CustomButton letterbutton1, CustomButton letterbutton2, CustomButton letterbutton3, CustomButton letterbutton4, CustomButton letterbutton5, CustomButton letterbutton6, CustomButton letterbutton7) {
+    public StrategyNewPuzzle(CustomButton letterbutton1, CustomButton letterbutton2, CustomButton letterbutton3,
+            CustomButton letterbutton4, CustomButton letterbutton5, CustomButton letterbutton6,
+            CustomButton letterbutton7) {
         this.letterbutton1 = letterbutton1;
         this.letterbutton2 = letterbutton2;
         this.letterbutton3 = letterbutton3;
@@ -23,14 +25,13 @@ public class StrategyNewPuzzle{
         this.letterbutton7 = letterbutton7;
     }
 
-    public void execute(mainframe mainFrame)
-    {
+    public void execute(mainframe mainFrame) {
         master.totalPoints = 0;
 
         master.foundWords = new ArrayList<>();
-                
+
         mainframe.shuffleWord = master.shuffle(mainframe.baseWord, mainframe.reqLetter);
-                
+
         mainframe.baseWord = mainframe.shuffleWord;
 
         String noReqLetter = master.removeChar(mainframe.baseWord, mainframe.reqLetter);
@@ -69,5 +70,5 @@ public class StrategyNewPuzzle{
         letterbutton6.setEnabled(true);
         letterbutton7.setEnabled(true);
     }
-    
+
 }

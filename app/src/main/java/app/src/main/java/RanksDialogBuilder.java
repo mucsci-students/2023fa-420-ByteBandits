@@ -11,7 +11,6 @@ import javax.swing.JTextArea;
 import java.awt.Dialog;
 import java.awt.Dimension;
 
-
 public class RanksDialogBuilder {
     private JDialog ranksDialog;
     private JFrame parentFrame;
@@ -65,7 +64,8 @@ public class RanksDialogBuilder {
             for (int i = 0; i < rankNames.length - 1; i++) {
                 helpers.calculateRankDifference(rankNames[i], 0, acceptedWordList, baseWord.toLowerCase());
                 if (helpers.pointsRequired != 0) {
-                    ranksArea.append("Rank: " + rankNames[i + 1] + "\nPoints needed: " + helpers.pointsRequired + "\n\n");
+                    ranksArea.append(
+                            "Rank: " + rankNames[i + 1] + "\nPoints needed: " + helpers.pointsRequired + "\n\n");
                 }
             }
         }
