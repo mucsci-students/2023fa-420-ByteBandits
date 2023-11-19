@@ -495,28 +495,28 @@ public class CliGameModel extends helpers {
         if (playerPoints < goodStart) {
             playerRank = "Beginner";
         }
-        if (isBetween(playerPoints, goodStart, movingUp)) {
+        if (isBetween(playerPoints, Math.round(goodStart), movingUp)) {
             playerRank = "Good Start";
         }
-        if (isBetween(playerPoints, movingUp, good)) {
+        if (isBetween(playerPoints, Math.round(movingUp), good)) {
             playerRank = "Moving Up";
         }
-        if (isBetween(playerPoints, good, solid)) {
+        if (isBetween(playerPoints, Math.round(good), solid)) {
             playerRank = "Good";
         }
-        if (isBetween(playerPoints, solid, nice)) {
+        if (isBetween(playerPoints, Math.round(solid), nice)) {
             playerRank = "Solid";
         }
-        if (isBetween(playerPoints, nice, great)) {
+        if (isBetween(playerPoints, Math.round(nice), great)) {
             playerRank = "Nice";
         }
-        if (isBetween(playerPoints, great, amazing)) {
+        if (isBetween(playerPoints, Math.round(great), amazing)) {
             playerRank = "Great";
         }
-        if (isBetween(playerPoints, amazing, genuis)) {
+        if (isBetween(playerPoints, Math.round(amazing), genuis)) {
             playerRank = "Amazing";
         }
-        if (isBetween(playerPoints, genuis, queenBee)) {
+        if (isBetween(playerPoints, Math.round(genuis), queenBee)) {
             playerRank = "Genius";
         }
         if (playerPoints == queenBee) {

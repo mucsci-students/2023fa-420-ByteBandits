@@ -12,6 +12,7 @@ import java.util.Scanner;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.anyChar;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -19,6 +20,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 import app.src.main.java.CliGameModel;
+import app.src.main.java.CliGameView;
 // Removed unused imports
 import app.src.main.java.playerData;
 
@@ -296,7 +298,7 @@ public void testGetSaveFileName() {
 
     @Test
     public void testGetUserInput() {
-        String simulatedInput = "Test Input";
+        String simulatedInput = "jackpot";
         InputStream inputStream = new ByteArrayInputStream(simulatedInput.getBytes());
         Scanner scanner = new Scanner(inputStream);
 
@@ -466,7 +468,6 @@ public void testGetSaveFileName() {
 /**********************************************************************/
 /***********************************************************************/
 //Tests for playerRank
-/** 
  @Test
     public void testPlayerRank() throws FileNotFoundException {
         String baseWord = "jackpot";
@@ -478,34 +479,32 @@ public void testGetSaveFileName() {
         assertEquals("Beginner", CliGameModel.playerRank(baseWord, 0, possibleWords));
     
         // Test for Good Start rank
-        assertEquals("Good Start", CliGameModel.playerRank(baseWord, (int) (0.02 * maxPoints), possibleWords));
+        assertEquals("Good Start", CliGameModel.playerRank(baseWord, (int) Math.round(0.02 * maxPoints), possibleWords));
     
         // Test for Moving Up rank
-        assertEquals("Moving Up", CliGameModel.playerRank(baseWord, (int) (0.05 * maxPoints), possibleWords));
+        assertEquals("Moving Up", CliGameModel.playerRank(baseWord, (int) Math.round(0.05 * maxPoints), possibleWords));
     
         // Test for Good rank
-        assertEquals("Good", CliGameModel.playerRank(baseWord, (int) (0.08 * maxPoints), possibleWords));
+        assertEquals("Good", CliGameModel.playerRank(baseWord, (int) Math.round(0.08 * maxPoints), possibleWords));
     
         // Test for Solid rank
-        assertEquals("Solid", CliGameModel.playerRank(baseWord, (int) (0.15 * maxPoints), possibleWords));
+        assertEquals("Solid", CliGameModel.playerRank(baseWord, (int) Math.round(0.15 * maxPoints), possibleWords));
     
         // Test for Nice rank
-        assertEquals("Nice", CliGameModel.playerRank(baseWord, (int) (0.25 * maxPoints), possibleWords));
+        assertEquals("Nice", CliGameModel.playerRank(baseWord, (int) Math.round(0.25 * maxPoints), possibleWords));
     
         // Test for Great rank
-        assertEquals("great", CliGameModel.playerRank(baseWord, (int) (0.40 * maxPoints), possibleWords));
+        assertEquals("Great", CliGameModel.playerRank(baseWord, (int) Math.round(0.40 * maxPoints), possibleWords));
     
         // Test for Amazing rank
-        assertEquals("Amazing", CliGameModel.playerRank(baseWord, (int) (0.50 * maxPoints), possibleWords));
+        assertEquals("Amazing", CliGameModel.playerRank(baseWord, (int) Math.round(0.50 * maxPoints), possibleWords));
     
         // Test for Genius rank
-        assertEquals("Genius", CliGameModel.playerRank(baseWord, (int) (0.70 * maxPoints), possibleWords));
+        assertEquals("Genius", CliGameModel.playerRank(baseWord, (int) Math.round(0.70 * maxPoints), possibleWords));
     
         // Test for Queen Bee rank
         assertEquals("Queen Bee", CliGameModel.playerRank(baseWord, maxPoints, possibleWords));
     }
-
-*/
 //***************************************************************************//
 //**********************HELPER FUNCTIONS*************************************//
 
