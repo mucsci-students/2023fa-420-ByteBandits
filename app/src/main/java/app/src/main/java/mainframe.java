@@ -45,6 +45,7 @@ import javax.imageio.ImageIO;
 
 public class mainframe {
 
+    
     private static Clip clip;
     protected JTextPane textPane;
 
@@ -58,8 +59,9 @@ public class mainframe {
     private String defaultPoints = "Total points: 0 |";
 
     boolean isRanksDialogOpen = false;
-
     Color darkYellow = new Color(204, 153, 0);
+
+    
 
     public class CustomButton extends JButton {
         private Color originalBackgroundColor;
@@ -83,6 +85,7 @@ public class mainframe {
             setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
             setUI(new BasicButtonUI());
 
+            
             addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseEntered(MouseEvent e) {
@@ -161,6 +164,7 @@ public class mainframe {
     final private Font mainFont = new Font("SansSerif", Font.BOLD, 18);
     final private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
+    
     /*************************************************************/
     /******************* BACKGROUND PANEL **************************/
     class BackgroundPanel extends JPanel {
@@ -463,7 +467,9 @@ public class mainframe {
         adjustVolume(-5.0f);
 
         // System.out.println("mainframe() constructor called"); // Debugging statement
-        mainFrame = new JFrame("Welcome to Wordy Wasps");
+        mainFrame = new JFrame("Welcome to WordyWasps");
+        ImageIcon icon = new ImageIcon("./src/main/resources/visualcontent/waspstill.png");
+        mainFrame.setIconImage(icon.getImage());
         GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         if (device.isFullScreenSupported()) {
             mainFrame.setUndecorated(true);
@@ -559,7 +565,9 @@ public class mainframe {
         };
 
         // Create the second frame
-        secondFrame = new JFrame("Wordy Wasps - Main Menu");
+        secondFrame = new JFrame("WordyWasps");
+        ImageIcon icon = new ImageIcon("./src/main/resources/visualcontent/waspstill.png");
+        secondFrame.setIconImage(icon.getImage());
         secondFrame.setAlwaysOnTop(false);
         GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         if (device.isFullScreenSupported()) {
