@@ -36,6 +36,7 @@ import java.io.*;
 import java.util.Comparator;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import javax.imageio.ImageIO;
 
@@ -254,11 +255,20 @@ public class mainframe {
 
                 if (jsonObject.has(word)) {
                     JSONArray entries = jsonObject.getJSONArray(word);
+                    List<JSONObject> entryList = new ArrayList<>();
+
                     for (int i = 0; i < entries.length(); i++) {
-                        JSONObject entry = entries.getJSONObject(i);
+                        entryList.add(entries.getJSONObject(i));
+                    }
+
+                    entryList.sort(Comparator.comparingInt(o -> o.getInt("score")));
+                    Collections.reverse(entryList); 
+                    int num = 1;
+                    for (JSONObject entry : entryList) {
                         String name = entry.getString("userId");
                         int score = entry.getInt("score");
-                        highScoresArea.append("Name: " + name + "\t\tScore: " + score + "\n");
+                        highScoresArea.append(num + "." + name+ ":" + "\t" + score + " pts\n");
+                        num++;
                     }
                 } else {
                     highScoresArea.append("NO HIGH SCORES FOR THIS WORD");
@@ -1062,6 +1072,24 @@ public class mainframe {
             @Override
             public void actionPerformed(ActionEvent e) {
 
+                if (key != null) {
+                    if (highScores.isHighScore(key, master.totalPoints)) {
+                        String userId = JOptionPane.showInputDialog(secondFrame,
+                                "New high score! Enter your name to join the leaderboard:");
+                        if (userId == null) {
+                            JOptionPane.showMessageDialog(secondFrame,
+                                    "You did not provide a first name. High score was not saved.");
+                        }
+                        highScores.saveHighScores(key, master.totalPoints, userId);
+                        savePuzzleButton.doClick();
+                    } else {
+
+                        JOptionPane.showMessageDialog(secondFrame, "YOUR SCORE FOR THIS GAME WAS NOT A HIGH SCORE :( ", "High Scores",
+                                JOptionPane.INFORMATION_MESSAGE);
+                        secondFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                    }
+                }
+                
                 outputLabel.setText("");
                 outputLabel2.setText("");
                 outputLabel3.setText("");
@@ -1166,9 +1194,28 @@ public class mainframe {
         /*********************************************************************/
         /******************** NEW USER PUZZLE BUTTON LOGIC *********************/
 
-        newUserPuzzleButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+    newUserPuzzleButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+            if (key != null) {
+                if (highScores.isHighScore(key, master.totalPoints)) {
+                    String userId = JOptionPane.showInputDialog(secondFrame,
+                            "New high score! Enter your name to join the leaderboard:");
+                    if (userId == null) {
+                        JOptionPane.showMessageDialog(secondFrame,
+                                "You did not provide a first name. High score was not saved.");
+                    }
+                    highScores.saveHighScores(key, master.totalPoints, userId);
+                    savePuzzleButton.doClick();
+                } else {
+
+                    JOptionPane.showMessageDialog(secondFrame, "YOUR SCORE FOR THIS GAME WAS NOT A HIGH SCORE :( ", "High Scores",
+                            JOptionPane.INFORMATION_MESSAGE);
+                    secondFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                }
+            }
+            
                 boolean hintsBool = false;
                 boolean ranksBool = false;
                 boolean foundWordsBool = false;
@@ -1570,7 +1617,27 @@ public class mainframe {
         /********************* LOAD PUZZLE LOGIC ********************************/
         loadPuzzleButton.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent e) 
+            {
+
+                if (key != null) {
+                    if (highScores.isHighScore(key, master.totalPoints)) {
+                        String userId = JOptionPane.showInputDialog(secondFrame,
+                                "New high score! Enter your name to join the leaderboard:");
+                        if (userId == null) {
+                            JOptionPane.showMessageDialog(secondFrame,
+                                    "You did not provide a first name. High score was not saved.");
+                        }
+                        highScores.saveHighScores(key, master.totalPoints, userId);
+                        savePuzzleButton.doClick();
+                    } else {
+
+                        JOptionPane.showMessageDialog(secondFrame, "YOUR SCORE FOR THIS GAME WAS NOT A HIGH SCORE :( ", "High Scores",
+                                JOptionPane.INFORMATION_MESSAGE);
+                        secondFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                    }
+                }
+
                 boolean hintsBool = false;
                 boolean ranksBool = false;
                 boolean foundWordsBool = false;
@@ -2080,26 +2147,29 @@ public class mainframe {
             }
         });
 
-        /**********************************************************************/
-        /************************ EXIT BUTTON LOGIC *****************************/
-        exitButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (highScores.isHighScore(key, master.totalPoints)) {
-                    String userId = JOptionPane.showInputDialog(secondFrame,
-                            "New high score! Enter your name to join the leaderboard:");
-                    if (userId == null) {
-                        JOptionPane.showMessageDialog(secondFrame,
-                                "You did not provide a first name. High score was not saved.");
-                    }
-                    highScores.saveHighScores(key, master.totalPoints, userId);
-                    savePuzzleButton.doClick();
-                } else {
 
-                    JOptionPane.showMessageDialog(secondFrame, "YOUR SCORE WAS NOT A HIGH SCORE :( ", "Information",
-                            JOptionPane.INFORMATION_MESSAGE);
-                    secondFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    /**********************************************************************/
+    /************************EXIT BUTTON LOGIC*****************************/
+    exitButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (key == null) {
+                System.exit(0);
+            }
+
+            if (highScores.isHighScore(key, master.totalPoints)) {
+                String userId = JOptionPane.showInputDialog(secondFrame, "New high score! Enter your name to join the leaderboard:");
+                if (userId == null) {
+                    JOptionPane.showMessageDialog(secondFrame, "You did not provide a first name. High score was not saved.");
                 }
+                highScores.saveHighScores(key, master.totalPoints, userId);
+                savePuzzleButton.doClick();
+            } else {
+                
+                JOptionPane.showMessageDialog(secondFrame, "YOUR SCORE FOR THIS GAME WAS NOT A HIGH SCORE :( ", "High Scores",
+                        JOptionPane.INFORMATION_MESSAGE);
+                secondFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
+            }
 
                 System.exit(0);
             }
