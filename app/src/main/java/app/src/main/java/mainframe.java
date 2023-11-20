@@ -226,65 +226,72 @@ public class mainframe {
     }
 
     public static void updateHighScoresDialog(String word) {
-        if (highscores == null) {
-            highscores = new JDialog(mainFrame, "HIGH SCORES", true);
-            highscores.setModalityType(Dialog.ModalityType.MODELESS);
-            highscores.setAlwaysOnTop(true);
-            highscores.setFocusableWindowState(false);
-
-            highscores.setSize(400, 300);
-            highscores.setLocationRelativeTo(mainFrame);
-
-            JTextArea highScoresArea = new JTextArea();
-            highScoresArea.setBackground(pastelYellow);
-            highScoresArea.setEditable(false);
-            highScoresArea.setWrapStyleWord(true);
-            highScoresArea.setLineWrap(true);
-            highScoresArea.setFont(new Font("SansSerif", Font.PLAIN, 16));
-            highScoresArea.setForeground(Color.BLACK);
-
-            JSONObject jsonObject;
-            try (BufferedReader reader = new BufferedReader(new FileReader(highScores.GAME_DATA_FILENAME))) {
-                StringBuilder jsonData = new StringBuilder();
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    jsonData.append(line).append("\n");
-                }
-
-                if (jsonData.length() == 0) {
-                    jsonObject = new JSONObject();
-                } else {
-                    jsonObject = new JSONObject(jsonData.toString());
-                }
-
-                if (jsonObject.has(word)) {
-                    JSONArray entries = jsonObject.getJSONArray(word);
-                    List<JSONObject> entryList = new ArrayList<>();
-
-                    for (int i = 0; i < entries.length(); i++) {
-                        entryList.add(entries.getJSONObject(i));
-                    }
-
-                    entryList.sort(Comparator.comparingInt(o -> o.getInt("score")));
-                    Collections.reverse(entryList); 
-                    int num = 1;
-                    for (JSONObject entry : entryList) {
-                        String name = entry.getString("userId");
-                        int score = entry.getInt("score");
-                        highScoresArea.append(num + "." + name+ ":" + "\t" + score + " pts\n");
-                        num++;
-                    }
-                } else {
-                    highScoresArea.append("NO HIGH SCORES FOR THIS WORD");
-                }
-            } catch (IOException | JSONException e) {
-                e.printStackTrace();
-            }
-
-            JScrollPane scrollPane = new JScrollPane(highScoresArea);
-            highscores.add(scrollPane);
+        if (highscores != null) {
+            Container contentPane = highscores.getContentPane();
+            contentPane.removeAll();
+            contentPane.repaint();
+            contentPane.revalidate();
         }
+    
+        highscores = new JDialog(mainFrame, "HIGH SCORES", true);
+        highscores.setModalityType(Dialog.ModalityType.MODELESS);
+        highscores.setAlwaysOnTop(true);
+        highscores.setFocusableWindowState(false);
+    
+        highscores.setSize(400, 300);
+        highscores.setLocationRelativeTo(mainFrame);
+    
+        JTextArea highScoresArea = new JTextArea();
+        highScoresArea.setBackground(pastelYellow);
+        highScoresArea.setEditable(false);
+        highScoresArea.setWrapStyleWord(true);
+        highScoresArea.setLineWrap(true);
+        highScoresArea.setFont(new Font("SansSerif", Font.PLAIN, 16));
+        highScoresArea.setForeground(Color.BLACK);
+    
+        JSONObject jsonObject;
+        try (BufferedReader reader = new BufferedReader(new FileReader(highScores.GAME_DATA_FILENAME))) {
+            StringBuilder jsonData = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                jsonData.append(line).append("\n");
+            }
+    
+            if (jsonData.length() == 0) {
+                jsonObject = new JSONObject();
+            } else {
+                jsonObject = new JSONObject(jsonData.toString());
+            }
+    
+            if (jsonObject.has(word)) {
+                JSONArray entries = jsonObject.getJSONArray(word);
+                List<JSONObject> entryList = new ArrayList<>();
+    
+                for (int i = 0; i < entries.length(); i++) {
+                    entryList.add(entries.getJSONObject(i));
+                }
+    
+                entryList.sort(Comparator.comparingInt(o -> o.getInt("score")));
+                Collections.reverse(entryList);
+                int num = 1;
+                for (JSONObject entry : entryList) {
+                    String name = entry.getString("userId");
+                    int score = entry.getInt("score");
+                    highScoresArea.append(num + "." + name + ":" + "\t" + score + " pts\n");
+                    num++;
+                }
+            } else {
+                highScoresArea.append("NO HIGH SCORES FOR THIS WORD");
+            }
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+        }
+    
+        JScrollPane scrollPane = new JScrollPane(highScoresArea);
+        highscores.add(scrollPane);
+        highscores.setVisible(true);
     }
+    
 
     /**********************************************************/
     /**********************************************************/
@@ -470,19 +477,7 @@ public class mainframe {
         mainFrame = new JFrame("Welcome to WordyWasps");
         ImageIcon icon = new ImageIcon("./src/main/resources/visualcontent/waspstill.png");
         mainFrame.setIconImage(icon.getImage());
-        GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-        if (device.isFullScreenSupported()) {
-            mainFrame.setUndecorated(true);
-            device.setFullScreenWindow(mainFrame);
-        } else {
-            System.out.println("Fullscreen mode is not supported on this system.");
-            mainFrame.setSize(400, 300);
-            mainFrame.setLocationRelativeTo(null);
-        }
-
-        mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        mainFrame.setMinimumSize(screenSize);
+    
         mainFrame.setSize(screenSize);
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -544,6 +539,7 @@ public class mainframe {
         mainFrame.setAlwaysOnTop(true);
         mainFrame.setContentPane(backgroundPanel);
         mainFrame.setVisible(true);
+        
 
     }
 
@@ -569,16 +565,6 @@ public class mainframe {
         ImageIcon icon = new ImageIcon("./src/main/resources/visualcontent/waspstill.png");
         secondFrame.setIconImage(icon.getImage());
         secondFrame.setAlwaysOnTop(false);
-        GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-        if (device.isFullScreenSupported()) {
-            secondFrame.setUndecorated(true);
-            device.setFullScreenWindow(secondFrame);
-
-        } else {
-            System.out.println("Fullscreen mode is not supported on this system.");
-            secondFrame.setSize(400, 300);
-            secondFrame.setLocationRelativeTo(null);
-        }
 
         secondFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         secondFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -1242,37 +1228,39 @@ public class mainframe {
                     highScoresBool = true;
                 }
 
-                JTextField inputField = new JTextField();
+                 JTextField inputField = new JTextField();
+        inputField.setPreferredSize(new Dimension(200, 30));
 
-                inputField.setPreferredSize(new Dimension(200, 30));
+        Object[] message = {
+                "Enter a base word for the puzzle:", inputField
+        };
 
-                Object[] message = {
-                        "Enter a base word for the puzzle:", inputField
-                };
+        JOptionPane optionPane = new JOptionPane(
+                message,
+                JOptionPane.PLAIN_MESSAGE,
+                JOptionPane.OK_CANCEL_OPTION);
 
-                JOptionPane optionPane = new JOptionPane(
-                        message,
-                        JOptionPane.PLAIN_MESSAGE,
-                        JOptionPane.OK_CANCEL_OPTION);
+        JDialog dialog = optionPane.createDialog("New User Puzzle");
+        dialog.setAlwaysOnTop(true); // Set the dialog to always be on top
 
-                JDialog dialog = optionPane.createDialog("New User Puzzle");
-                dialog.setAlwaysOnTop(true); // Set the dialog to always be on top
+        // Add a ComponentListener to the dialog
+        dialog.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentShown(ComponentEvent ce) {
+                inputField.requestFocusInWindow();
+            }
+        });
 
-                dialog.addComponentListener(new ComponentAdapter() {
-                    @Override
-                    public void componentShown(ComponentEvent ce) {
-                        inputField.requestFocusInWindow();
-                    }
-                });
+        dialog.setVisible(true);
 
-                dialog.setVisible(true);
 
                 // Retrieve the result after the dialog is closed
                 Object result = optionPane.getValue();
                 // Check if the user clicked "OK"
                 if (result instanceof Integer && (Integer) result == JOptionPane.OK_OPTION) {
                     String userWord = inputField.getText().toLowerCase();
-                    updateHighScoresDialog(userWord);
+        
+                    
                     key = userWord;
 
                     System.out.println(key);
@@ -1329,6 +1317,8 @@ public class mainframe {
 
                         baseWord = userWord;
                         reqLetter = master.getReqLetter(baseWord);
+
+                        updateHighScoresDialog(baseWord);
 
                         try {
                             acceptedWordList = master.acceptedWords(baseWord, reqLetter);
