@@ -1082,11 +1082,6 @@ public class mainframe {
                         }
                         highScores.saveHighScores(key, master.totalPoints, userId);
                         savePuzzleButton.doClick();
-                    } else {
-
-                        JOptionPane.showMessageDialog(secondFrame, "YOUR SCORE FOR THIS GAME WAS NOT A HIGH SCORE :( ", "High Scores",
-                                JOptionPane.INFORMATION_MESSAGE);
-                        secondFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                     }
                 }
                 
@@ -1208,11 +1203,6 @@ public class mainframe {
                     }
                     highScores.saveHighScores(key, master.totalPoints, userId);
                     savePuzzleButton.doClick();
-                } else {
-
-                    JOptionPane.showMessageDialog(secondFrame, "YOUR SCORE FOR THIS GAME WAS NOT A HIGH SCORE :( ", "High Scores",
-                            JOptionPane.INFORMATION_MESSAGE);
-                    secondFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 }
             }
             
@@ -2158,11 +2148,6 @@ public class mainframe {
                 }
                 highScores.saveHighScores(key, master.totalPoints, userId);
                 savePuzzleButton.doClick();
-            } else {
-                
-                JOptionPane.showMessageDialog(secondFrame, "YOUR SCORE FOR THIS GAME WAS NOT A HIGH SCORE :( ", "High Scores",
-                        JOptionPane.INFORMATION_MESSAGE);
-                secondFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
             }
 
                 System.exit(0);
