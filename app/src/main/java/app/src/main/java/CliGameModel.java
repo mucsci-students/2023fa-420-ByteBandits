@@ -89,10 +89,6 @@ public class CliGameModel extends helpers {
         return author;
     }
 
-    public highScores getHighScoresInstance() {
-        return saveHighScores;
-    }
-
     // SETTERS
     public static void setPossiblePoints(int possiblePoints) {
         CliGameModel.possiblePoints = possiblePoints;

@@ -22,6 +22,7 @@ import static org.mockito.Mockito.*;
 
 import app.src.main.java.CliGameModel;
 import app.src.main.java.CliGameView;
+import app.src.main.java.helpers;
 import app.src.main.java.highScores;
 // Removed unused imports
 import app.src.main.java.playerData;
@@ -423,7 +424,15 @@ public void testGetSaveFileName() {
     }
 
     
+    @Test
+    public void testHighScoreEmptyBaseWord() {
+        String baseWord = "       ";
+        int totalPoints = 100;
+        String userId = "user123";
 
+        
+        CliGameModel.highScore(baseWord, totalPoints, userId);
+    }
 
 /**********************************************************************/
 /**********************************************************************/
@@ -448,9 +457,13 @@ public void testGetSaveFileName() {
         points = CliGameModel.pointsPWord("jackpot", "jackpo");
         assertEquals("A word of length 6 containing the required letter should give 6 points.", 6, points);
 
+         points = CliGameModel.pointsPWord("jackpot", "mmmmmmmm");
+        assertEquals("A word of length 10 containing the required letter should give 10 points.", 8, points);
+
         points = CliGameModel.pointsPWord("jackpot", "jackpot");
         assertEquals("A pangram (all letters) containing the required letter should give 14 points.", 14, points); // 7 for word length + 7 bonus for pangram
 }
+
 
 /**********************************************************************/
 /**********************************************************************/
