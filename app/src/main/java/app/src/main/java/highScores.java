@@ -20,6 +20,9 @@ public class highScores {
     private static final int MAX_ENTRIES_PER_WORD = 10;
     private static boolean newHighScore = false;
     public static List<String> highScores;
+    public static String baseWord;
+    public static String userId;
+    public static int score;
 
     public static boolean saveHighScores(String baseWord, int totalPoints, String userId) {
         try {
@@ -186,5 +189,15 @@ public static void displayEntriesForBaseWord(String baseWord) {
         }
 
         return false;
+    }
+
+    public static String getBaseWord () {
+        return baseWord;
+    }
+    public static String getUserId () {
+        return userId;
+    }
+    public static int getScore () {
+        return score;
     }
 }

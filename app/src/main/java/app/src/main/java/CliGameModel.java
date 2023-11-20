@@ -30,7 +30,7 @@ public class CliGameModel extends helpers {
 
     private static char reqLetter;
 
-    private static highScores saveHighScores;
+    private highScores saveHighScores;
 
     private static playerData saveFile;
 
@@ -89,6 +89,10 @@ public class CliGameModel extends helpers {
         return author;
     }
 
+    public highScores getHighScoresInstance() {
+        return saveHighScores;
+    }
+
     // SETTERS
     public static void setPossiblePoints(int possiblePoints) {
         CliGameModel.possiblePoints = possiblePoints;
@@ -128,6 +132,10 @@ public class CliGameModel extends helpers {
 
     public void setScanner(Scanner scanner) {
         this.console = scanner;
+    }
+
+    public void setHighScores(highScores hs) {
+        this.saveHighScores = hs;
     }
 
     public String getUserInput() {
@@ -599,6 +607,10 @@ public class CliGameModel extends helpers {
     public static int pointsPWord(String baseWord, String userGuess) {
         int length = userGuess.length();
         int points = 0;
+
+        if (length < 4) {
+            return 0;
+        }
 
         switch (length) {
             case 4:

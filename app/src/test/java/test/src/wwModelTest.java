@@ -3,6 +3,7 @@
 package test.src;
 
 import java.io.ByteArrayInputStream;
+import java.io.Console;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Arrays;
@@ -21,12 +22,14 @@ import static org.mockito.Mockito.*;
 
 import app.src.main.java.CliGameModel;
 import app.src.main.java.CliGameView;
+import app.src.main.java.highScores;
 // Removed unused imports
 import app.src.main.java.playerData;
 
 public class wwModelTest {
     private CliGameModel game;
     private static playerData mockSaveFile;
+    private highScores mockHighScores;
     
     @Before
     public void setUp() throws FileNotFoundException {
@@ -42,6 +45,8 @@ public class wwModelTest {
 
         // Assign the mock to the static field in CliGameModel
         CliGameModel.setSaveFile(mockSaveFile);
+        mockHighScores = mock(highScores.class);
+        game.setHighScores(mockHighScores);
     }
 
     @Test
@@ -91,24 +96,30 @@ public class wwModelTest {
 */
 /**********************************************************************/
 /**********************************************************************/
-//Tests for Loading
 // @Test
 // public void testLoadPuzzle() throws FileNotFoundException {
-//     // Setup
-//     CliGameModel.setBaseWord("customs");
+//     CliGameModel mockModel = mock(CliGameModel.class);
+//     playerData mockSaveFile = mock(playerData.class);
+//     when(mockSaveFile.getBaseWord()).thenReturn("jackpot");
+//     when(mockSaveFile.getPlayerPoints()).thenReturn(100);
+//     when(mockSaveFile.getFoundWords()).thenReturn(Arrays.asList("jack", "jackpot"));
+//     when(mockSaveFile.getRequiredLetter()).thenReturn("k");
+//     when(mockSaveFile.getMaxPoints()).thenReturn(200);
+
+//     // Setting up the mock for CliGameModel
+//     CliGameModel.setSaveFile(mockSaveFile);
+//     CliGameModel.setBaseWord("jackpot");
 //     CliGameModel.setTotalPoints(50);
 
 //     // Action
 //     CliGameModel.loadPuzzle();
 
-//     // Assert
-//     assertEquals("jackpot", game.getBaseWord());
+//     // Assertions based on the mock's behavior
+//     assertEquals("jackpot", mockModel.getBaseWord());
 //     assertEquals(Arrays.asList("jack", "jackpot"), CliGameModel.getFoundWords());
 //     assertEquals(100, CliGameModel.getTotalPoints());
 //     assertEquals('k', CliGameModel.getReqLetter());
-//     assertEquals(200, CliGameModel.possiblePoints);
-    
-//     // If there are any other side-effects, like interactions with CliGameView or others, you should verify/assert them here.
+//     assertEquals(200, mockModel.getPossiblePoints());
 // }
 
 /**********************************************************************/
@@ -411,6 +422,9 @@ public void testGetSaveFileName() {
         assertTrue("Shuffled word should not contain any characters not in the base word.", containsOnlyCharsFrom(baseWord, shuffled));
     }
 
+    
+
+
 /**********************************************************************/
 /**********************************************************************/
 //Tests for PointsPWord
@@ -421,12 +435,16 @@ public void testGetSaveFileName() {
         // Tests using "jackpot" as the base word
         int points = CliGameModel.pointsPWord("jackpot", "jack");
         assertEquals("A word of length 4 containing the required letter should give 1 point.", 1, points);
-    
+        
+        points = CliGameModel.pointsPWord("jackpot", "j");
+        assertEquals("A word of length 1 containing the required letter should give 0 points.", 0, points);
    
-
         points = CliGameModel.pointsPWord("jackpot", "pack");
         assertEquals("A word of length 4 containing the required letter should give 1 point.", 1, points);
-    
+        
+        points = CliGameModel.pointsPWord("jackpot", "jackp");
+        assertEquals("A word of length 6 containing the required letter should give 5 points.", 5, points);
+
         points = CliGameModel.pointsPWord("jackpot", "jackpo");
         assertEquals("A word of length 6 containing the required letter should give 6 points.", 6, points);
 
