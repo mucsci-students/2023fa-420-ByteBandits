@@ -9,6 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import java.awt.Dialog;
+import java.awt.Dimension;
 
 public class RanksDialogBuilder {
     private JDialog ranksDialog;
@@ -47,12 +48,11 @@ public class RanksDialogBuilder {
         ranksDialog.setModalityType(Dialog.ModalityType.MODELESS);
         ranksDialog.setAlwaysOnTop(true);
         ranksDialog.setFocusableWindowState(false);
-
         ranksDialog.setSize(400, 630);
         ranksDialog.setLocationRelativeTo(parentFrame);
 
         JTextArea ranksArea = new JTextArea();
-        Color darkYellow = new Color(204, 153, 0);
+        Color darkYellow = new Color(166, 102, 22);
         ranksArea.setBackground(darkYellow);
         ranksArea.setEditable(false);
         ranksArea.setWrapStyleWord(true);
@@ -64,12 +64,16 @@ public class RanksDialogBuilder {
             for (int i = 0; i < rankNames.length - 1; i++) {
                 helpers.calculateRankDifference(rankNames[i], 0, acceptedWordList, baseWord.toLowerCase());
                 if (helpers.pointsRequired != 0) {
-                    ranksArea.append("Rank: " + rankNames[i + 1] + "\nPoints needed: " + helpers.pointsRequired + "\n\n");
+                    ranksArea.append(
+                            "Rank: " + rankNames[i + 1] + "\nPoints needed: " + helpers.pointsRequired + "\n\n");
                 }
             }
         }
 
-        ranksDialog.add(new JScrollPane(ranksArea));
+        // Wrap the text area in a JScrollPane
+        JScrollPane scrollPane = new JScrollPane(ranksArea);
+        scrollPane.setPreferredSize(new Dimension(380, 250)); // Set the preferred size of the scroll pane
+        ranksDialog.setContentPane(scrollPane);
         return ranksDialog;
     }
 }

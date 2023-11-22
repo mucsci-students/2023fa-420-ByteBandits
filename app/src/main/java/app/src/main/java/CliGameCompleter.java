@@ -17,8 +17,11 @@ public class CliGameCompleter implements Completer {
         List<String> matchingCommands = new ArrayList<>();
 
         for (String command : new String[] {
-            "/newpuzzle", "/basepuzzle", "/guess", "/viewpuzzle", "/foundwords",
-            "/shuffle", "/cleansave", "/advancedsave", "/loadpuzzle", "/observestatus", "/help", "/exit"
+                "/newpuzzle", "/basepuzzle", "/guess", "/viewpuzzle", "/foundwords",
+
+                "/shuffle", "/cleansave", "/advancedsave", "/matrixhints", "/loadpuzzle", "/observestatus", "/help",
+                "/exit", "/topscores"
+
         }) {
             if (command.startsWith(word)) {
                 matchingCommands.add(command);
@@ -27,9 +30,11 @@ public class CliGameCompleter implements Completer {
 
         if (matchingCommands.size() == 1) {
             // If there's only one match, add it to candidates
-            candidates.add(new Candidate(AttributedString.stripAnsi(matchingCommands.get(0)), matchingCommands.get(0), null, null, null, null, true));
+            candidates.add(new Candidate(AttributedString.stripAnsi(matchingCommands.get(0)), matchingCommands.get(0),
+                    null, null, null, null, true));
         }
-        // You can add further logic here if you want to handle multiple matches differently.
+        // You can add further logic here if you want to handle multiple matches
+        // differently.
         // For example, do not add any candidates or handle them in a specific way.
     }
 }
